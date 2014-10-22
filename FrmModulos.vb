@@ -108,7 +108,7 @@ Public Class FrmModulos
                     Me.DialogResult = Windows.Forms.DialogResult.None
                 Else
 
-                    Call borrarModulo(datosModulo(0))
+                    Call borrarModulo(CInt(datosModulo(0)))
                     Call cargarlistbox()
                 End If
             End If
@@ -145,6 +145,8 @@ Public Class FrmModulos
             MsgBox(ex2.ToString)
         Catch ex As Exception
             MsgBox(ex.ToString)
+        Finally
+            cn.Close()
         End Try
         Return True
     End Function
