@@ -22,14 +22,14 @@ Public Class FrmListado
         Me.ListView1.View = View.Details
         'Call cargarColumnasListview(Me.ListView1, "Personal")
         Call cargarSoloColumnasPrincipalesListview()
-        Call cargarDatosEnListview()
-        Select Case pos
-            Case 1
-                'Aqui el codigo si es para alumnos
-
-            Case 2
-                'aqui el codigo si es para profesores
-        End Select
+        Dim categoria As String
+        If pos = 0 Then
+            categoria = "Profesor"
+        Else
+            categoria = "Alumno"
+        End If
+        Call cargarDatosEnListview(categoria)
+       
 
     End Sub
     'Private Sub cargarColumnasListview(ByVal lst As ListView, ByVal tabla As String)
@@ -57,24 +57,30 @@ Public Class FrmListado
         Me.ListView1.Columns.Add("Apellido1", 180, HorizontalAlignment.Center)
         Me.ListView1.Columns.Add("Apellido2", 180, HorizontalAlignment.Center)
     End Sub
-    Private Sub cargarDatosEnListview()
+    Private Sub cargarDatosEnListview(ByVal pr As String)
         Try
             cn.Open()
-            Dim sql As String = "SELECT Personal.DNI, Personal.Nombre, Personal.Apellido1, Personal.Apellido2 FROM Personal"
+            Dim sql As String
+            sql = String.Format("SELECT Personal.{0}, Personal.DNI, Personal.Nombre, Personal.Apellido1, Personal.Apellido2 FROM Personal", pr)
+           
             Dim cmd As New SqlCommand(sql, cn)
             Dim dr As SqlDataReader
             dr = cmd.ExecuteReader
             'creo un contador para ayudarme a poner los valores en los items correctos
             Dim i As Integer = 0
             While dr.Read
-                'aqui añado un dato nuevo
-                Me.ListView1.Items.Add(dr(0))
-                'aqui añado los subitems al recien añadido
-                Me.ListView1.Items(i).SubItems.Add(CStr(dr(1)))
-                Me.ListView1.Items(i).SubItems.Add(CStr(dr(2)))
-                Me.ListView1.Items(i).SubItems.Add(CStr(dr(3)))
-                'aumentamos el contador para la siguiente vuelta
-                i += 1
+                ' compruebo el primer valor, si es uno añado el dato
+                If dr(0) = True Then
+                    'aqui añado un dato nuevo
+                    Me.ListView1.Items.Add(dr(1))
+                    'aqui añado los subitems al recien añadido
+                    Me.ListView1.Items(i).SubItems.Add(CStr(dr(2)))
+                    Me.ListView1.Items(i).SubItems.Add(CStr(dr(3)))
+                    Me.ListView1.Items(i).SubItems.Add(CStr(dr(4)))
+                    'aumentamos el contador para la siguiente vuelta
+                    i += 1
+                Else
+                End If
             End While
 
         Catch ex2 As miExcepcion

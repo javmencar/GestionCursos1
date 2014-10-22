@@ -18,12 +18,14 @@ Public Class FrmCrear
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim frm As New FrmListado
+        'alumnos, le paso 1 como valor
+        Dim frm As New FrmListado(1)
         frm.ShowDialog()
     End Sub
 
     Private Sub CmdProfesores_Click(sender As Object, e As EventArgs) Handles CmdProfesores.Click
-        Dim frm As New FrmListado
+        'profesor, le mando 0 como valor
+        Dim frm As New FrmListado(0)
         frm.ShowDialog()
     End Sub
 End Class
