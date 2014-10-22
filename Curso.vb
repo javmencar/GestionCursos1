@@ -55,7 +55,7 @@ Public Class Curso
     End Sub
     Public Sub ordenarModulos()
         If Not IsNothing(Me.mModulos) Then
-            Dim m1, m2 As Modulo
+            'Dim m1, m2 As Modulo
             Dim k As Integer = mModulos.Count
             For i As Integer = 0 To Me.mModulos.Count - 2
                 If mModulos(i).Id > mModulos(i + 1).Id Then
@@ -77,6 +77,6 @@ Public Class Curso
     End Function
 
     Public Function CompareTo(obj As Object) As Integer Implements IComparable.CompareTo
-
+        Return ""
     End Function
 End Class
