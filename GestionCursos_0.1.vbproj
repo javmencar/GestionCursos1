@@ -131,6 +131,12 @@
     <Compile Include="FrmModulos.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FrmProfesores.Designer.vb">
+      <DependentUpon>FrmProfesores.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FrmProfesores.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="miExcepcion.vb" />
     <Compile Include="Module1.vb" />
     <Compile Include="Modulo.vb" />
@@ -177,6 +183,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmModulos.resx">
       <DependentUpon>FrmModulos.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmProfesores.resx">
+      <DependentUpon>FrmProfesores.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

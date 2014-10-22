@@ -16,4 +16,14 @@ Public Class FrmCrear
         Dim frm As New FrmModulos
         frm.ShowDialog()
     End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Dim frm As New FrmAlumnos
+        frm.ShowDialog()
+    End Sub
+
+    Private Sub CmdProfesores_Click(sender As Object, e As EventArgs) Handles CmdProfesores.Click
+        Dim frm As New FrmProfesores
+        frm.ShowDialog()
+    End Sub
 End Class
