@@ -62,4 +62,5 @@ C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.FrmModificarModulos.resources
 C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.FrmModulos.resources
 C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.Resources.resources
 C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0.1.vbproj.GenerateResource.Cache
-C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.FrmProfesores.resources
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.FrmFichas.resources
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.FrmListado.resources
