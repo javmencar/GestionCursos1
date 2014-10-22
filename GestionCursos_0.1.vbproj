@@ -101,6 +101,12 @@
     <Compile Include="FrmCursos.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FrmFichas.Designer.vb">
+      <DependentUpon>FrmFichas.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FrmFichas.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FrmGestionar.Designer.vb">
       <DependentUpon>FrmGestionar.vb</DependentUpon>
     </Compile>
@@ -171,6 +177,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmCursos.resx">
       <DependentUpon>FrmCursos.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmFichas.resx">
+      <DependentUpon>FrmFichas.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmGestionar.resx">
       <DependentUpon>FrmGestionar.vb</DependentUpon>
