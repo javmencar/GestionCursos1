@@ -1,0 +1,268 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+GestionCursos_0.1
+</name>
+</assembly>
+<members>
+<member name="P:GestionCursos_0._1.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:GestionCursos_0._1.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:GestionCursos_0._1.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.AlumnosDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.Alumnos_CursosDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.AulasDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.CursosDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.Cursos_ModulosDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.DatosDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.FotosDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.HorasDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.ModulosDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.ProfesoresDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.Profesores_modulosDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.UsuariosDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.ValoracionesDataTable">
+	<summary>
+Represents the strongly named DataTable class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.AlumnosRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.Alumnos_CursosRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.AulasRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.CursosRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.Cursos_ModulosRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.DatosRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.FotosRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.HorasRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.ModulosRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.ProfesoresRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.Profesores_modulosRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.UsuariosRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.ValoracionesRow">
+	<summary>
+Represents strongly named DataRow class.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.AlumnosRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.Alumnos_CursosRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.AulasRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.CursosRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.Cursos_ModulosRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.DatosRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.FotosRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.HorasRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.ModulosRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.ProfesoresRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.Profesores_modulosRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.UsuariosRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet.ValoracionesRowChangeEvent">
+	<summary>
+Row event argument class
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSet">
+	<summary>
+Represents a strongly typed in-memory cache of data.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.AlumnosTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.Alumnos_CursosTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.AulasTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.CursosTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.Cursos_ModulosTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.DatosTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.FotosTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.HorasTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.ModulosTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.ProfesoresTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.Profesores_modulosTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.UsuariosTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.ValoracionesTableAdapter">
+	<summary>
+Represents the connection and commands used to retrieve and save data.
+</summary>
+</member><member name="M:GestionCursos_0._1.BBDD_02DataSetTableAdapters.TableAdapterManager.UpdateUpdatedRows(GestionCursos_0._1.BBDD_02DataSet,System.Collections.Generic.List{System.Data.DataRow},System.Collections.Generic.List{System.Data.DataRow})">
+	<summary>
+Update rows in top-down order.
+</summary>
+</member><member name="M:GestionCursos_0._1.BBDD_02DataSetTableAdapters.TableAdapterManager.UpdateInsertedRows(GestionCursos_0._1.BBDD_02DataSet,System.Collections.Generic.List{System.Data.DataRow})">
+	<summary>
+Insert rows in top-down order.
+</summary>
+</member><member name="M:GestionCursos_0._1.BBDD_02DataSetTableAdapters.TableAdapterManager.UpdateDeletedRows(GestionCursos_0._1.BBDD_02DataSet,System.Collections.Generic.List{System.Data.DataRow})">
+	<summary>
+Delete rows in bottom-up order.
+</summary>
+</member><member name="M:GestionCursos_0._1.BBDD_02DataSetTableAdapters.TableAdapterManager.GetRealUpdatedRows(System.Data.DataRow[],System.Collections.Generic.List{System.Data.DataRow})">
+	<summary>
+Remove inserted rows that become updated rows after calling TableAdapter.Update(inserted rows) first
+</summary>
+</member><member name="M:GestionCursos_0._1.BBDD_02DataSetTableAdapters.TableAdapterManager.UpdateAll(GestionCursos_0._1.BBDD_02DataSet)">
+	<summary>
+Update all changes to the dataset.
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.TableAdapterManager.UpdateOrderOption">
+	<summary>
+Update Order Option
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.TableAdapterManager.SelfReferenceComparer">
+	<summary>
+Used to sort self-referenced table's rows
+</summary>
+</member><member name="T:GestionCursos_0._1.BBDD_02DataSetTableAdapters.TableAdapterManager">
+	<summary>
+TableAdapterManager is used to coordinate TableAdapters in the dataset to enable Hierarchical Update scenarios
+</summary>
+</member>
+</members>
+</doc>

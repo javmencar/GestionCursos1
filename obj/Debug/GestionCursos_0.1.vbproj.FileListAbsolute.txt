@@ -1,0 +1,45 @@
+C:\Users\Javier\AppData\Local\Temporary Projects\GestionCursos_0.1\bin\Debug\GestionCursos_0.1.exe.config
+C:\Users\Javier\AppData\Local\Temporary Projects\GestionCursos_0.1\bin\Debug\GestionCursos_0.1.exe
+C:\Users\Javier\AppData\Local\Temporary Projects\GestionCursos_0.1\bin\Debug\GestionCursos_0.1.pdb
+C:\Users\Javier\AppData\Local\Temporary Projects\GestionCursos_0.1\bin\Debug\GestionCursos_0.1.xml
+C:\Users\Javier\AppData\Local\Temporary Projects\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.Form1.resources
+C:\Users\Javier\AppData\Local\Temporary Projects\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.Resources.resources
+C:\Users\Javier\AppData\Local\Temporary Projects\GestionCursos_0.1\obj\Debug\GestionCursos_0.1.vbproj.GenerateResource.Cache
+C:\Users\Javier\AppData\Local\Temporary Projects\GestionCursos_0.1\obj\Debug\GestionCursos_0.1.exe
+C:\Users\Javier\AppData\Local\Temporary Projects\GestionCursos_0.1\obj\Debug\GestionCursos_0.1.xml
+C:\Users\Javier\AppData\Local\Temporary Projects\GestionCursos_0.1\obj\Debug\GestionCursos_0.1.pdb
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\bin\Debug\GestionCursos_0.1.exe.config
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\obj\Debug\GestionCursos_0.1.exe
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\obj\Debug\GestionCursos_0.1.xml
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\obj\Debug\GestionCursos_0.1.pdb
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\bin\Debug\GestionCursos_0.1.exe
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\bin\Debug\GestionCursos_0.1.pdb
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\bin\Debug\GestionCursos_0.1.xml
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.Form1.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.FrmCrear.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.FrmCursos.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.Resources.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\obj\Debug\GestionCursos_0.1.vbproj.GenerateResource.Cache
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.FrmModificarCursos.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.Form2.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\obj\Debug\GestionCursos_0.1.vbprojResolveAssemblyReference.cache
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.FrmModificarModulos.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.1\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.FrmModulos.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\bin\Debug\GestionCursos_0.1.exe.config
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\obj\Debug\GestionCursos_0.1.exe
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\obj\Debug\GestionCursos_0.1.xml
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\obj\Debug\GestionCursos_0.1.pdb
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\obj\Debug\GestionCursos_0.1.vbprojResolveAssemblyReference.cache
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.Form1.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.Form2.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.FrmCrear.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.FrmCursos.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.FrmModificarCursos.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.FrmModificarModulos.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.FrmModulos.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.Resources.resources
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\obj\Debug\GestionCursos_0.1.vbproj.GenerateResource.Cache
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\bin\Debug\GestionCursos_0.1.exe
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\bin\Debug\GestionCursos_0.1.pdb
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\bin\Debug\GestionCursos_0.1.xml
+C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.FrmGestionar.resources
