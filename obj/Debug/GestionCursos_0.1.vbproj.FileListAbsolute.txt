@@ -43,3 +43,22 @@ C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionC
 C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\bin\Debug\GestionCursos_0.1.pdb
 C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\bin\Debug\GestionCursos_0.1.xml
 C:\Users\Javier\Documents\Visual Studio 2013\Projects\GestionCursos_0.2\GestionCursos_0.1\obj\Debug\GestionCursos_0._1.FrmGestionar.resources
+C:\GIT\GestionCursos1\bin\Debug\GestionCursos_0.1.exe.config
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0.1.exe
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0.1.xml
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0.1.pdb
+C:\GIT\GestionCursos1\bin\Debug\GestionCursos_0.1.exe
+C:\GIT\GestionCursos1\bin\Debug\GestionCursos_0.1.pdb
+C:\GIT\GestionCursos1\bin\Debug\GestionCursos_0.1.xml
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0.1.vbprojResolveAssemblyReference.cache
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.Form1.resources
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.Form2.resources
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.FrmAlumnos.resources
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.FrmCrear.resources
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.FrmCursos.resources
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.FrmGestionar.resources
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.FrmModificarCursos.resources
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.FrmModificarModulos.resources
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.FrmModulos.resources
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.Resources.resources
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0.1.vbproj.GenerateResource.Cache

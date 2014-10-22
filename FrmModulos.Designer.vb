@@ -28,12 +28,13 @@ Partial Class FrmModulos
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.lstModulos = New System.Windows.Forms.ListBox()
         Me.lblLstModulos = New System.Windows.Forms.Label()
+        Me.cmdBorrarModulo = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'cmdCancelar
         '
-        Me.cmdCancelar.Location = New System.Drawing.Point(425, 161)
+        Me.cmdCancelar.Location = New System.Drawing.Point(425, 275)
         Me.cmdCancelar.Name = "cmdCancelar"
         Me.cmdCancelar.Size = New System.Drawing.Size(118, 51)
         Me.cmdCancelar.TabIndex = 9
@@ -51,7 +52,7 @@ Partial Class FrmModulos
         '
         'cmdModificar
         '
-        Me.cmdModificar.Location = New System.Drawing.Point(425, 47)
+        Me.cmdModificar.Location = New System.Drawing.Point(425, 161)
         Me.cmdModificar.Name = "cmdModificar"
         Me.cmdModificar.Size = New System.Drawing.Size(118, 51)
         Me.cmdModificar.TabIndex = 7
@@ -86,11 +87,21 @@ Partial Class FrmModulos
         Me.lblLstModulos.TabIndex = 1
         Me.lblLstModulos.Text = "Listado de Modulos Existentes"
         '
+        'cmdBorrarModulo
+        '
+        Me.cmdBorrarModulo.Location = New System.Drawing.Point(425, 218)
+        Me.cmdBorrarModulo.Name = "cmdBorrarModulo"
+        Me.cmdBorrarModulo.Size = New System.Drawing.Size(118, 51)
+        Me.cmdBorrarModulo.TabIndex = 10
+        Me.cmdBorrarModulo.Text = "Borrar el Modulo seleccionado"
+        Me.cmdBorrarModulo.UseVisualStyleBackColor = True
+        '
         'FrmModulos
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(604, 486)
+        Me.Controls.Add(Me.cmdBorrarModulo)
         Me.Controls.Add(Me.cmdCancelar)
         Me.Controls.Add(Me.cmdNuevoModulo)
         Me.Controls.Add(Me.cmdModificar)
@@ -108,4 +119,5 @@ Partial Class FrmModulos
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents lstModulos As System.Windows.Forms.ListBox
     Friend WithEvents lblLstModulos As System.Windows.Forms.Label
+    Friend WithEvents cmdBorrarModulo As System.Windows.Forms.Button
 End Class
