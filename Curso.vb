@@ -7,6 +7,7 @@ Public Class Curso
     Private mCodCur, mNombre As String
     Private mModulos As List(Of Modulo)
     Public Property Id As Integer
+	'probando si funciona el control de versiones
         Get
             Return mid
         End Get
