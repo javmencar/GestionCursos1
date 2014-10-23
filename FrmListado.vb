@@ -20,13 +20,16 @@ Public Class FrmListado
     Private Sub FrmListado_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         cn = New SqlConnection(ConeStr)
         Me.ListView1.View = View.Details
-        'Call cargarColumnasListview(Me.ListView1, "Personal")
+        'cargo los nombres de las columnas
         Call cargarSoloColumnasPrincipalesListview()
-        If pos = 0 Then
-            Call cargarDatosEnListview("Profesores")
-        Else
-            Call cargarDatosEnListview("Alumnos")
-        End If
+        Select Case pos
+            Case 0
+                Call cargarDatosEnListview("Profesores")
+            Case 1
+                Call cargarDatosEnListview("Alumnos")
+            Case Else
+                MsgBox("Por ahora esto no debería salir")
+        End Select
     End Sub
     Private Sub cargarSoloColumnasPrincipalesListview()
         Me.ListView1.Columns.Add("Id", 25, HorizontalAlignment.Center)
@@ -64,5 +67,17 @@ Public Class FrmListado
         Finally
             cn.Close()
         End Try
+    End Sub
+
+    Private Sub cmdNuevo_Click(sender As Object, e As EventArgs) Handles cmdNuevo.Click
+
+    End Sub
+
+    Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
+
+    End Sub
+
+    Private Sub cmdSalir_Click(sender As Object, e As EventArgs) Handles cmdSalir.Click
+        Me.DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
 End Class
