@@ -39,9 +39,8 @@ Public Class FrmListado
     Private Sub cargarDatosEnListview(ByVal cat As String)
         Try
             cn.Open()
-            Dim sql As String = String.Format("SELECT {0}.id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2" &
-                    " FROM({0}, DatosPersonales) WHERE DatosPersonales.Id= A{0}.IdDP", cat)
-            MsgBox(sql)
+             Dim sql As String = String.Format("SELECT {0}.id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2" &
+                    " FROM {0}, DatosPersonales WHERE DatosPersonales.Id={0}.IdDP", cat)
             Dim cmd As New SqlCommand(sql, cn)
             Dim dr As SqlDataReader
             dr = cmd.ExecuteReader
