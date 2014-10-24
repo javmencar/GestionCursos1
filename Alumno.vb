@@ -6,7 +6,7 @@ Public Class Alumno
     Implements IComparable
 
 
-    Private mId, mEdad, mTallaZapato As Integer
+    Private mId, mEdad, mTallaZapato, mIdFoto As Integer
     Private mDNI, mNombre, mApellido1, mApellido2, mLugNac, mDomicilio, mCP, mPoblacion As String
     Private mTel1, mTel2, mNumSS, mNivelEstudios, mExpSector, mTallaCamiseta, mTallaPantalon As String
     Private mEntrevistador, mValoracion, mApto As String
@@ -35,6 +35,14 @@ Public Class Alumno
         End Get
         Set(ByVal Value As Integer)
             mTallaZapato = Value
+        End Set
+    End Property
+    Public Property IdFoto As Integer
+        Get
+            Return mIdFoto
+        End Get
+        Set(ByVal Value As Integer)
+            mIdFoto = Value
         End Set
     End Property
     Public Property DNI As String

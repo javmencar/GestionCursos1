@@ -101,10 +101,59 @@ Public Class FrmListado
     End Sub
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
-        Dim alu As Alumno '= rellenaralumno()
+        Dim alu As Alumno = RellenarAlumno()
         Dim frm As New FrmFichas(alu)
 
     End Sub
+    Private Function RellenarAlumno() As Alumno
+        Dim alum As New Alumno
+
+        Try
+            cn = New SqlConnection(ConeStr)
+            'recupero el id del alumno que quiero modificar a traves del listview
+            Dim id As Integer = CInt(Me.ListView1.SelectedItems(0).Text)
+            Dim sql As String = "select * from DatosPersonales, alumnos where DatosPersonales.Id=Alumnos.IdDP and Alumnos.id=" & id
+            cn.Open()
+            Dim cmd As New SqlCommand(sql, cn)
+            Dim dr As SqlDataReader
+            dr = cmd.ExecuteReader
+            If dr.Read Then
+                alum.DNI = dr(1)
+                alum.Nombre = dr(2)
+                alum.Apellido1 = dr(3)
+                alum.Apellido2 = dr(4)
+                alum.Fnac = dr(5)
+                alum.LugNac = dr(6)
+                alum.Edad = dr(7)
+                alum.Domicilio = dr(8)
+                alum.CP = dr(9)
+                alum.Poblacion = dr(10)
+                alum.Tel1 = dr(11)
+                alum.Tel2 = dr(12)
+                alum.NumSS = dr(13)
+                alum.InInaem = dr(14)
+                alum.InFecha = dr(15)
+                alum.NivelEstudios = dr(16)
+                alum.ExpSector = dr(17)
+                alum.TallaCamiseta = dr(18)
+                alum.TallaPantalon = dr(19)
+                alum.TallaZapato = dr(20)
+                alum.Entrevistador = dr(21)
+                alum.FecEntr = dr(22)
+                alum.Valoracion = dr(23)
+                alum.Apto = dr(24)
+                alum.IdFoto = dr(25)
+            End If
+        Catch ex2 As miExcepcion
+            MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        Finally
+            cn.Close()
+        End Try
+
+        Return alum
+    End Function
 
     Private Sub cmdSalir_Click(sender As Object, e As EventArgs) Handles cmdSalir.Click
         Me.DialogResult = Windows.Forms.DialogResult.Cancel
