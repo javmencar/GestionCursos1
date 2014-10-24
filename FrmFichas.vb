@@ -20,6 +20,7 @@
     Private Sub FrmFichas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If IsNothing(alum) Then
             'nada, viene vacío y lo tenemos que rellenar
+            alum = New Alumno
         Else
             'cargamos el objeto en los campos
             Call rellenarCamposDesdeObjeto()
@@ -48,10 +49,13 @@
         Me.txtInFecha.Text = CStr(alum.InFecha)
         Me.txtNivelEstudios.Text = alum.NivelEstudios
         'hago una matriz con la string de experiencia y la vuelco en el listbox
-        Dim sectores() As String = alum.ExpSector.Split(";")
-        For Each s As String In sectores
-            Me.LstExpSector.Items.Add(s)
-        Next
+        'controlo si hay algo en el string
+        If alum.ExpSector.ToString <> "" Then
+            Dim sectores() As String = alum.ExpSector.Split(";")
+            For Each s As String In sectores
+                Me.LstExpSector.Items.Add(s)
+            Next
+        End If
         Me.CboTallaCamiseta.SelectedItem = alum.TallaCamiseta
         Me.CboTallaPantalon.SelectedItem = alum.TallaPantalon
         Me.txtTallaCalzado.Text = CStr(alum.TallaZapato)
