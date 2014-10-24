@@ -120,6 +120,7 @@ Public Class FrmListado
             Dim dr As SqlDataReader
             dr = cmd.ExecuteReader
             If dr.Read Then
+                'poner todas como la fecha
                 With alum
                     If Not IsNothing(dr(1)) Then
                         .DNI = dr(1)
