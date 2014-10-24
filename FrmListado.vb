@@ -71,9 +71,38 @@ Public Class FrmListado
 
     Private Sub cmdNuevo_Click(sender As Object, e As EventArgs) Handles cmdNuevo.Click
 
+        Select Case pos
+            Case 0
+                'Dim pro As New Profesor
+                'Dim frm As New FrmFichas(pro)
+            Case 1
+                'creo un objeto alumno y lo paso vacío
+                Dim alu As New Alumno
+                Dim frm As New FrmFichas(alu)
+                If frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
+                    MsgBox("Proceso cancelado")
+                ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
+                    MsgBox("Proceso cancelado a peticicion del usuario")
+                ElseIf frm.ShowDialog = Windows.Forms.DialogResult.OK Then
+                    ' recupero el objeto alumno ya rellenado y la vuelco en la base de datos
+                    Call insertarAlumnoEnBaseDatos(alu)
+                    MsgBox("Se ha insertado correctamente el alumno en la base de datos")
+                End If
+            Case Else
+
+        End Select
+
+
+
+
+    End Sub
+    Private Sub insertarAlumnoEnBaseDatos(ByVal a As Alumno)
+
     End Sub
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
+        Dim alu As Alumno '= rellenaralumno()
+        Dim frm As New FrmFichas(alu)
 
     End Sub
 

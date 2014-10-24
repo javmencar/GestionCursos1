@@ -35,12 +35,8 @@ Partial Class FrmFichas
         Me.txtEdad = New System.Windows.Forms.TextBox()
         Me.lblEdad = New System.Windows.Forms.Label()
         Me.lblDNI = New System.Windows.Forms.Label()
-        Me.GbDNI_NIE = New System.Windows.Forms.GroupBox()
-        Me.optDNI = New System.Windows.Forms.RadioButton()
-        Me.optNIE = New System.Windows.Forms.RadioButton()
         Me.txtDomicilio = New System.Windows.Forms.TextBox()
         Me.lblDomicilio = New System.Windows.Forms.Label()
-        Me.txtCP = New System.Windows.Forms.TextBox()
         Me.lblCP = New System.Windows.Forms.Label()
         Me.txtPoblacion = New System.Windows.Forms.TextBox()
         Me.lblPoblacion = New System.Windows.Forms.Label()
@@ -52,37 +48,41 @@ Partial Class FrmFichas
         Me.txtDNI = New System.Windows.Forms.MaskedTextBox()
         Me.txtNumSS = New System.Windows.Forms.MaskedTextBox()
         Me.GbInaem = New System.Windows.Forms.GroupBox()
-        Me.OptNo = New System.Windows.Forms.RadioButton()
+        Me.OptInaemNo = New System.Windows.Forms.RadioButton()
         Me.txtInFecha = New System.Windows.Forms.MaskedTextBox()
-        Me.optSi = New System.Windows.Forms.RadioButton()
+        Me.optInaemSi = New System.Windows.Forms.RadioButton()
         Me.lblInFecha = New System.Windows.Forms.Label()
         Me.lblNivelEstudios = New System.Windows.Forms.Label()
         Me.txtNivelEstudios = New System.Windows.Forms.TextBox()
         Me.GbExperiencia = New System.Windows.Forms.GroupBox()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
-        Me.ListBox1 = New System.Windows.Forms.ListBox()
+        Me.CboExpSector = New System.Windows.Forms.ComboBox()
+        Me.LstExpSector = New System.Windows.Forms.ListBox()
         Me.GbUniforme = New System.Windows.Forms.GroupBox()
         Me.lblTallaCamiseta = New System.Windows.Forms.Label()
         Me.CboTallaCamiseta = New System.Windows.Forms.ComboBox()
         Me.lblTallaPantalon = New System.Windows.Forms.Label()
         Me.lblNumZapato = New System.Windows.Forms.Label()
         Me.CboTallaPantalon = New System.Windows.Forms.ComboBox()
-        Me.cboTallaZapato = New System.Windows.Forms.ComboBox()
         Me.GbEntrevista = New System.Windows.Forms.GroupBox()
         Me.txtEntrevistador = New System.Windows.Forms.TextBox()
         Me.lblEntrevistador = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.txtValoracion = New System.Windows.Forms.TextBox()
         Me.txtFecEntr = New System.Windows.Forms.MaskedTextBox()
         Me.lblFecEntr = New System.Windows.Forms.Label()
         Me.optAptoSi = New System.Windows.Forms.RadioButton()
         Me.OptAptoNo = New System.Windows.Forms.RadioButton()
         Me.OptAptoPendiente = New System.Windows.Forms.RadioButton()
+        Me.txtCP = New System.Windows.Forms.MaskedTextBox()
+        Me.GbFormacion = New System.Windows.Forms.GroupBox()
+        Me.cmdModificar = New System.Windows.Forms.Button()
+        Me.cmdCancelar = New System.Windows.Forms.Button()
+        Me.txtTallaCalzado = New System.Windows.Forms.TextBox()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GbDNI_NIE.SuspendLayout()
         Me.GbInaem.SuspendLayout()
         Me.GbExperiencia.SuspendLayout()
         Me.GbUniforme.SuspendLayout()
         Me.GbEntrevista.SuspendLayout()
+        Me.GbFormacion.SuspendLayout()
         Me.SuspendLayout()
         '
         'LblApellido1
@@ -103,7 +103,7 @@ Partial Class FrmFichas
         '
         'txtApellido2
         '
-        Me.txtApellido2.Location = New System.Drawing.Point(118, 59)
+        Me.txtApellido2.Location = New System.Drawing.Point(416, 20)
         Me.txtApellido2.Name = "txtApellido2"
         Me.txtApellido2.Size = New System.Drawing.Size(165, 20)
         Me.txtApellido2.TabIndex = 4
@@ -111,7 +111,7 @@ Partial Class FrmFichas
         'lblApellido2
         '
         Me.lblApellido2.AutoSize = True
-        Me.lblApellido2.Location = New System.Drawing.Point(22, 62)
+        Me.lblApellido2.Location = New System.Drawing.Point(319, 23)
         Me.lblApellido2.Name = "lblApellido2"
         Me.lblApellido2.Size = New System.Drawing.Size(90, 13)
         Me.lblApellido2.TabIndex = 3
@@ -119,7 +119,7 @@ Partial Class FrmFichas
         '
         'txtNombre
         '
-        Me.txtNombre.Location = New System.Drawing.Point(118, 94)
+        Me.txtNombre.Location = New System.Drawing.Point(118, 59)
         Me.txtNombre.Name = "txtNombre"
         Me.txtNombre.Size = New System.Drawing.Size(165, 20)
         Me.txtNombre.TabIndex = 6
@@ -127,7 +127,7 @@ Partial Class FrmFichas
         'lblNombre
         '
         Me.lblNombre.AutoSize = True
-        Me.lblNombre.Location = New System.Drawing.Point(22, 97)
+        Me.lblNombre.Location = New System.Drawing.Point(22, 62)
         Me.lblNombre.Name = "lblNombre"
         Me.lblNombre.Size = New System.Drawing.Size(44, 13)
         Me.lblNombre.TabIndex = 5
@@ -135,16 +135,16 @@ Partial Class FrmFichas
         '
         'PictureBox2
         '
-        Me.PictureBox2.Location = New System.Drawing.Point(475, 20)
+        Me.PictureBox2.Location = New System.Drawing.Point(719, 20)
         Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(100, 118)
+        Me.PictureBox2.Size = New System.Drawing.Size(125, 140)
         Me.PictureBox2.TabIndex = 7
         Me.PictureBox2.TabStop = False
         '
         'lblFNac
         '
         Me.lblFNac.AutoSize = True
-        Me.lblFNac.Location = New System.Drawing.Point(22, 218)
+        Me.lblFNac.Location = New System.Drawing.Point(22, 102)
         Me.lblFNac.Name = "lblFNac"
         Me.lblFNac.Size = New System.Drawing.Size(146, 13)
         Me.lblFNac.TabIndex = 8
@@ -152,7 +152,7 @@ Partial Class FrmFichas
         '
         'txtFNac
         '
-        Me.txtFNac.Location = New System.Drawing.Point(174, 215)
+        Me.txtFNac.Location = New System.Drawing.Point(174, 99)
         Me.txtFNac.Mask = "00/00/0000"
         Me.txtFNac.Name = "txtFNac"
         Me.txtFNac.Size = New System.Drawing.Size(67, 20)
@@ -161,14 +161,14 @@ Partial Class FrmFichas
         '
         'txtLugNac
         '
-        Me.txtLugNac.Location = New System.Drawing.Point(247, 215)
+        Me.txtLugNac.Location = New System.Drawing.Point(247, 99)
         Me.txtLugNac.Name = "txtLugNac"
         Me.txtLugNac.Size = New System.Drawing.Size(214, 20)
         Me.txtLugNac.TabIndex = 12
         '
         'txtEdad
         '
-        Me.txtEdad.Location = New System.Drawing.Point(509, 215)
+        Me.txtEdad.Location = New System.Drawing.Point(509, 99)
         Me.txtEdad.Name = "txtEdad"
         Me.txtEdad.Size = New System.Drawing.Size(57, 20)
         Me.txtEdad.TabIndex = 14
@@ -176,7 +176,7 @@ Partial Class FrmFichas
         'lblEdad
         '
         Me.lblEdad.AutoSize = True
-        Me.lblEdad.Location = New System.Drawing.Point(472, 218)
+        Me.lblEdad.Location = New System.Drawing.Point(472, 102)
         Me.lblEdad.Name = "lblEdad"
         Me.lblEdad.Size = New System.Drawing.Size(32, 13)
         Me.lblEdad.TabIndex = 13
@@ -185,74 +185,32 @@ Partial Class FrmFichas
         'lblDNI
         '
         Me.lblDNI.AutoSize = True
-        Me.lblDNI.Location = New System.Drawing.Point(21, 45)
+        Me.lblDNI.Location = New System.Drawing.Point(319, 62)
         Me.lblDNI.Name = "lblDNI"
-        Me.lblDNI.Size = New System.Drawing.Size(44, 13)
+        Me.lblDNI.Size = New System.Drawing.Size(35, 13)
         Me.lblDNI.TabIndex = 15
-        Me.lblDNI.Text = "Numero"
-        '
-        'GbDNI_NIE
-        '
-        Me.GbDNI_NIE.Controls.Add(Me.optNIE)
-        Me.GbDNI_NIE.Controls.Add(Me.txtDNI)
-        Me.GbDNI_NIE.Controls.Add(Me.optDNI)
-        Me.GbDNI_NIE.Controls.Add(Me.lblDNI)
-        Me.GbDNI_NIE.Location = New System.Drawing.Point(25, 130)
-        Me.GbDNI_NIE.Name = "GbDNI_NIE"
-        Me.GbDNI_NIE.Size = New System.Drawing.Size(235, 69)
-        Me.GbDNI_NIE.TabIndex = 18
-        Me.GbDNI_NIE.TabStop = False
-        Me.GbDNI_NIE.Text = "Seleccione el tipo de Documento que posee"
-        '
-        'optDNI
-        '
-        Me.optDNI.AutoSize = True
-        Me.optDNI.Location = New System.Drawing.Point(23, 19)
-        Me.optDNI.Name = "optDNI"
-        Me.optDNI.Size = New System.Drawing.Size(44, 17)
-        Me.optDNI.TabIndex = 0
-        Me.optDNI.TabStop = True
-        Me.optDNI.Text = "DNI"
-        Me.optDNI.UseVisualStyleBackColor = True
-        '
-        'optNIE
-        '
-        Me.optNIE.AutoSize = True
-        Me.optNIE.Location = New System.Drawing.Point(130, 19)
-        Me.optNIE.Name = "optNIE"
-        Me.optNIE.Size = New System.Drawing.Size(43, 17)
-        Me.optNIE.TabIndex = 1
-        Me.optNIE.TabStop = True
-        Me.optNIE.Text = "NIE"
-        Me.optNIE.UseVisualStyleBackColor = True
+        Me.lblDNI.Text = "D.N.I."
         '
         'txtDomicilio
         '
-        Me.txtDomicilio.Location = New System.Drawing.Point(77, 255)
+        Me.txtDomicilio.Location = New System.Drawing.Point(77, 183)
         Me.txtDomicilio.Name = "txtDomicilio"
-        Me.txtDomicilio.Size = New System.Drawing.Size(384, 20)
+        Me.txtDomicilio.Size = New System.Drawing.Size(457, 20)
         Me.txtDomicilio.TabIndex = 20
         '
         'lblDomicilio
         '
         Me.lblDomicilio.AutoSize = True
-        Me.lblDomicilio.Location = New System.Drawing.Point(22, 258)
+        Me.lblDomicilio.Location = New System.Drawing.Point(22, 186)
         Me.lblDomicilio.Name = "lblDomicilio"
         Me.lblDomicilio.Size = New System.Drawing.Size(49, 13)
         Me.lblDomicilio.TabIndex = 19
         Me.lblDomicilio.Text = "Domicilio"
         '
-        'txtCP
-        '
-        Me.txtCP.Location = New System.Drawing.Point(509, 255)
-        Me.txtCP.Name = "txtCP"
-        Me.txtCP.Size = New System.Drawing.Size(57, 20)
-        Me.txtCP.TabIndex = 22
-        '
         'lblCP
         '
         Me.lblCP.AutoSize = True
-        Me.lblCP.Location = New System.Drawing.Point(472, 258)
+        Me.lblCP.Location = New System.Drawing.Point(540, 186)
         Me.lblCP.Name = "lblCP"
         Me.lblCP.Size = New System.Drawing.Size(27, 13)
         Me.lblCP.TabIndex = 21
@@ -260,7 +218,7 @@ Partial Class FrmFichas
         '
         'txtPoblacion
         '
-        Me.txtPoblacion.Location = New System.Drawing.Point(77, 289)
+        Me.txtPoblacion.Location = New System.Drawing.Point(680, 183)
         Me.txtPoblacion.Name = "txtPoblacion"
         Me.txtPoblacion.Size = New System.Drawing.Size(164, 20)
         Me.txtPoblacion.TabIndex = 24
@@ -268,7 +226,7 @@ Partial Class FrmFichas
         'lblPoblacion
         '
         Me.lblPoblacion.AutoSize = True
-        Me.lblPoblacion.Location = New System.Drawing.Point(22, 292)
+        Me.lblPoblacion.Location = New System.Drawing.Point(625, 186)
         Me.lblPoblacion.Name = "lblPoblacion"
         Me.lblPoblacion.Size = New System.Drawing.Size(54, 13)
         Me.lblPoblacion.TabIndex = 23
@@ -277,7 +235,7 @@ Partial Class FrmFichas
         'lblTel1
         '
         Me.lblTel1.AutoSize = True
-        Me.lblTel1.Location = New System.Drawing.Point(278, 292)
+        Me.lblTel1.Location = New System.Drawing.Point(152, 143)
         Me.lblTel1.Name = "lblTel1"
         Me.lblTel1.Size = New System.Drawing.Size(58, 13)
         Me.lblTel1.TabIndex = 25
@@ -286,7 +244,7 @@ Partial Class FrmFichas
         'lblTel2
         '
         Me.lblTel2.AutoSize = True
-        Me.lblTel2.Location = New System.Drawing.Point(435, 292)
+        Me.lblTel2.Location = New System.Drawing.Point(330, 143)
         Me.lblTel2.Name = "lblTel2"
         Me.lblTel2.Size = New System.Drawing.Size(58, 13)
         Me.lblTel2.TabIndex = 27
@@ -294,7 +252,7 @@ Partial Class FrmFichas
         '
         'txtTel1
         '
-        Me.txtTel1.Location = New System.Drawing.Point(342, 289)
+        Me.txtTel1.Location = New System.Drawing.Point(216, 140)
         Me.txtTel1.Mask = "000-00-00-00"
         Me.txtTel1.Name = "txtTel1"
         Me.txtTel1.Size = New System.Drawing.Size(67, 20)
@@ -302,7 +260,7 @@ Partial Class FrmFichas
         '
         'txtTel2
         '
-        Me.txtTel2.Location = New System.Drawing.Point(499, 289)
+        Me.txtTel2.Location = New System.Drawing.Point(394, 140)
         Me.txtTel2.Mask = "000-00-00-00"
         Me.txtTel2.Name = "txtTel2"
         Me.txtTel2.Size = New System.Drawing.Size(67, 20)
@@ -311,7 +269,7 @@ Partial Class FrmFichas
         'lblNumSS
         '
         Me.lblNumSS.AutoSize = True
-        Me.lblNumSS.Location = New System.Drawing.Point(324, 149)
+        Me.lblNumSS.Location = New System.Drawing.Point(446, 62)
         Me.lblNumSS.Name = "lblNumSS"
         Me.lblNumSS.Size = New System.Drawing.Size(157, 13)
         Me.lblNumSS.TabIndex = 31
@@ -319,7 +277,7 @@ Partial Class FrmFichas
         '
         'txtDNI
         '
-        Me.txtDNI.Location = New System.Drawing.Point(93, 42)
+        Me.txtDNI.Location = New System.Drawing.Point(372, 59)
         Me.txtDNI.Mask = "00000000A"
         Me.txtDNI.Name = "txtDNI"
         Me.txtDNI.Size = New System.Drawing.Size(67, 20)
@@ -327,7 +285,7 @@ Partial Class FrmFichas
         '
         'txtNumSS
         '
-        Me.txtNumSS.Location = New System.Drawing.Point(342, 172)
+        Me.txtNumSS.Location = New System.Drawing.Point(613, 59)
         Me.txtNumSS.Mask = "00/00000000/00"
         Me.txtNumSS.Name = "txtNumSS"
         Me.txtNumSS.Size = New System.Drawing.Size(100, 20)
@@ -335,27 +293,27 @@ Partial Class FrmFichas
         '
         'GbInaem
         '
-        Me.GbInaem.Controls.Add(Me.OptNo)
+        Me.GbInaem.Controls.Add(Me.OptInaemNo)
         Me.GbInaem.Controls.Add(Me.txtInFecha)
-        Me.GbInaem.Controls.Add(Me.optSi)
+        Me.GbInaem.Controls.Add(Me.optInaemSi)
         Me.GbInaem.Controls.Add(Me.lblInFecha)
-        Me.GbInaem.Location = New System.Drawing.Point(25, 323)
+        Me.GbInaem.Location = New System.Drawing.Point(25, 233)
         Me.GbInaem.Name = "GbInaem"
         Me.GbInaem.Size = New System.Drawing.Size(235, 69)
         Me.GbInaem.TabIndex = 35
         Me.GbInaem.TabStop = False
         Me.GbInaem.Text = "¿Está inscrito en laOficina de Empleo?"
         '
-        'OptNo
+        'OptInaemNo
         '
-        Me.OptNo.AutoSize = True
-        Me.OptNo.Location = New System.Drawing.Point(130, 19)
-        Me.OptNo.Name = "OptNo"
-        Me.OptNo.Size = New System.Drawing.Size(39, 17)
-        Me.OptNo.TabIndex = 1
-        Me.OptNo.TabStop = True
-        Me.OptNo.Text = "No"
-        Me.OptNo.UseVisualStyleBackColor = True
+        Me.OptInaemNo.AutoSize = True
+        Me.OptInaemNo.Location = New System.Drawing.Point(130, 19)
+        Me.OptInaemNo.Name = "OptInaemNo"
+        Me.OptInaemNo.Size = New System.Drawing.Size(39, 17)
+        Me.OptInaemNo.TabIndex = 1
+        Me.OptInaemNo.TabStop = True
+        Me.OptInaemNo.Text = "No"
+        Me.OptInaemNo.UseVisualStyleBackColor = True
         '
         'txtInFecha
         '
@@ -366,16 +324,16 @@ Partial Class FrmFichas
         Me.txtInFecha.TabIndex = 33
         Me.txtInFecha.ValidatingType = GetType(Date)
         '
-        'optSi
+        'optInaemSi
         '
-        Me.optSi.AutoSize = True
-        Me.optSi.Location = New System.Drawing.Point(23, 19)
-        Me.optSi.Name = "optSi"
-        Me.optSi.Size = New System.Drawing.Size(36, 17)
-        Me.optSi.TabIndex = 0
-        Me.optSi.TabStop = True
-        Me.optSi.Text = "Sí"
-        Me.optSi.UseVisualStyleBackColor = True
+        Me.optInaemSi.AutoSize = True
+        Me.optInaemSi.Location = New System.Drawing.Point(23, 19)
+        Me.optInaemSi.Name = "optInaemSi"
+        Me.optInaemSi.Size = New System.Drawing.Size(36, 17)
+        Me.optInaemSi.TabIndex = 0
+        Me.optInaemSi.TabStop = True
+        Me.optInaemSi.Text = "Sí"
+        Me.optInaemSi.UseVisualStyleBackColor = True
         '
         'lblInFecha
         '
@@ -389,7 +347,7 @@ Partial Class FrmFichas
         'lblNivelEstudios
         '
         Me.lblNivelEstudios.AutoSize = True
-        Me.lblNivelEstudios.Location = New System.Drawing.Point(282, 323)
+        Me.lblNivelEstudios.Location = New System.Drawing.Point(6, 16)
         Me.lblNivelEstudios.Name = "lblNivelEstudios"
         Me.lblNivelEstudios.Size = New System.Drawing.Size(102, 13)
         Me.lblNivelEstudios.TabIndex = 36
@@ -397,49 +355,49 @@ Partial Class FrmFichas
         '
         'txtNivelEstudios
         '
-        Me.txtNivelEstudios.Location = New System.Drawing.Point(285, 339)
+        Me.txtNivelEstudios.Location = New System.Drawing.Point(6, 47)
         Me.txtNivelEstudios.Multiline = True
         Me.txtNivelEstudios.Name = "txtNivelEstudios"
-        Me.txtNivelEstudios.Size = New System.Drawing.Size(281, 53)
+        Me.txtNivelEstudios.Size = New System.Drawing.Size(270, 53)
         Me.txtNivelEstudios.TabIndex = 37
         '
         'GbExperiencia
         '
-        Me.GbExperiencia.Controls.Add(Me.ListBox1)
-        Me.GbExperiencia.Controls.Add(Me.ComboBox1)
-        Me.GbExperiencia.Location = New System.Drawing.Point(25, 409)
+        Me.GbExperiencia.Controls.Add(Me.LstExpSector)
+        Me.GbExperiencia.Controls.Add(Me.CboExpSector)
+        Me.GbExperiencia.Location = New System.Drawing.Point(609, 233)
         Me.GbExperiencia.Name = "GbExperiencia"
         Me.GbExperiencia.Size = New System.Drawing.Size(235, 130)
         Me.GbExperiencia.TabIndex = 34
         Me.GbExperiencia.TabStop = False
         Me.GbExperiencia.Text = "Sectores Experiencia Laboral"
         '
-        'ComboBox1
+        'CboExpSector
         '
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {"HOSTELERÍA", "PANADERÍA", "PASTELERÍA", "COMERCIO PANADERÍA PASTELERÍA", "COMERCIO VARIOS", "OPERARIO DE PRODUCCIÓN", "OTROS"})
-        Me.ComboBox1.Location = New System.Drawing.Point(7, 20)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(209, 21)
-        Me.ComboBox1.TabIndex = 0
+        Me.CboExpSector.FormattingEnabled = True
+        Me.CboExpSector.Items.AddRange(New Object() {"HOSTELERÍA", "PANADERÍA", "PASTELERÍA", "COMERCIO PANADERÍA PASTELERÍA", "COMERCIO VARIOS", "OPERARIO DE PRODUCCIÓN", "OTROS"})
+        Me.CboExpSector.Location = New System.Drawing.Point(7, 20)
+        Me.CboExpSector.Name = "CboExpSector"
+        Me.CboExpSector.Size = New System.Drawing.Size(209, 21)
+        Me.CboExpSector.TabIndex = 0
         '
-        'ListBox1
+        'LstExpSector
         '
-        Me.ListBox1.FormattingEnabled = True
-        Me.ListBox1.Location = New System.Drawing.Point(7, 48)
-        Me.ListBox1.Name = "ListBox1"
-        Me.ListBox1.Size = New System.Drawing.Size(209, 56)
-        Me.ListBox1.TabIndex = 1
+        Me.LstExpSector.FormattingEnabled = True
+        Me.LstExpSector.Location = New System.Drawing.Point(7, 48)
+        Me.LstExpSector.Name = "LstExpSector"
+        Me.LstExpSector.Size = New System.Drawing.Size(209, 56)
+        Me.LstExpSector.TabIndex = 1
         '
         'GbUniforme
         '
-        Me.GbUniforme.Controls.Add(Me.cboTallaZapato)
+        Me.GbUniforme.Controls.Add(Me.txtTallaCalzado)
         Me.GbUniforme.Controls.Add(Me.CboTallaPantalon)
         Me.GbUniforme.Controls.Add(Me.lblNumZapato)
         Me.GbUniforme.Controls.Add(Me.lblTallaPantalon)
         Me.GbUniforme.Controls.Add(Me.CboTallaCamiseta)
         Me.GbUniforme.Controls.Add(Me.lblTallaCamiseta)
-        Me.GbUniforme.Location = New System.Drawing.Point(327, 409)
+        Me.GbUniforme.Location = New System.Drawing.Point(25, 358)
         Me.GbUniforme.Name = "GbUniforme"
         Me.GbUniforme.Size = New System.Drawing.Size(172, 130)
         Me.GbUniforme.TabIndex = 35
@@ -491,15 +449,6 @@ Partial Class FrmFichas
         Me.CboTallaPantalon.Size = New System.Drawing.Size(69, 21)
         Me.CboTallaPantalon.TabIndex = 31
         '
-        'cboTallaZapato
-        '
-        Me.cboTallaZapato.FormattingEnabled = True
-        Me.cboTallaZapato.Items.AddRange(New Object() {"XS", "S", "M", "L", "XL", "XXL", "XXXL"})
-        Me.cboTallaZapato.Location = New System.Drawing.Point(89, 92)
-        Me.cboTallaZapato.Name = "cboTallaZapato"
-        Me.cboTallaZapato.Size = New System.Drawing.Size(69, 21)
-        Me.cboTallaZapato.TabIndex = 32
-        '
         'GbEntrevista
         '
         Me.GbEntrevista.Controls.Add(Me.OptAptoPendiente)
@@ -507,12 +456,12 @@ Partial Class FrmFichas
         Me.GbEntrevista.Controls.Add(Me.optAptoSi)
         Me.GbEntrevista.Controls.Add(Me.txtFecEntr)
         Me.GbEntrevista.Controls.Add(Me.lblFecEntr)
-        Me.GbEntrevista.Controls.Add(Me.TextBox1)
+        Me.GbEntrevista.Controls.Add(Me.txtValoracion)
         Me.GbEntrevista.Controls.Add(Me.txtEntrevistador)
         Me.GbEntrevista.Controls.Add(Me.lblEntrevistador)
-        Me.GbEntrevista.Location = New System.Drawing.Point(25, 547)
+        Me.GbEntrevista.Location = New System.Drawing.Point(230, 358)
         Me.GbEntrevista.Name = "GbEntrevista"
-        Me.GbEntrevista.Size = New System.Drawing.Size(519, 165)
+        Me.GbEntrevista.Size = New System.Drawing.Size(519, 189)
         Me.GbEntrevista.TabIndex = 35
         Me.GbEntrevista.TabStop = False
         Me.GbEntrevista.Text = "Entrevista"
@@ -535,13 +484,13 @@ Partial Class FrmFichas
         Me.lblEntrevistador.TabIndex = 25
         Me.lblEntrevistador.Text = "Entrevistador"
         '
-        'TextBox1
+        'txtValoracion
         '
-        Me.TextBox1.Location = New System.Drawing.Point(23, 59)
-        Me.TextBox1.Multiline = True
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(482, 78)
-        Me.TextBox1.TabIndex = 38
+        Me.txtValoracion.Location = New System.Drawing.Point(23, 59)
+        Me.txtValoracion.Multiline = True
+        Me.txtValoracion.Name = "txtValoracion"
+        Me.txtValoracion.Size = New System.Drawing.Size(482, 78)
+        Me.txtValoracion.TabIndex = 38
         '
         'txtFecEntr
         '
@@ -564,7 +513,7 @@ Partial Class FrmFichas
         'optAptoSi
         '
         Me.optAptoSi.AutoSize = True
-        Me.optAptoSi.Location = New System.Drawing.Point(79, 142)
+        Me.optAptoSi.Location = New System.Drawing.Point(88, 152)
         Me.optAptoSi.Name = "optAptoSi"
         Me.optAptoSi.Size = New System.Drawing.Size(47, 17)
         Me.optAptoSi.TabIndex = 41
@@ -575,7 +524,7 @@ Partial Class FrmFichas
         'OptAptoNo
         '
         Me.OptAptoNo.AutoSize = True
-        Me.OptAptoNo.Location = New System.Drawing.Point(222, 142)
+        Me.OptAptoNo.Location = New System.Drawing.Point(210, 152)
         Me.OptAptoNo.Name = "OptAptoNo"
         Me.OptAptoNo.Size = New System.Drawing.Size(64, 17)
         Me.OptAptoNo.TabIndex = 42
@@ -586,7 +535,7 @@ Partial Class FrmFichas
         'OptAptoPendiente
         '
         Me.OptAptoPendiente.AutoSize = True
-        Me.OptAptoPendiente.Location = New System.Drawing.Point(344, 142)
+        Me.OptAptoPendiente.Location = New System.Drawing.Point(343, 152)
         Me.OptAptoPendiente.Name = "OptAptoPendiente"
         Me.OptAptoPendiente.Size = New System.Drawing.Size(73, 17)
         Me.OptAptoPendiente.TabIndex = 43
@@ -594,16 +543,64 @@ Partial Class FrmFichas
         Me.OptAptoPendiente.Text = "Pendiente"
         Me.OptAptoPendiente.UseVisualStyleBackColor = True
         '
+        'txtCP
+        '
+        Me.txtCP.Location = New System.Drawing.Point(573, 183)
+        Me.txtCP.Mask = "00000"
+        Me.txtCP.Name = "txtCP"
+        Me.txtCP.Size = New System.Drawing.Size(30, 20)
+        Me.txtCP.TabIndex = 38
+        '
+        'GbFormacion
+        '
+        Me.GbFormacion.Controls.Add(Me.txtNivelEstudios)
+        Me.GbFormacion.Controls.Add(Me.lblNivelEstudios)
+        Me.GbFormacion.Location = New System.Drawing.Point(285, 233)
+        Me.GbFormacion.Name = "GbFormacion"
+        Me.GbFormacion.Size = New System.Drawing.Size(296, 105)
+        Me.GbFormacion.TabIndex = 39
+        Me.GbFormacion.TabStop = False
+        Me.GbFormacion.Text = "Formacion"
+        '
+        'cmdModificar
+        '
+        Me.cmdModificar.Location = New System.Drawing.Point(897, 161)
+        Me.cmdModificar.Name = "cmdModificar"
+        Me.cmdModificar.Size = New System.Drawing.Size(104, 52)
+        Me.cmdModificar.TabIndex = 40
+        Me.cmdModificar.Text = "Crear/Modificar"
+        Me.cmdModificar.UseVisualStyleBackColor = True
+        '
+        'cmdCancelar
+        '
+        Me.cmdCancelar.Location = New System.Drawing.Point(897, 275)
+        Me.cmdCancelar.Name = "cmdCancelar"
+        Me.cmdCancelar.Size = New System.Drawing.Size(104, 52)
+        Me.cmdCancelar.TabIndex = 41
+        Me.cmdCancelar.Text = "Cancelar"
+        Me.cmdCancelar.UseVisualStyleBackColor = True
+        '
+        'txtTallaCalzado
+        '
+        Me.txtTallaCalzado.Location = New System.Drawing.Point(89, 92)
+        Me.txtTallaCalzado.Name = "txtTallaCalzado"
+        Me.txtTallaCalzado.Size = New System.Drawing.Size(69, 20)
+        Me.txtTallaCalzado.TabIndex = 32
+        '
         'FrmFichas
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(614, 733)
+        Me.ClientSize = New System.Drawing.Size(1013, 636)
+        Me.Controls.Add(Me.cmdCancelar)
+        Me.Controls.Add(Me.cmdModificar)
+        Me.Controls.Add(Me.GbFormacion)
+        Me.Controls.Add(Me.txtCP)
+        Me.Controls.Add(Me.txtDNI)
         Me.Controls.Add(Me.GbEntrevista)
+        Me.Controls.Add(Me.lblDNI)
         Me.Controls.Add(Me.GbUniforme)
         Me.Controls.Add(Me.GbExperiencia)
-        Me.Controls.Add(Me.txtNivelEstudios)
-        Me.Controls.Add(Me.lblNivelEstudios)
         Me.Controls.Add(Me.GbInaem)
         Me.Controls.Add(Me.txtNumSS)
         Me.Controls.Add(Me.lblNumSS)
@@ -613,11 +610,9 @@ Partial Class FrmFichas
         Me.Controls.Add(Me.lblTel1)
         Me.Controls.Add(Me.txtPoblacion)
         Me.Controls.Add(Me.lblPoblacion)
-        Me.Controls.Add(Me.txtCP)
         Me.Controls.Add(Me.lblCP)
         Me.Controls.Add(Me.txtDomicilio)
         Me.Controls.Add(Me.lblDomicilio)
-        Me.Controls.Add(Me.GbDNI_NIE)
         Me.Controls.Add(Me.txtEdad)
         Me.Controls.Add(Me.lblEdad)
         Me.Controls.Add(Me.txtLugNac)
@@ -633,8 +628,6 @@ Partial Class FrmFichas
         Me.Name = "FrmFichas"
         Me.Text = "FrmFichas"
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GbDNI_NIE.ResumeLayout(False)
-        Me.GbDNI_NIE.PerformLayout()
         Me.GbInaem.ResumeLayout(False)
         Me.GbInaem.PerformLayout()
         Me.GbExperiencia.ResumeLayout(False)
@@ -642,6 +635,8 @@ Partial Class FrmFichas
         Me.GbUniforme.PerformLayout()
         Me.GbEntrevista.ResumeLayout(False)
         Me.GbEntrevista.PerformLayout()
+        Me.GbFormacion.ResumeLayout(False)
+        Me.GbFormacion.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -659,13 +654,9 @@ Partial Class FrmFichas
     Friend WithEvents txtEdad As System.Windows.Forms.TextBox
     Friend WithEvents lblEdad As System.Windows.Forms.Label
     Friend WithEvents lblDNI As System.Windows.Forms.Label
-    Friend WithEvents GbDNI_NIE As System.Windows.Forms.GroupBox
-    Friend WithEvents optNIE As System.Windows.Forms.RadioButton
     Friend WithEvents txtDNI As System.Windows.Forms.MaskedTextBox
-    Friend WithEvents optDNI As System.Windows.Forms.RadioButton
     Friend WithEvents txtDomicilio As System.Windows.Forms.TextBox
     Friend WithEvents lblDomicilio As System.Windows.Forms.Label
-    Friend WithEvents txtCP As System.Windows.Forms.TextBox
     Friend WithEvents lblCP As System.Windows.Forms.Label
     Friend WithEvents txtPoblacion As System.Windows.Forms.TextBox
     Friend WithEvents lblPoblacion As System.Windows.Forms.Label
@@ -676,17 +667,16 @@ Partial Class FrmFichas
     Friend WithEvents lblNumSS As System.Windows.Forms.Label
     Friend WithEvents txtNumSS As System.Windows.Forms.MaskedTextBox
     Friend WithEvents GbInaem As System.Windows.Forms.GroupBox
-    Friend WithEvents OptNo As System.Windows.Forms.RadioButton
+    Friend WithEvents OptInaemNo As System.Windows.Forms.RadioButton
     Friend WithEvents txtInFecha As System.Windows.Forms.MaskedTextBox
-    Friend WithEvents optSi As System.Windows.Forms.RadioButton
+    Friend WithEvents optInaemSi As System.Windows.Forms.RadioButton
     Friend WithEvents lblInFecha As System.Windows.Forms.Label
     Friend WithEvents lblNivelEstudios As System.Windows.Forms.Label
     Friend WithEvents txtNivelEstudios As System.Windows.Forms.TextBox
     Friend WithEvents GbExperiencia As System.Windows.Forms.GroupBox
-    Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
-    Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
+    Friend WithEvents LstExpSector As System.Windows.Forms.ListBox
+    Friend WithEvents CboExpSector As System.Windows.Forms.ComboBox
     Friend WithEvents GbUniforme As System.Windows.Forms.GroupBox
-    Friend WithEvents cboTallaZapato As System.Windows.Forms.ComboBox
     Friend WithEvents CboTallaPantalon As System.Windows.Forms.ComboBox
     Friend WithEvents lblNumZapato As System.Windows.Forms.Label
     Friend WithEvents lblTallaPantalon As System.Windows.Forms.Label
@@ -695,10 +685,15 @@ Partial Class FrmFichas
     Friend WithEvents GbEntrevista As System.Windows.Forms.GroupBox
     Friend WithEvents txtFecEntr As System.Windows.Forms.MaskedTextBox
     Friend WithEvents lblFecEntr As System.Windows.Forms.Label
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents txtValoracion As System.Windows.Forms.TextBox
     Friend WithEvents txtEntrevistador As System.Windows.Forms.TextBox
     Friend WithEvents lblEntrevistador As System.Windows.Forms.Label
     Friend WithEvents OptAptoPendiente As System.Windows.Forms.RadioButton
     Friend WithEvents OptAptoNo As System.Windows.Forms.RadioButton
     Friend WithEvents optAptoSi As System.Windows.Forms.RadioButton
+    Friend WithEvents txtCP As System.Windows.Forms.MaskedTextBox
+    Friend WithEvents GbFormacion As System.Windows.Forms.GroupBox
+    Friend WithEvents cmdModificar As System.Windows.Forms.Button
+    Friend WithEvents cmdCancelar As System.Windows.Forms.Button
+    Friend WithEvents txtTallaCalzado As System.Windows.Forms.TextBox
 End Class
