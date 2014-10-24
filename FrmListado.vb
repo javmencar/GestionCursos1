@@ -133,7 +133,8 @@ Public Class FrmListado
                     If Not IsNothing(dr(4)) Then
                         .Apellido2 = dr(4)
                     End If
-                    If Not dr(5).DBNull.Then Then
+                    'vigilar las fechas, dan problemas
+                    If Not IsDBNull(dr(5)) Then
                         .Fnac = dr(5)
                     End If
                     If Not IsNothing(dr(6)) Then
@@ -163,8 +164,9 @@ Public Class FrmListado
                     If Not IsNothing(dr(14)) Then
                         .InInaem = dr(14)
                     End If
-                    If Not IsNothing(dr(15)) Then
-                        .InFecha = dr(15)
+                    'vigilar las fechas, dan problemas
+                    If Not IsDBNull(dr(15)) Then
+                        .Fnac = dr(15)
                     End If
                     If Not IsNothing(dr(16)) Then
                         .NivelEstudios = dr(16)
@@ -184,8 +186,9 @@ Public Class FrmListado
                     If Not IsNothing(dr(21)) Then
                         .Entrevistador = dr(21)
                     End If
-                    If Not IsNothing(dr(22)) Then
-                        .FecEntr = dr(22)
+                    'vigilar las fechas, dan problemas
+                    If Not IsDBNull(dr(22)) Then
+                        .Fnac = dr(22)
                     End If
                     If Not IsNothing(dr(23)) Then
                         .Valoracion = dr(23)
