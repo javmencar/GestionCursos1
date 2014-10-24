@@ -103,6 +103,7 @@ Public Class FrmListado
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
         Dim alu As Alumno = RellenarAlumno()
         Dim frm As New FrmFichas(alu)
+        frm.ShowDialog()
 
     End Sub
     Private Function RellenarAlumno() As Alumno
@@ -113,6 +114,7 @@ Public Class FrmListado
             'recupero el id del alumno que quiero modificar a traves del listview
             Dim id As Integer = CInt(Me.ListView1.SelectedItems(0).Text)
             Dim sql As String = "select * from DatosPersonales, alumnos where DatosPersonales.Id=Alumnos.IdDP and Alumnos.id=" & id
+            MsgBox(sql)
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
             Dim dr As SqlDataReader
@@ -131,7 +133,7 @@ Public Class FrmListado
                     If Not IsNothing(dr(4)) Then
                         .Apellido2 = dr(4)
                     End If
-                    If Not IsNothing(dr(5)) Then
+                    If Not dr(5).DBNull.Then Then
                         .Fnac = dr(5)
                     End If
                     If Not IsNothing(dr(6)) Then
