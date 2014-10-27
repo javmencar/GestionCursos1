@@ -87,7 +87,8 @@
             .DNI = Me.txtDNI.Text
             .NumSS = Me.txtNumSS.Text
             If Me.txtFNac.Text <> "00/00/0" Then
-                .Fnac = CDate(Me.txtFNac.Text)
+                .Fnac = Convert.ToDateTime(Me.txtFNac.Text)
+                ' .Fnac = CDate(Me.txtFNac.Text)
             End If
             .LugNac = Me.txtLugNac.Text
             .Edad = CInt(Me.txtEdad.Text)
@@ -102,7 +103,8 @@
                 .InInaem = False
             End If
             If Me.txtInFecha.Text <> "00/00/0" Then
-                .InFecha = CDate(Me.txtInFecha.Text)
+                .InFecha = Convert.ToDateTime(Me.txtInFecha.Text)
+                ' .InFecha = CDate(Me.txtInFecha.Text)
             End If
 
             .NivelEstudios = Me.txtNivelEstudios.Text
@@ -117,11 +119,18 @@
                 End If
                 .ExpSector = str
             End If
-            .TallaCamiseta = Me.CboTallaCamiseta.SelectedItem.ToString
-            .TallaPantalon = Me.CboTallaPantalon.SelectedItem.to
+            If Me.CboTallaCamiseta.SelectedIndex <> -1 Then
+                .TallaCamiseta = Me.CboTallaCamiseta.SelectedItem.ToString
+            End If
+            If Me.CboTallaPantalon.SelectedIndex <> -1 Then
+                .TallaPantalon = Me.CboTallaPantalon.SelectedItem.ToString
+            End If
             .TallaZapato = CInt(Me.txtTallaCalzado.Text)
             .Entrevistador = Me.txtEntrevistador.Text
-            .FecEntr = CDate(Me.txtFecEntr.Text)
+            If Me.txtFecEntr.Text <> "00/00/0" Then
+                .FecEntr = Convert.ToDateTime(Me.txtFecEntr.Text)
+            End If
+            '.FecEntr = CDate(Me.txtFecEntr.Text)
             .Valoracion = Me.txtValoracion.Text
             If Me.optAptoSi.Checked = True Then
                 .Apto = "Apto"
