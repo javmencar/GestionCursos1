@@ -13,36 +13,36 @@ Public Class Alumno
     Private mFnac, mInFecha, mFecEntr As Date
     Private mInInaem As Boolean
 
-    Public Property Id As Integer
+    Public Property Id As String
         Get
-            Return mid
+            Return CStr(mId)
         End Get
-        Set(ByVal Value As Integer)
-            mid = Value
+        Set(ByVal Value As String)
+            mId = CInt(Value)
         End Set
     End Property
-    Public Property Edad As Integer
+    Public Property Edad As String
         Get
-            Return mEdad
+            Return CStr(mEdad)
         End Get
-        Set(ByVal Value As Integer)
-            mEdad = Value
+        Set(ByVal Value As String)
+            mEdad = CInt(Value)
         End Set
     End Property
-    Public Property TallaZapato As Integer
+    Public Property TallaZapato As String
         Get
-            Return mTallaZapato
+            Return CStr(mTallaZapato)
         End Get
-        Set(ByVal Value As Integer)
-            mTallaZapato = Value
+        Set(ByVal Value As String)
+            mTallaZapato = CInt(Value)
         End Set
     End Property
-    Public Property IdFoto As Integer
+    Public Property IdFoto As String
         Get
-            Return mIdFoto
+            Return CStr(mIdFoto)
         End Get
-        Set(ByVal Value As Integer)
-            mIdFoto = Value
+        Set(ByVal Value As String)
+            mIdFoto = CInt(Value)
         End Set
     End Property
     Public Property DNI As String
@@ -193,36 +193,43 @@ Public Class Alumno
             mApto = Value
         End Set
     End Property
-    Public Property Fnac As Date
+    Public Property Fnac As String
         Get
-            Return mFnac
+            Return CStr(mFnac)
         End Get
-        Set(ByVal Value As Date)
-            mFnac = Value
+        Set(ByVal Value As String)
+            mFnac = Convert.ToDateTime(Value)
         End Set
     End Property
-    Public Property InFecha As Date
+    Public Property InFecha As String
         Get
-            Return mInFecha
+            Return CStr(mInFecha)
         End Get
-        Set(ByVal Value As Date)
-            mInFecha = Value
+        Set(ByVal Value As String)
+            mInFecha = Convert.ToDateTime(Value)
         End Set
     End Property
-    Public Property FecEntr As Date
+    Public Property FecEntr As String
         Get
-            Return mFecentr
+            Return CStr(mFecEntr)
         End Get
-        Set(ByVal Value As Date)
-            mFecentr = Value
+        Set(ByVal Value As String)
+            mFecEntr = Convert.ToDateTime(Value)
         End Set
     End Property
-    Public Property InInaem As Boolean
+    Public Property InInaem As String
         Get
-            Return mInInaem
+            If mInInaem = True Then
+                Return "True"
+            Else : Return "False"
+            End If
         End Get
-        Set(ByVal Value As Boolean)
-            mInInaem = Value
+        Set(ByVal Value As String)
+            If Value = "True" Then
+                mInInaem = True
+            Else
+                mInInaem = False
+            End If
         End Set
     End Property
 
@@ -238,16 +245,15 @@ Public Class Alumno
             For i As Integer = 0 To lis.Count - 1
                 comparacion(i) = (Me.ListadoDePropiedades(i).CompareTo(otroAlumno.ListadoDePropiedades(i)))
             Next
-
+            Dim k As Integer
             For Each j As Integer In comparacion
                 If j <> 0 Then
+                    k = j
                     Exit For
                 End If
                 Return 0
             Next
-            Return -1
-
-
+            Return k
             'Else
             Throw New ArgumentException("No es un Alumno")
         End If

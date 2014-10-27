@@ -149,7 +149,18 @@
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
         Call rellenarObjetoDesdeCampos()
-       
+        Dim i As Integer = Me.alum.CompareTo(a)
+        Select Case i
+            Case -1
+                MsgBox("no debería salir")
+            Case 0
+                MsgBox("No hay cambios")
+            Case Else
+                MsgBox("Cambio en la propiedad " & i)
+        End Select
+
+        
+
     End Sub
     
 End Class
