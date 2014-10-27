@@ -228,39 +228,51 @@ Public Class Alumno
         End Set
     End Property
 
-    Public Function CompareTo(obj As Object) As Integer Implements IComparable.CompareTo
-        Return "Aun no se de que va esto"
+    Public Overloads Function CompareTo(ByVal obj As Object) As Integer Implements IComparable.CompareTo
+        If obj Is Nothing Then Return 1
+        'Dim otherTemperature As Temperature = TryCast(obj, Temperature)
+        Dim otroAlumno As Alumno = TryCast(obj, Alumno)
+        If otroAlumno IsNot Nothing Then
+            Return Me.CompareTo(otroAlumno)
+        Else
+            Throw New ArgumentException("No es un Alumno")
+        End If
+
     End Function
 
     Public Function ListadoDePropiedades() As List(Of String)
         Dim lista As New List(Of String)
         With lista
-            .Add(Me.Id)
+            .Add(CStr(Me.Id))
             .Add(Me.DNI)
             .Add(Me.Nombre)
             .Add(Me.Apellido1)
             .Add(Me.Apellido2)
-            .Add(Me.Fnac)
+            .Add(CStr(Me.Fnac))
             .Add(Me.LugNac)
-            .Add(Me.Edad)
+            .Add(CStr(Me.Edad))
             .Add(Me.Domicilio)
             .Add(Me.CP)
             .Add(Me.Poblacion)
             .Add(Me.Tel1)
             .Add(Me.Tel2)
             .Add(Me.NumSS)
-            .Add(Me.InInaem)
-            .Add(Me.InFecha)
+            If Me.InInaem = True Then
+                .Add("TRUE")
+            Else
+                .Add("FALSE")
+            End If
+            .Add(CStr(Me.InFecha))
             .Add(Me.NivelEstudios)
             .Add(Me.ExpSector)
             .Add(Me.TallaCamiseta)
             .Add(Me.TallaPantalon)
-            .Add(Me.TallaZapato)
+            .Add(CStr(Me.TallaZapato))
             .Add(Me.Entrevistador)
-            .Add(Me.FecEntr)
+            .Add(CStr(Me.FecEntr))
             .Add(Me.Valoracion)
             .Add(Me.Apto)
-            .Add(Me.IdFoto)
+            .Add(CStr(Me.IdFoto))
         End With
         Return lista
     End Function

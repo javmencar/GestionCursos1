@@ -1,5 +1,5 @@
 ﻿Public Class FrmFichas
-    Public alum As Alumno
+    Public alum, a As Alumno
     'Public profe As profesor
     Sub New()
 
@@ -76,54 +76,82 @@
         Else
             Me.OptAptoPendiente.Select()
         End If
-       
+        'falta la foto
     End Sub
+    Private Sub rellenarObjetoDesdeCampos()
+        a = New Alumno
+        With a
+            .Apellido1 = Me.txtApellido1.Text
+            .Apellido2 = Me.txtApellido2.Text
+            .Nombre = Me.txtNombre.Text
+            .DNI = Me.txtDNI.Text
+            .NumSS = Me.txtNumSS.Text
+            If Me.txtFNac.Text <> "00/00/0" Then
+                .Fnac = CDate(Me.txtFNac.Text)
+            End If
+            .LugNac = Me.txtLugNac.Text
+            .Edad = CInt(Me.txtEdad.Text)
+            .Tel1 = Me.txtTel1.Text
+            .Tel2 = Me.txtTel2.Text
+            .Domicilio = Me.txtDomicilio.Text
+            .CP = Me.txtCP.Text
+            .Poblacion = Me.txtPoblacion.Text
+            If Me.optInaemSi.Checked = True Then
+                .InInaem = True
+            Else
+                .InInaem = False
+            End If
+            If Me.txtInFecha.Text <> "00/00/0" Then
+                .InFecha = CDate(Me.txtInFecha.Text)
+            End If
 
-
-
-
-
+            .NivelEstudios = Me.txtNivelEstudios.Text
+            If Me.LstExpSector.Items.Count > 0 Then
+                Dim str As String = ""
+                For Each l As String In Me.LstExpSector.Items
+                    String.Format("{0} ; {1}", str, l)
+                Next
+                If str.Length > 0 Then
+                    str.Substring(1)
+                    MsgBox(str)
+                End If
+                .ExpSector = str
+            End If
+            .TallaCamiseta = Me.CboTallaCamiseta.SelectedItem.ToString
+            .TallaPantalon = Me.CboTallaPantalon.SelectedItem.to
+            .TallaZapato = CInt(Me.txtTallaCalzado.Text)
+            .Entrevistador = Me.txtEntrevistador.Text
+            .FecEntr = CDate(Me.txtFecEntr.Text)
+            .Valoracion = Me.txtValoracion.Text
+            If Me.optAptoSi.Checked = True Then
+                .Apto = "Apto"
+            End If
+            If Me.OptAptoNo.Checked = True Then
+                .Apto = "No Apto"
+            End If
+            If Me.OptAptoPendiente.Checked = True Then
+                .Apto = "Pendiente"
+            End If
+            'falta la foto
+        End With
+    End Sub
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
-        Dim errores As Boolean = ErrorEnCamposRellenados()
-        If errores = True Then
-            MsgBox("error al guardar")
+        Call rellenarObjetoDesdeCampos()
+        If Me.alum.CompareTo(a) = 1 Then
+            MsgBox("devuelve 1")
+        ElseIf Me.alum.CompareTo(a) = 0 Then
+            MsgBox("devuelve 0")
         Else
-            MsgBox("Aqui codigo para guardar")
+            MsgBox("Devuelve mas de uno")
         End If
+
+
+        'If errores = True Then
+        '    MsgBox("error al guardar")
+        'Else
+        '    MsgBox("Aqui codigo para guardar")
+        'End If
     End Sub
-    Private Function ErrorEnCamposRellenados()
-        'creo una lista de controles y le añado solo los que estan marcados por el tag
-        Dim listacontroles As New List(Of Control)
-        Dim listadecambios As New List(Of String)
-        For Each c As Control In Me.Controls
-            If c.Tag <> "" Then
-                listacontroles.Add(c)
-            End If
-            'ordeno el listado por el tag, eso me deja los controles en posicion para comparar
-            listacontroles.Sort(c.Tag)
-        Next
-        'cargo las propiedades del objeto en una lista
-        Dim l As New List(Of String)
-        l = alum.ListadoDePropiedades
-        'recorro los controles  y comparo el contenido con los valores de las propiedades
-        For i As Integer = 0 To listacontroles.Count
-            'si hay cambio lo meto en una lista, para luego poder ponerlo en un mensaje
-            'segun que tipo de control sea, lo hago de una manera u otra
-            'textbox
-            If TypeOf (listacontroles(i)) Is TextBox Or TypeOf (listacontroles(i)) Is MaskedTextBox Then
-                If listacontroles(i).Text <> alum.ListadoDePropiedades(i) Then
-                    listadecambios.Add(listacontroles(i).Name)
-                End If
-            End If
-        Next
-        Dim resp As MsgBoxResult
-        For Each li As String In listadecambios
-            resp = MsgBox("hay cambios en " & vbCrLf & li & "¿Desea hacerlos?", MsgBoxStyle.YesNo)
-            If resp = MsgBoxResult.No Then
-                Return True
-            End If
-        Next
-        Return False
-    End Function
+    
 End Class
