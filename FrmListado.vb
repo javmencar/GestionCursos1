@@ -128,7 +128,7 @@ Public Class FrmListado
                         .Nombre = dr(2)
                     End If
                     If Not IsDBNull(dr(3)) Then
-                        
+                        .Apellido1 = dr(3)
                         End If
                     If Not IsDBNull(dr(4)) Then
                         .Apellido2 = dr(4)

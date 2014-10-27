@@ -229,6 +229,39 @@ Public Class Alumno
     End Property
 
     Public Function CompareTo(obj As Object) As Integer Implements IComparable.CompareTo
-        Return ""
+        Return "Aun no se de que va esto"
+    End Function
+
+    Public Function ListadoDePropiedades() As List(Of String)
+        Dim lista As New List(Of String)
+        With lista
+            .Add(Me.Id)
+            .Add(Me.DNI)
+            .Add(Me.Nombre)
+            .Add(Me.Apellido1)
+            .Add(Me.Apellido2)
+            .Add(Me.Fnac)
+            .Add(Me.LugNac)
+            .Add(Me.Edad)
+            .Add(Me.Domicilio)
+            .Add(Me.CP)
+            .Add(Me.Poblacion)
+            .Add(Me.Tel1)
+            .Add(Me.Tel2)
+            .Add(Me.NumSS)
+            .Add(Me.InInaem)
+            .Add(Me.InFecha)
+            .Add(Me.NivelEstudios)
+            .Add(Me.ExpSector)
+            .Add(Me.TallaCamiseta)
+            .Add(Me.TallaPantalon)
+            .Add(Me.TallaZapato)
+            .Add(Me.Entrevistador)
+            .Add(Me.FecEntr)
+            .Add(Me.Valoracion)
+            .Add(Me.Apto)
+            .Add(Me.IdFoto)
+        End With
+        Return lista
     End Function
 End Class
