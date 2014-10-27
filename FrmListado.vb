@@ -121,6 +121,9 @@ Public Class FrmListado
             dr = cmd.ExecuteReader
             If dr.Read Then
                 With alum
+                    If Not IsNothing(dr(0)) Then
+                        .Id = dr(0)
+                    End If
                     If Not IsDBNull(dr(1)) Then
                         .DNI = dr(1)
                     End If
@@ -129,13 +132,13 @@ Public Class FrmListado
                     End If
                     If Not IsDBNull(dr(3)) Then
                         .Apellido1 = dr(3)
-                        End If
+                    End If
                     If Not IsDBNull(dr(4)) Then
                         .Apellido2 = dr(4)
                     End If
-                        If Not IsDBNull(dr(5)) Then
-                            .Fnac = dr(5)
-                        End If
+                    If Not IsDBNull(dr(5)) Then
+                        .Fnac = dr(5)
+                    End If
                     If Not IsDBNull(dr(6)) Then
                         .LugNac = dr(6)
                     End If

@@ -26,10 +26,12 @@
 
             'cargamos el objeto en los campos
             Call rellenarCamposDesdeObjeto()
+            Me.txtId.Enabled = False
         End If
     End Sub
 
     Private Sub rellenarCamposDesdeObjeto()
+        Me.txtId.Text = CStr(alum.Id)
         Me.txtApellido1.Text = alum.Apellido1
         Me.txtApellido2.Text = alum.Apellido2
         Me.txtNombre.Text = alum.Nombre
@@ -147,20 +149,7 @@
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
         Call rellenarObjetoDesdeCampos()
-        If Me.alum.CompareTo(a) = 1 Then
-            MsgBox("devuelve 1")
-        ElseIf Me.alum.CompareTo(a) = 0 Then
-            MsgBox("devuelve 0")
-        Else
-            MsgBox("Devuelve mas de uno")
-        End If
-
-
-        'If errores = True Then
-        '    MsgBox("error al guardar")
-        'Else
-        '    MsgBox("Aqui codigo para guardar")
-        'End If
+       
     End Sub
     
 End Class

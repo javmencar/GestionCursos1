@@ -193,8 +193,6 @@ Public Class Alumno
             mApto = Value
         End Set
     End Property
-   
-    ' Private mFnac, mInFecha, mFecentr As Date
     Public Property Fnac As Date
         Get
             Return mFnac
@@ -229,12 +227,28 @@ Public Class Alumno
     End Property
 
     Public Overloads Function CompareTo(ByVal obj As Object) As Integer Implements IComparable.CompareTo
+        Dim lis As New List(Of String)
+        lis = Me.ListadoDePropiedades
+        Dim comparacion(lis.Count) As Integer
+        'sigo sin entender de que va esto
         If obj Is Nothing Then Return 1
-        'Dim otherTemperature As Temperature = TryCast(obj, Temperature)
         Dim otroAlumno As Alumno = TryCast(obj, Alumno)
         If otroAlumno IsNot Nothing Then
-            Return Me.CompareTo(otroAlumno)
-        Else
+            'probaremos con una
+            For i As Integer = 0 To lis.Count - 1
+                comparacion(i) = (Me.ListadoDePropiedades(i).CompareTo(otroAlumno.ListadoDePropiedades(i)))
+            Next
+
+            For Each j As Integer In comparacion
+                If j <> 0 Then
+                    Exit For
+                End If
+                Return 0
+            Next
+            Return -1
+
+
+            'Else
             Throw New ArgumentException("No es un Alumno")
         End If
 
