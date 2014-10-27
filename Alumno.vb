@@ -243,7 +243,9 @@ Public Class Alumno
         If otroAlumno IsNot Nothing Then
             'probaremos con una
             For i As Integer = 0 To lis.Count - 1
-                comparacion(i) = (Me.ListadoDePropiedades(i).CompareTo(otroAlumno.ListadoDePropiedades(i)))
+                If Not IsNothing(lis(i)) Then
+                    comparacion(i) = (Me.ListadoDePropiedades(i).CompareTo(otroAlumno.ListadoDePropiedades(i)))
+                End If
             Next
             Dim k As Integer
             For Each j As Integer In comparacion
