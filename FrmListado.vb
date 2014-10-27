@@ -120,112 +120,83 @@ Public Class FrmListado
             Dim dr As SqlDataReader
             dr = cmd.ExecuteReader
             If dr.Read Then
-                'poner todas como la fecha
                 With alum
-                    If Not IsNothing(dr(1)) Then
+                    If Not IsDBNull(dr(1)) Then
                         .DNI = dr(1)
                     End If
-                    If Not IsNothing(dr(2)) Then
+                    If Not IsDBNull(dr(2)) Then
                         .Nombre = dr(2)
                     End If
-                    If Not IsNothing(dr(3)) Then
-                        .Apellido1 = dr(3)
-                    End If
-                    If Not IsNothing(dr(4)) Then
+                    If Not IsDBNull(dr(3)) Then
+                        
+                        End If
+                    If Not IsDBNull(dr(4)) Then
                         .Apellido2 = dr(4)
                     End If
-                    'vigilar las fechas, dan problemas
-                    If Not IsDBNull(dr(5)) Then
-                        .Fnac = dr(5)
-                    End If
-                    If Not IsNothing(dr(6)) Then
+                        If Not IsDBNull(dr(5)) Then
+                            .Fnac = dr(5)
+                        End If
+                    If Not IsDBNull(dr(6)) Then
                         .LugNac = dr(6)
                     End If
-                    If Not IsNothing(dr(7)) Then
+                    If Not IsDBNull(dr(7)) Then
                         .Edad = dr(7)
                     End If
-                    If Not IsNothing(dr(8)) Then
+                    If Not IsDBNull(dr(8)) Then
                         .Domicilio = dr(8)
                     End If
-                    If Not IsNothing(dr(9)) Then
+                    If Not IsDBNull(dr(9)) Then
                         .CP = dr(9)
                     End If
-                    If Not IsNothing(dr(10)) Then
+                    If Not IsDBNull(dr(10)) Then
                         .Poblacion = dr(10)
                     End If
-                    If Not IsNothing(dr(11)) Then
+                    If Not IsDBNull(dr(11)) Then
                         .Tel1 = dr(11)
                     End If
-                    If Not IsNothing(dr(12)) Then
+                    If Not IsDBNull(dr(12)) Then
                         .Tel2 = dr(12)
                     End If
-                    If Not IsNothing(dr(13)) Then
+                    If Not IsDBNull(dr(13)) Then
                         .NumSS = dr(13)
                     End If
-                    If Not IsNothing(dr(14)) Then
+                    If Not IsDBNull(dr(14)) Then
                         .InInaem = dr(14)
                     End If
-                    'vigilar las fechas, dan problemas
                     If Not IsDBNull(dr(15)) Then
                         .Fnac = dr(15)
                     End If
-                    If Not IsNothing(dr(16)) Then
+                    If Not IsDBNull(dr(16)) Then
                         .NivelEstudios = dr(16)
                     End If
-                    If Not IsNothing(dr(17)) Then
+                    If Not IsDBNull(dr(17)) Then
                         .ExpSector = dr(17)
                     End If
-                    If Not IsNothing(dr(18)) Then
+                    If Not IsDBNull(dr(18)) Then
                         .TallaCamiseta = dr(18)
                     End If
-                    If Not IsNothing(dr(19)) Then
+                    If Not IsDBNull(dr(19)) Then
                         .TallaPantalon = dr(19)
                     End If
-                    If Not IsNothing(dr(20)) Then
+                    If Not IsDBNull(dr(20)) Then
                         .TallaZapato = dr(20)
                     End If
-                    If Not IsNothing(dr(21)) Then
+                    If Not IsDBNull(dr(21)) Then
                         .Entrevistador = dr(21)
                     End If
-                    'vigilar las fechas, dan problemas
                     If Not IsDBNull(dr(22)) Then
                         .Fnac = dr(22)
                     End If
-                    If Not IsNothing(dr(23)) Then
+                    If Not IsDBNull(dr(23)) Then
                         .Valoracion = dr(23)
                     End If
-                    If Not IsNothing(dr(24)) Then
+                    If Not IsDBNull(dr(24)) Then
                         .Apto = dr(24)
                     End If
-                    If Not IsNothing(dr(25)) Then
+                    If Not IsDBNull(dr(25)) Then
                         .IdFoto = dr(25)
                     End If
                 End With
-                'alum.DNI = dr(1)
-                'alum.Nombre = dr(2)
-                'alum.Apellido1 = dr(3)
-                'alum.Apellido2 = dr(4)
-                'alum.Fnac = dr(5)
-                'alum.LugNac = dr(6)
-                'alum.Edad = dr(7)
-                'alum.Domicilio = dr(8)
-                'alum.CP = dr(9)
-                'alum.Poblacion = dr(10)
-                'alum.Tel1 = dr(11)
-                'alum.Tel2 = dr(12)
-                'alum.NumSS = dr(13)
-                'alum.InInaem = dr(14)
-                'alum.InFecha = dr(15)
-                'alum.NivelEstudios = dr(16)
-                'alum.ExpSector = dr(17)
-                'alum.TallaCamiseta = dr(18)
-                'alum.TallaPantalon = dr(19)
-                'alum.TallaZapato = dr(20)
-                'alum.Entrevistador = dr(21)
-                'alum.FecEntr = dr(22)
-                'alum.Valoracion = dr(23)
-                'alum.Apto = dr(24)
-                'alum.IdFoto = dr(25)
             End If
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
