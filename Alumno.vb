@@ -245,7 +245,7 @@ Public Class Alumno
     '    Return k
     'End Function
 
-    Public Function ListadoDePropiedades() As List(Of String)
+    Public Function ListadoDeValoresDeLasPropiedades() As List(Of String)
         Dim lista As New List(Of String)
         With lista
             .Add(CStr(Me.Id))
@@ -278,6 +278,38 @@ Public Class Alumno
             .Add(Me.Valoracion)
             .Add(Me.Apto)
             .Add(CStr(Me.IdFoto))
+        End With
+        Return lista
+    End Function
+    Public Function ListadoNombreDeLasPropiedades() As List(Of String)
+        Dim lista As New List(Of String)
+        With lista
+            .Add("Id")
+            .Add("DNI")
+            .Add("Nombre")
+            .Add("Apellido1")
+            .Add("Apellido2")
+            .Add("Fnac")
+            .Add("LugNac")
+            .Add("Edad")
+            .Add("Domicilio")
+            .Add("CP")
+            .Add("Poblacion")
+            .Add("Tel1")
+            .Add("Tel2")
+            .Add("NumSS")
+            .Add("InInaem")
+            .Add("InFecha")
+            .Add("NivelEstudios")
+            .Add("ExpSector")
+            .Add("TallaCamiseta")
+            .Add("TallaPantalon")
+            .Add("TallaZapato")
+            .Add("Entrevistador")
+            .Add("FecEntr")
+            .Add("Valoracion")
+            .Add("Apto")
+            .Add("IdFoto")
         End With
         Return lista
     End Function

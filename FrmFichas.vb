@@ -145,6 +145,7 @@
             End If
             'falta la foto
         End With
+        Return a
     End Function
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
@@ -155,28 +156,56 @@
     End Sub
     Private Sub comprobarcampos(ByVal ALU As Alumno)
 
-        Dim listadoPropiedades As List(Of String) = ALU.ListadoDePropiedades
-        Dim estadoDeCampos(26) As Integer
-        For Each c As Control In Me.Controls
-            Select Case c.Tag
-                Case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"
-                    If c.Text = listadoPropiedades(CInt(c.Tag)) Then
-                        estadoDeCampos.SetValue(0, CInt(c.Tag))
-                    ElseIf c.Text = "" Then
-                        estadoDeCampos.SetValue(-1, CInt(c.Tag))
-                        ' estadoDeCampos.Add(c.Tag & "_" & "-1")
-                    Else
-                        estadoDeCampos.SetValue(1, CInt(c.Tag))
-                        'estadoDeCampos.Add(c.Tag & "_" & "1")
-                    End If
-                Case Else
-                    'nada, no nos interesan los controles sin tag
-            End Select
-        Next
-        'deberia salir de aqui con todas las propiedades listadas
-        For i As Integer = 0 To estadoDeCampos.Length - 2
-            MsgBox(listadoPropiedades(i) & "_" & estadoDeCampos(i))
+        Try
+            Dim listaNombres As List(Of String) = ALU.ListadoNombreDeLasPropiedades
+            Dim listadoPropiedades As List(Of String) = ALU.ListadoDeValoresDeLasPropiedades
+            Dim estadoDeCampos As New List(Of Integer)
+            For Each c As Control In Me.Controls
+                Select Case c.Tag
+                    Case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"
+                        If c.Text = listadoPropiedades(CInt(c.Tag)) Then
+                            estadoDeCampos.Insert(CInt(c.Tag), 0)
+                        ElseIf c.Text = "" Then
+                            estadoDeCampos.Insert(CInt(c.Tag), -1)
+                        Else
+                            estadoDeCampos.Insert(CInt(c.Tag), 1)
+                           
+                        End If
+                    Case Else
+                        'nada, no nos interesan los controles sin tag
+                End Select
+            Next
+            'deberia salir de aqui con todas las propiedades listadas
+            'For i As Integer = 0 To estadoDeCampos.Length - 2
+            '    MsgBox(listadoPropiedades(i) & "_" & estadoDeCampos(i))
+            'Next
+           
+            For i As Integer = 1 To 4
+                Select Case estadoDeCampos(i)
+                    Case -1
+                        Throw New miExcepcion(String.Format("No ha rellenado el campo {0}", listaNombres(i)))
+                    Case 0
+                        MsgBox(String.Format("El campo {0} NO ha sido Modificado", listaNombres(i)))
+                    Case 1
+                        MsgBox(String.Format("El campo {0} ha cambiado  a '{1}'", listaNombres(i), listadoPropiedades(i)))
+                End Select
+            Next
 
-        Next
+
+
+
+
+            If estadoDeCampos(1) = -1 Or estadoDeCampos(2) = -1 Or estadoDeCampos(3) = -1 Or estadoDeCampos(4) = -1 Then Throw New miExcepcion("Rellene los campos vacíos")
+            If estadoDeCampos(1) = 1 Or estadoDeCampos(2) = 1 Or estadoDeCampos(3) = 1 Or estadoDeCampos(4) = 1 Then
+
+                MsgBox("ha cambiado ")
+
+            End If
+        Catch ex2 As miExcepcion
+            MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        End Try
+
     End Sub
 End Class
