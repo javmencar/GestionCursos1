@@ -150,67 +150,56 @@
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
         'Call rellenarObjetoDesdeCampos()
-        Call comprobarcampos(alum)
+        Call comprobarcamposprincipales()
         Dim alumnoModificado As Alumno = rellenarObjetoDesdeCampos()
-        Call comprobarcampos2()
+
         'Call comprobarcampos(alumnoModificado)
     End Sub
-    Private Sub comprobarcampos(ByVal ALU As Alumno)
+    Private Sub comprobarcamposprincipales()
+        Dim cambios As New List(Of String)
+        Dim vacios As New List(Of String)
+        Try
+            If alum.DNI <> Me.txtDNI.Text Then cambios.Add("DNI")
+            If alum.Nombre <> Me.txtNombre.Text Then cambios.Add("Nombre")
+            If alum.Apellido1 <> Me.txtApellido1.Text Then cambios.Add("Apellido1")
+            If alum.Apellido2 <> Me.txtApellido2.Text Then cambios.Add("Apellido2")
+            If alum.NumSS <> Me.txtNumSS.Text Then cambios.Add("NumSS" & "   '" & Me.txtNumSS.Text & "'")
 
+            If Me.txtDNI.Text = "" Then vacios.Add("DNI")
+            If Me.txtNombre.Text = "" Then vacios.Add("Nombre")
+            If Me.txtApellido1.Text = "" Then vacios.Add("Apellido1")
+            If Me.txtApellido2.Text = "" Then vacios.Add("Apellido2")
+            If Me.lblNumSS.Text = "  /        /" Then vacios.Add("NumSS")
+            Dim respuesta As MsgBoxResult
+            Dim anulado As Boolean = False
 
-        Dim listaNombres As List(Of String) = ALU.ListadoNombreDeLasPropiedades
-        Dim listadoPropiedades As List(Of String) = ALU.ListadoDeValoresDeLasPropiedades
-        Dim estadoDeCampos As New List(Of Integer)
-
-
-    End Sub
-    Sub comprobarcampos2()
-        Dim listacontroles As New List(Of Control)
-        For Each c As Control In Me.Controls
-
-            If c.Tag <> "" Then
-                listacontroles.Add(c)
-            ElseIf TypeOf (c) Is GroupBox Then
-                For Each c2 As Control In c.Controls
-                    If Not TypeOf (c2) Is RadioButton Then
-                        listacontroles.Add(c2)
-
+            If cambios.Count > 0 Then
+                For Each c As String In cambios
+                    respuesta = MsgBox(String.Format("Va generar una ficha con cambios en la casilla '{0}'" &
+                                                    vbCrLf & "¿Es correcto?", c), MsgBoxStyle.YesNo)
+                    If respuesta = MsgBoxResult.No Then
+                        anulado = True
+                        Exit For
                     End If
                 Next
+                If anulado = True Then Throw New miExcepcion("Peticion anulada a peticion del usuario")
             End If
-        Next
-        'listacontroles.
-
-        For Each c As Control In listacontroles
-            MsgBox(c.Tag & "  " & c.Name & "  " & c.Text)
-        Next
-        MsgBox("Todos recorridos")
+            For Each v As String In vacios
+                respuesta = MsgBox(String.Format("Va generar una ficha con un campo vacío en la casilla '{0}'" &
+                                                vbCrLf & "¿Es correcto?", v), MsgBoxStyle.YesNo)
+                If respuesta = MsgBoxResult.No Then
+                    anulado = True
+                    Exit For
+                End If
+            Next
+            If anulado = True Then Throw New miExcepcion("Peticion anulada a peticion del usuario")
+            MsgBox("Aqui irá la insercion o modificacion")
+        Catch ex2 As miExcepcion
+            MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        End Try
     End Sub
-    Sub comprobarcampos3()
-        Dim listacontroles As New ArrayList
-        For Each c As Control In Me.Controls
-            If TypeOf (c) Is TextBox Then
-                listacontroles.Add(c)
-            ElseIf TypeOf (c) Is MaskedTextBox Then
-                listacontroles.Add(c)
-            ElseIf TypeOf (c) Is PictureBox Then
-                listacontroles.Add(c)
-            ElseIf TypeOf (c) Is GroupBox Then
-                For Each c2 As Control In c.Controls
-                    If Not TypeOf (c2) Is RadioButton Then
-                        listacontroles.Add(c2)
-                    Else
-                        listacontroles.Add(c)
-                    End If
-                Next
-            End If
-        Next
-        ' ya tengo una puta lista de controles 
-        listacontroles.Sort()
-      
-        For Each c As Control In listacontroles
-            MsgBox(c.Tag & "  " & c.Name & "  " & c.Text)
-        Next
-        MsgBox("Todos recorridos")
-    End Sub
+  
+   
 End Class
