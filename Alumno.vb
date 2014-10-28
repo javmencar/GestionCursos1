@@ -3,7 +3,7 @@
 Public Class Alumno
 
 
-    Implements IComparable
+    '   Implements IComparable
 
 
     Private mId, mEdad, mTallaZapato, mIdFoto As Integer
@@ -233,34 +233,17 @@ Public Class Alumno
         End Set
     End Property
 
-    Public Overloads Function CompareTo(ByVal obj As Object) As Integer Implements IComparable.CompareTo
-        Dim lis As New List(Of String)
-        lis = Me.ListadoDePropiedades
-        Dim comparacion(lis.Count) As Integer
-        'sigo sin entender de que va esto
-        If obj Is Nothing Then Return 1
-        Dim otroAlumno As Alumno = TryCast(obj, Alumno)
-        If otroAlumno IsNot Nothing Then
-            'probaremos con una
-            For i As Integer = 0 To lis.Count - 1
-                If Not IsNothing(lis(i)) Then
-                    comparacion(i) = (Me.ListadoDePropiedades(i).CompareTo(otroAlumno.ListadoDePropiedades(i)))
-                End If
-            Next
-            Dim k As Integer
-            For Each j As Integer In comparacion
-                If j <> 0 Then
-                    k = j
-                    Exit For
-                End If
-                Return 0
-            Next
-            Return k
-            'Else
-            Throw New ArgumentException("No es un Alumno")
-        End If
+    'Public Overloads Function CompareTo(ByVal obj As Object, ByVal s As String) As Integer Implements IComparable.CompareTo
+    '    Dim k As Integer
+    '    'sigo sin entender de que va esto
+    '    If obj Is Nothing Then Return -1
+    '    Dim otroAlumno As Alumno = TryCast(obj, Alumno)
+    '    If otroAlumno IsNot Nothing Then
+    '        k = (Me.ListadoDePropiedades(i).CompareTo(otroAlumno.ListadoDePropiedades(i)))
+    '    End If
 
-    End Function
+    '    Return k
+    'End Function
 
     Public Function ListadoDePropiedades() As List(Of String)
         Dim lista As New List(Of String)
