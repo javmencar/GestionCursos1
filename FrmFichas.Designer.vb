@@ -585,7 +585,7 @@ Partial Class FrmFichas
         Me.txtCP.Location = New System.Drawing.Point(573, 183)
         Me.txtCP.Mask = "00000"
         Me.txtCP.Name = "txtCP"
-        Me.txtCP.Size = New System.Drawing.Size(30, 20)
+        Me.txtCP.Size = New System.Drawing.Size(46, 20)
         Me.txtCP.TabIndex = 38
         Me.txtCP.Tag = "9"
         '
