@@ -163,7 +163,14 @@
             If alum.Nombre <> Me.txtNombre.Text Then cambios.Add("Nombre")
             If alum.Apellido1 <> Me.txtApellido1.Text Then cambios.Add("Apellido1")
             If alum.Apellido2 <> Me.txtApellido2.Text Then cambios.Add("Apellido2")
-            If alum.NumSS <> Me.txtNumSS.Text Then cambios.Add("NumSS" & "   '" & Me.txtNumSS.Text & "'")
+           
+            Dim numSSSinBarras As String
+            numSSSinBarras = Me.txtNumSS.Text.Replace("/", "")
+            Dim ca As Integer = numSSSinBarras.LastIndexOf("")
+            MsgBox(numSSSinBarras)
+            MsgBox(ca)
+            If alum.NumSS <> numSSSinBarras Then cambios.Add("NumSS" & "   '" & numSSSinBarras & "'")
+            'If alum.NumSS <> Me.txtNumSS.Text Then cambios.Add("NumSS" & "   '" & Me.txtNumSS.Text & "'")
 
             If Me.txtDNI.Text = "" Then vacios.Add("DNI")
             If Me.txtNombre.Text = "" Then vacios.Add("Nombre")
