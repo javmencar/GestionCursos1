@@ -80,7 +80,7 @@
         End If
         'falta la foto
     End Sub
-    Private Sub rellenarObjetoDesdeCampos()
+    Private Function rellenarObjetoDesdeCampos() As Alumno
         a = New Alumno
         With a
             .Apellido1 = Me.txtApellido1.Text
@@ -145,22 +145,38 @@
             End If
             'falta la foto
         End With
-    End Sub
+    End Function
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
-        Call rellenarObjetoDesdeCampos()
-        Dim i As Integer = Me.alum.CompareTo(a)
-        Select Case i
-            Case -1
-                MsgBox("no debería salir")
-            Case 0
-                MsgBox("No hay cambios")
-            Case Else
-                MsgBox("Cambio en la propiedad " & i)
-        End Select
-
-        
-
+        'Call rellenarObjetoDesdeCampos()
+        Call comprobarcampos(alum)
+        Dim alumnoModificado As Alumno = rellenarObjetoDesdeCampos()
+        Call comprobarcampos(alumnoModificado)
     End Sub
-    
+    Private Sub comprobarcampos(ByVal ALU As Alumno)
+
+        Dim listadoPropiedades As List(Of String) = ALU.ListadoDePropiedades
+        Dim estadoDeCampos(26) As Integer
+        For Each c As Control In Me.Controls
+            Select Case c.Tag
+                Case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"
+                    If c.Text = listadoPropiedades(CInt(c.Tag)) Then
+                        estadoDeCampos.SetValue(0, CInt(c.Tag))
+                    ElseIf c.Text = "" Then
+                        estadoDeCampos.SetValue(-1, CInt(c.Tag))
+                        ' estadoDeCampos.Add(c.Tag & "_" & "-1")
+                    Else
+                        estadoDeCampos.SetValue(1, CInt(c.Tag))
+                        'estadoDeCampos.Add(c.Tag & "_" & "1")
+                    End If
+                Case Else
+                    'nada, no nos interesan los controles sin tag
+            End Select
+        Next
+        'deberia salir de aqui con todas las propiedades listadas
+        For i As Integer = 0 To estadoDeCampos.Length - 2
+            MsgBox(listadoPropiedades(i) & "_" & estadoDeCampos(i))
+
+        Next
+    End Sub
 End Class
