@@ -157,75 +157,60 @@
     End Sub
     Private Sub comprobarcampos(ByVal ALU As Alumno)
 
-        Try
-            Dim listaNombres As List(Of String) = ALU.ListadoNombreDeLasPropiedades
-            Dim listadoPropiedades As List(Of String) = ALU.ListadoDeValoresDeLasPropiedades
-            Dim estadoDeCampos As New List(Of Integer)
 
-            'For Each c As Control In Me.Controls
-            '    Select Case c.Tag
-            '        Case "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"
-            '            If c.Text = listadoPropiedades(CInt(c.Tag)) Then
-            '                estadoDeCampos.Insert(CInt(c.Tag), 0)
-            '            ElseIf c.Text = "" Then
-            '                estadoDeCampos.Insert(CInt(c.Tag), -1)
-            '            Else
-            '                estadoDeCampos.Insert(CInt(c.Tag), 1)
+        Dim listaNombres As List(Of String) = ALU.ListadoNombreDeLasPropiedades
+        Dim listadoPropiedades As List(Of String) = ALU.ListadoDeValoresDeLasPropiedades
+        Dim estadoDeCampos As New List(Of Integer)
 
-            '            End If
-            '        Case Else
-            '            'nada, no nos interesan los controles sin tag
-            '    End Select
-            'Next
-            ''deberia salir de aqui con todas las propiedades listadas
-            ''For i As Integer = 0 To estadoDeCampos.Length - 2
-            ''    MsgBox(listadoPropiedades(i) & "_" & estadoDeCampos(i))
-            ''Next
-
-            'For i As Integer = 1 To 4
-            '    Select Case estadoDeCampos(i)
-            '        Case -1
-            '            Throw New miExcepcion(String.Format("No ha rellenado el campo {0}", listaNombres(i)))
-            '        Case 0
-            '            MsgBox(String.Format("El campo {0} NO ha sido Modificado", listaNombres(i)))
-            '        Case 1
-            '            MsgBox(String.Format("El campo {0} ha cambiado  a '{1}'", listaNombres(i), listadoPropiedades(i)))
-            '    End Select
-            'Next
-
-
-
-
-
-            'If estadoDeCampos(1) = -1 Or estadoDeCampos(2) = -1 Or estadoDeCampos(3) = -1 Or estadoDeCampos(4) = -1 Then Throw New miExcepcion("Rellene los campos vacíos")
-            'If estadoDeCampos(1) = 1 Or estadoDeCampos(2) = 1 Or estadoDeCampos(3) = 1 Or estadoDeCampos(4) = 1 Then
-
-            'MsgBox("ha cambiado ")
-
-            'End If
-        Catch ex2 As miExcepcion
-            MsgBox(ex2.ToString)
-        Catch ex As Exception
-            MsgBox(ex.ToString)
-        End Try
 
     End Sub
     Sub comprobarcampos2()
         Dim listacontroles As New List(Of Control)
         For Each c As Control In Me.Controls
+
             If c.Tag <> "" Then
                 listacontroles.Add(c)
             ElseIf TypeOf (c) Is GroupBox Then
                 For Each c2 As Control In c.Controls
-                    listacontroles.Add(c2)
+                    If Not TypeOf (c2) Is RadioButton Then
+                        listacontroles.Add(c2)
+
+                    End If
                 Next
             End If
         Next
-        'listacontroles.Sort()
+        'listacontroles.
+
         For Each c As Control In listacontroles
             MsgBox(c.Tag & "  " & c.Name & "  " & c.Text)
         Next
         MsgBox("Todos recorridos")
     End Sub
-   
+    Sub comprobarcampos3()
+        Dim listacontroles As New ArrayList
+        For Each c As Control In Me.Controls
+            If TypeOf (c) Is TextBox Then
+                listacontroles.Add(c)
+            ElseIf TypeOf (c) Is MaskedTextBox Then
+                listacontroles.Add(c)
+            ElseIf TypeOf (c) Is PictureBox Then
+                listacontroles.Add(c)
+            ElseIf TypeOf (c) Is GroupBox Then
+                For Each c2 As Control In c.Controls
+                    If Not TypeOf (c2) Is RadioButton Then
+                        listacontroles.Add(c2)
+                    Else
+                        listacontroles.Add(c)
+                    End If
+                Next
+            End If
+        Next
+        ' ya tengo una puta lista de controles 
+        listacontroles.Sort()
+      
+        For Each c As Control In listacontroles
+            MsgBox(c.Tag & "  " & c.Name & "  " & c.Text)
+        Next
+        MsgBox("Todos recorridos")
+    End Sub
 End Class
