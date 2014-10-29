@@ -1,4 +1,5 @@
 ﻿Public Class FrmFichas
+    Dim nuevo As Boolean
     Public alum, a As Alumno
     'Public profe As profesor
     Sub New()
@@ -21,9 +22,10 @@
         If IsNothing(alum) Then
             'nada, viene vacío y lo tenemos que rellenar
             alum = New Alumno
+            nuevo = True
         Else
-            MsgBox(alum.Nombre & vbCrLf & alum.DNI)
-
+            '   MsgBox(alum.Nombre & vbCrLf & alum.DNI)
+            nuevo = False
             'cargamos el objeto en los campos
             Call rellenarCamposDesdeObjeto()
             Me.txtId.Enabled = False
@@ -149,64 +151,74 @@
     End Function
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
-        'Call rellenarObjetoDesdeCampos()
-        Call comprobarcamposprincipales()
-        Dim alumnoModificado As Alumno = rellenarObjetoDesdeCampos()
+        Try
+            Dim alumnoModificado As Alumno
+            Dim fallos As Boolean = fallosEnCamposPrincipales()
+            If fallos = False Then
+                alumnoModificado = rellenarObjetoDesdeCampos()
+            End If
+            If Not IsNothing(alumnoModificado) Then
+                If nuevo = True Then Call CrearNuevoAlumnoEnBaseDeDatos(alum)
+                If nuevo = False Then Call cargarCambiosEnAlumnoYaCreado(alumnoModificado)
+            End If
+        Catch ex2 As miExcepcion
+            MsgBox(ex2.ToString)
+        Catch ex As Exception
 
-        'Call comprobarcampos(alumnoModificado)
+        End Try
     End Sub
-    Private Sub comprobarcamposprincipales()
+    Private Function fallosEnCamposPrincipales() As Boolean
         Dim cambios As New List(Of String)
         Dim vacios As New List(Of String)
+        Dim respuesta As MsgBoxResult
         Try
-            If alum.DNI <> Me.txtDNI.Text Then cambios.Add("DNI")
             If alum.Nombre <> Me.txtNombre.Text Then cambios.Add("Nombre")
             If alum.Apellido1 <> Me.txtApellido1.Text Then cambios.Add("Apellido1")
             If alum.Apellido2 <> Me.txtApellido2.Text Then cambios.Add("Apellido2")
-           
-            Dim numSSSinBarras As String
-            numSSSinBarras = Me.txtNumSS.Text.Replace("/", "")
-            Dim ca As Integer = numSSSinBarras.LastIndexOf("")
-            MsgBox(numSSSinBarras)
-            MsgBox(ca)
-            If alum.NumSS <> numSSSinBarras Then cambios.Add("NumSS" & "   '" & numSSSinBarras & "'")
-            'If alum.NumSS <> Me.txtNumSS.Text Then cambios.Add("NumSS" & "   '" & Me.txtNumSS.Text & "'")
-
             If Me.txtDNI.Text = "" Then vacios.Add("DNI")
             If Me.txtNombre.Text = "" Then vacios.Add("Nombre")
             If Me.txtApellido1.Text = "" Then vacios.Add("Apellido1")
             If Me.txtApellido2.Text = "" Then vacios.Add("Apellido2")
             If Me.lblNumSS.Text = "  /        /" Then vacios.Add("NumSS")
-            Dim respuesta As MsgBoxResult
-            Dim anulado As Boolean = False
-
-            If cambios.Count > 0 Then
-                For Each c As String In cambios
-                    respuesta = MsgBox(String.Format("Va generar una ficha con cambios en la casilla '{0}'" &
-                                                    vbCrLf & "¿Es correcto?", c), MsgBoxStyle.YesNo)
-                    If respuesta = MsgBoxResult.No Then
-                        anulado = True
-                        Exit For
-                    End If
-                Next
-                If anulado = True Then Throw New miExcepcion("Peticion anulada a peticion del usuario")
-            End If
             For Each v As String In vacios
                 respuesta = MsgBox(String.Format("Va generar una ficha con un campo vacío en la casilla '{0}'" &
                                                 vbCrLf & "¿Es correcto?", v), MsgBoxStyle.YesNo)
-                If respuesta = MsgBoxResult.No Then
-                    anulado = True
-                    Exit For
-                End If
+                If respuesta = MsgBoxResult.No Then Throw New miExcepcion("Modificacion anulada a peticion del usuario")
             Next
-            If anulado = True Then Throw New miExcepcion("Peticion anulada a peticion del usuario")
-            MsgBox("Aqui irá la insercion o modificacion")
+            Dim numSSSinBarras As String
+            numSSSinBarras = Me.txtNumSS.Text.Replace("/", "")
+            If alum.NumSS <> numSSSinBarras Then
+                respuesta = MsgBox(String.Format("El numero de la Seguridad Social va a pasar de '{0}' a '{1}'" &
+                                                 vbCrLf & "¿Es correcto?", alum.NumSS, Me.txtNumSS.Text), MsgBoxStyle.YesNoCancel)
+                If respuesta = MsgBoxResult.No Then Me.txtNumSS.Text = alum.NumSS
+                If respuesta = MsgBoxResult.Cancel Then Throw New miExcepcion("Modificacion anulada a peticion del usuario")
+            End If
+            If alum.DNI <> Me.txtDNI.Text Then
+                respuesta = MsgBox(String.Format("El numero del DNI va a pasar de '{0}' a '{1}'" &
+                                            vbCrLf & "¿Es correcto?", alum.DNI, Me.txtDNI.Text), MsgBoxStyle.YesNoCancel)
+                If respuesta = MsgBoxResult.No Then Me.txtDNI.Text = alum.DNI
+                If respuesta = MsgBoxResult.Cancel Then Throw New miExcepcion("Modificacion anulada a peticion del usuario")
+            End If
+            For Each dato As String In cambios
+                respuesta = MsgBox(String.Format("Va generar una ficha con cambios en la casilla '{0}'" &
+            '                                    vbCrLf & "¿Es correcto?", c), MsgBoxStyle.YesCancel)
+                If respuesta = MsgBoxResult.Cancel Then Throw New miExcepcion("Modificacion anulada a peticion del usuario")
+            Next
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
+            Return True
         Catch ex As Exception
             MsgBox(ex.ToString)
         End Try
+        Return False
+    End Function
+
+    Public Sub cargarCambiosEnAlumnoYaCreado(ByVal al As Alumno)
+
     End Sub
-  
-   
+    Public Sub CrearNuevoAlumnoEnBaseDeDatos(ByVal al As Alumno)
+        Dim tablas, valores As String
+
+        Dim sql As String = ""
+    End Sub
 End Class
