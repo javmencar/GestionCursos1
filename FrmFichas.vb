@@ -94,82 +94,91 @@ Public Class FrmFichas
         'falta la foto
     End Sub
     Private Function rellenarObjetoDesdeCampos() As Alumno
-        a = New Alumno
+        Try
+            a = New Alumno
+            Dim fechanula As String = "999912310000"
 
-        'Me.txtFecEntr.Mask.Remove(0)
-        'Me.txtInFecha.Mask.Remove(0)
-        Dim fechanula As String = "999912310000"
-
-        With a
-            .Apellido1 = Me.txtApellido1.Text
-            .Apellido2 = Me.txtApellido2.Text
-            .Nombre = Me.txtNombre.Text
-            .DNI = Me.txtDNI.Text
-            .NumSS = Me.txtNumSS.Text
-            If Me.txtFNac.Text = "  /  /" Then Me.txtFNac.Text = fechanula
-            '.Fnac = DateTime.Parse(DateTime.ParseExact(fechanula, "yyyyMMddhhmm", Nothing))
-            '.Fnac = Convert.ToDateTime(Me.txtFNac.Text)
-            ''.Fnac = CDate(Me.txtFNac.Text)
-            .Fnac = DateTime.ParseExact(Me.txtFNac.Text, "yyyyMMddhhmm", Nothing)
-            .LugNac = Me.txtLugNac.Text
-            If Me.txtEdad.Text = "" Then Me.txtEdad.Text = "0"
-            .Edad = CInt(Me.txtEdad.Text)
-            .Tel1 = Me.txtTel1.Text
-            .Tel2 = Me.txtTel2.Text
-            .Domicilio = Me.txtDomicilio.Text
-            .CP = Me.txtCP.Text
-            .Poblacion = Me.txtPoblacion.Text
-            If Me.optInaemSi.Checked = True Then
-                'ojo, la propiedad alumno.Ininaem es un string
-                .InInaem = "True"
-            Else
-                .InInaem = "False"
-            End If
-            If Me.txtInFecha.Text = "  /  /" Then
-                .InFecha = DateTime.Parse(DateTime.ParseExact(fechanula, "yyyyMMddhhmm", Nothing))
-            End If
-            .InFecha = Convert.ToDateTime(Me.txtInFecha.Text)
-            '.InFecha = CDate(Me.txtInFecha.Text)
-            .NivelEstudios = Me.txtNivelEstudios.Text
-            If Me.LstExpSector.Items.Count > 0 Then
-                Dim str As String = ""
-                For Each l As String In Me.LstExpSector.Items
-                    String.Format("{0} ; {1}", str, l)
-                Next
-                If str.Length > 0 Then
-                    str.Substring(1)
-                    MsgBox(str)
+            With a
+                .Apellido1 = Me.txtApellido1.Text
+                .Apellido2 = Me.txtApellido2.Text
+                .Nombre = Me.txtNombre.Text
+                .DNI = Me.txtDNI.Text
+                .NumSS = Me.txtNumSS.Text
+                Dim t As String = "311299990000"
+                If Me.txtFNac.Text = "  /  /" Then Me.txtFNac.Text = t
+                Dim fechacorrecta As Date = DateTime.ParseExact(Me.txtFNac.Text, "ddMMyyyyhhmm", Nothing)
+                .Fnac = CStr(fechacorrecta)
+                'If Me.txtFNac.Text = "  /  /" Then Me.txtFNac.Text = fechanula
+                ''.Fnac = DateTime.Parse(DateTime.ParseExact(fechanula, "yyyyMMddhhmm", Nothing))
+                ''.Fnac = Convert.ToDateTime(Me.txtFNac.Text)
+                ' ''.Fnac = CDate(Me.txtFNac.Text)
+                '.Fnac = DateTime.ParseExact(Me.txtFNac.Text, "yyyyMMddhhmm", Nothing)
+                .LugNac = Me.txtLugNac.Text
+                If Me.txtEdad.Text = "" Then Me.txtEdad.Text = "0"
+                .Edad = CInt(Me.txtEdad.Text)
+                .Tel1 = Me.txtTel1.Text
+                .Tel2 = Me.txtTel2.Text
+                .Domicilio = Me.txtDomicilio.Text
+                .CP = Me.txtCP.Text
+                .Poblacion = Me.txtPoblacion.Text
+                If Me.optInaemSi.Checked = True Then
+                    'ojo, la propiedad alumno.Ininaem es un string
+                    .InInaem = "True"
+                Else
+                    .InInaem = "False"
                 End If
-                .ExpSector = str
-            End If
-            If Me.CboTallaCamiseta.SelectedIndex <> -1 Then
-                .TallaCamiseta = Me.CboTallaCamiseta.SelectedItem.ToString
-            End If
-            If Me.CboTallaPantalon.SelectedIndex <> -1 Then
-                .TallaPantalon = Me.CboTallaPantalon.SelectedItem.ToString
-            End If
-            If Me.txtTallaCalzado.Text = "" Then Me.txtTallaCalzado.Text = "0"
-            .TallaZapato = CInt(Me.txtTallaCalzado.Text)
-            .Entrevistador = Me.txtEntrevistador.Text
-            If Me.txtFecEntr.Text = "  /  /" Then
-                .FecEntr = DateTime.Parse(DateTime.ParseExact(fechanula, "yyyyMMddhhmm", Nothing))
-            End If
-            .FecEntr = Convert.ToDateTime(Me.txtFecEntr.Text)
+                .InFecha = cambiarFormatoFecha(Me.txtInFecha.Text)
+                'If Me.txtInFecha.Text = "  /  /" Then
+                '    .InFecha = DateTime.Parse(DateTime.ParseExact(fechanula, "yyyyMMddhhmm", Nothing))
+                'End If
+                '.InFecha = Convert.ToDateTime(Me.txtInFecha.Text)
+                ''.InFecha = CDate(Me.txtInFecha.Text)
+                .NivelEstudios = Me.txtNivelEstudios.Text
+                If Me.LstExpSector.Items.Count > 0 Then
+                    Dim str As String = ""
+                    For Each l As String In Me.LstExpSector.Items
+                        String.Format("{0} ; {1}", str, l)
+                    Next
+                    If str.Length > 0 Then
+                        str.Substring(1)
+                        MsgBox(str)
+                    End If
+                    .ExpSector = str
+                End If
+                If Me.CboTallaCamiseta.SelectedIndex <> -1 Then
+                    .TallaCamiseta = Me.CboTallaCamiseta.SelectedItem.ToString
+                End If
+                If Me.CboTallaPantalon.SelectedIndex <> -1 Then
+                    .TallaPantalon = Me.CboTallaPantalon.SelectedItem.ToString
+                End If
+                If Me.txtTallaCalzado.Text = "" Then Me.txtTallaCalzado.Text = "0"
+                .TallaZapato = CInt(Me.txtTallaCalzado.Text)
+                .Entrevistador = Me.txtEntrevistador.Text
+                .FecEntr = cambiarFormatoFecha(Me.txtFecEntr.Text)
+                'If Me.txtFecEntr.Text = "  /  /" Then
+                '    .FecEntr = DateTime.Parse(DateTime.ParseExact(fechanula, "yyyyMMddhhmm", Nothing))
+                'End If
+                '.FecEntr = Convert.ToDateTime(Me.txtFecEntr.Text)
 
-            '.FecEntr = CDate(Me.txtFecEntr.Text)
-            .Valoracion = Me.txtValoracion.Text
-            If Me.optAptoSi.Checked = True Then
-                .Apto = "Apto"
-            End If
-            If Me.OptAptoNo.Checked = True Then
-                .Apto = "No Apto"
-            End If
-            If Me.OptAptoPendiente.Checked = True Then
-                .Apto = "Pendiente"
-            End If
-            'falta la foto
-        End With
-        Return a
+                '.FecEntr = CDate(Me.txtFecEntr.Text)
+                .Valoracion = Me.txtValoracion.Text
+                If Me.optAptoSi.Checked = True Then
+                    .Apto = "Apto"
+                End If
+                If Me.OptAptoNo.Checked = True Then
+                    .Apto = "No Apto"
+                End If
+                If Me.OptAptoPendiente.Checked = True Then
+                    .Apto = "Pendiente"
+                End If
+                'falta la foto
+            End With
+            Return a
+        Catch ex2 As miExcepcion
+            MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        End Try
     End Function
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
@@ -299,9 +308,9 @@ Public Class FrmFichas
         Return nueva
     End Function
     Public Function cambiarPutoFormatoFecha(ByVal s As String) As Date
-        Dim fechacorrecta As Date
-
+        Dim t As String = "311299990000"
+        If s = "  /  /" Then s = t
+        Dim fechacorrecta As Date = DateTime.ParseExact(s, "ddMMyyyyhhmm", Nothing)
         Return fechacorrecta
-
     End Function
 End Class

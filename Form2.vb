@@ -21,16 +21,13 @@ Public Class Form2
     Public Function cambiarPutoFormatoFecha(ByVal s As String) As Date
         Dim t As String = "311299990000"
         If s = "  /  /" Then s = t
-        'DateTime.ParseExact(Me.txtFNac.Text, "yyyyMMddhhmm", Nothing)
-        ' Dim fechacorrecta As Date = DateTime.ParseExact(s, "yyyyMMddhhmm", Nothing)
         Dim fechacorrecta As Date = DateTime.ParseExact(s, "ddMMyyyyhhmm", Nothing)
         Return fechacorrecta
-        'Dim t As String = "ddMMyyyyhhmm"
     End Function
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Dim fecha As Date = cambiarPutoFormatoFecha(Me.MaskedTextBox1.Text)
         MsgBox(fecha.ToShortDateString)
-        MsgBox(fecha.ToLongDateString)
+
 
     End Sub
     'Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
