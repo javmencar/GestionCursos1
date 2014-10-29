@@ -108,9 +108,10 @@ Public Class FrmFichas
             .CP = Me.txtCP.Text
             .Poblacion = Me.txtPoblacion.Text
             If Me.optInaemSi.Checked = True Then
-                .InInaem = True
+                'ojo, la propiedad alumno.Ininaem es un string
+                .InInaem = "True"
             Else
-                .InInaem = False
+                .InInaem = "False"
             End If
             If Me.txtInFecha.Text <> "  /  / " Then
                 '.InFecha = Convert.ToDateTime(Me.txtInFecha.Text)

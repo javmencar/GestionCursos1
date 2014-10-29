@@ -248,7 +248,6 @@ Public Class Alumno
     Public Function ListadoDeValoresDeLasPropiedades() As ArrayList
         'List(Of String)
         Dim lista As New ArrayList
-        'List(Of String)()
         With lista
             .Add(Me.mId)
             .Add(Me.mDNI)
