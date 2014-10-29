@@ -90,17 +90,19 @@ Public Class FrmFichas
     End Sub
     Private Function rellenarObjetoDesdeCampos() As Alumno
         a = New Alumno
+
         With a
             .Apellido1 = Me.txtApellido1.Text
             .Apellido2 = Me.txtApellido2.Text
             .Nombre = Me.txtNombre.Text
             .DNI = Me.txtDNI.Text
             .NumSS = Me.txtNumSS.Text
-            If Me.txtFNac.Text <> "  /  / " Then
-                '.Fnac = Convert.ToDateTime(Me.txtFNac.Text)
-                .Fnac = CDate(Me.txtFNac.Text)
-            End If
+            If Me.txtFNac.Text = "  /  / " Then Me.txtFNac.Text = "0:00:00"
+            '.Fnac = Convert.ToDateTime(Me.txtFNac.Text)
+            .Fnac = CDate(Me.txtFNac.Text)
+
             .LugNac = Me.txtLugNac.Text
+            If Me.txtEdad.Text = "" Then Me.txtEdad.Text = "0"
             .Edad = CInt(Me.txtEdad.Text)
             .Tel1 = Me.txtTel1.Text
             .Tel2 = Me.txtTel2.Text
@@ -113,11 +115,9 @@ Public Class FrmFichas
             Else
                 .InInaem = "False"
             End If
-            If Me.txtInFecha.Text <> "  /  / " Then
-                '.InFecha = Convert.ToDateTime(Me.txtInFecha.Text)
-                .InFecha = CDate(Me.txtInFecha.Text)
-            End If
-
+            If Me.txtInFecha.Text = "  /  / " Then Me.txtInFecha.Text = "0:00:00"
+            '.InFecha = Convert.ToDateTime(Me.txtInFecha.Text)
+            .InFecha = CDate(Me.txtInFecha.Text)
             .NivelEstudios = Me.txtNivelEstudios.Text
             If Me.LstExpSector.Items.Count > 0 Then
                 Dim str As String = ""
@@ -136,12 +136,14 @@ Public Class FrmFichas
             If Me.CboTallaPantalon.SelectedIndex <> -1 Then
                 .TallaPantalon = Me.CboTallaPantalon.SelectedItem.ToString
             End If
+            If Me.txtTallaCalzado.Text = "" Then Me.txtTallaCalzado.Text = "0"
             .TallaZapato = CInt(Me.txtTallaCalzado.Text)
             .Entrevistador = Me.txtEntrevistador.Text
-            If Me.txtFecEntr.Text <> "00/00/0" Then
-                .FecEntr = CDate(Me.txtInFecha.Text)
-                '.FecEntr = Convert.ToDateTime(Me.txtFecEntr.Text)
-            End If
+            If Me.txtFecEntr.Text = "  /  / " Then Me.txtFecEntr.Text = "0:00:00"
+
+            .FecEntr = CDate(Me.txtInFecha.Text)
+            '.FecEntr = Convert.ToDateTime(Me.txtFecEntr.Text)
+
             '.FecEntr = CDate(Me.txtFecEntr.Text)
             .Valoracion = Me.txtValoracion.Text
             If Me.optAptoSi.Checked = True Then
@@ -259,6 +261,7 @@ Public Class FrmFichas
             tablas = tablas.Substring(2)
             valores = valores.Substring(2)
             Dim sql As String = String.Format("insert into {0} values ({1})", tablas, valores)
+            MsgBox(sql)
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
             Dim i As Integer = cmd.ExecuteNonQuery()
