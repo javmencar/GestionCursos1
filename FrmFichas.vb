@@ -23,8 +23,13 @@ Public Class FrmFichas
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
         alum = al
     End Sub
+
     Private Sub FrmFichas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         cn = New SqlConnection(ConeStr)
+        Me.txtFNac.Mask = "00/00/0000"
+        Me.txtFecEntr.Mask = "00/00/0000"
+        Me.txtInFecha.Mask = "00/00/0000"
+       
         If IsNothing(alum) Then
             'nada, viene vacío y lo tenemos que rellenar
             alum = New Alumno
@@ -91,18 +96,23 @@ Public Class FrmFichas
     Private Function rellenarObjetoDesdeCampos() As Alumno
         a = New Alumno
 
+        Me.txtFecEntr.Mask.Remove(0)
+        Me.txtInFecha.Mask.Remove(0)
         With a
             .Apellido1 = Me.txtApellido1.Text
             .Apellido2 = Me.txtApellido2.Text
             .Nombre = Me.txtNombre.Text
             .DNI = Me.txtDNI.Text
             .NumSS = Me.txtNumSS.Text
-            If Me.txtFNac.Text = "  /  / " Then Me.txtFNac.Text = "0:00:00"
-            '.Fnac = Convert.ToDateTime(Me.txtFNac.Text)
-            .Fnac = CDate(Me.txtFNac.Text)
+
+            If Me.txtFNac.Text = "  /  / " Or Me.txtFNac.Text = vbEmpty Then
+                Me.txtFNac.Text = "0:00:00"
+            End If
+            .Fnac = Convert.ToDateTime(Me.txtFNac.Text)
+            '.Fnac = CDate(Me.txtFNac.Text)
 
             .LugNac = Me.txtLugNac.Text
-            If Me.txtEdad.Text = "" Then Me.txtEdad.Text = "0"
+            If Me.txtEdad.Text = vbEmpty Then Me.txtEdad.Text = "0"
             .Edad = CInt(Me.txtEdad.Text)
             .Tel1 = Me.txtTel1.Text
             .Tel2 = Me.txtTel2.Text
@@ -115,9 +125,12 @@ Public Class FrmFichas
             Else
                 .InInaem = "False"
             End If
-            If Me.txtInFecha.Text = "  /  / " Then Me.txtInFecha.Text = "0:00:00"
-            '.InFecha = Convert.ToDateTime(Me.txtInFecha.Text)
-            .InFecha = CDate(Me.txtInFecha.Text)
+            If Me.txtInFecha.Text = "  /  / " Or Me.txtInFecha.Text = vbEmpty Then
+                Me.txtInFecha.Text = "0:00:00"
+            End If
+            ' If Me.txtInFecha.Text = "  /  / " Then Me.txtInFecha.Text = "0:00:00"
+            .InFecha = Convert.ToDateTime(Me.txtInFecha.Text)
+            '.InFecha = CDate(Me.txtInFecha.Text)
             .NivelEstudios = Me.txtNivelEstudios.Text
             If Me.LstExpSector.Items.Count > 0 Then
                 Dim str As String = ""
@@ -139,10 +152,13 @@ Public Class FrmFichas
             If Me.txtTallaCalzado.Text = "" Then Me.txtTallaCalzado.Text = "0"
             .TallaZapato = CInt(Me.txtTallaCalzado.Text)
             .Entrevistador = Me.txtEntrevistador.Text
-            If Me.txtFecEntr.Text = "  /  / " Then Me.txtFecEntr.Text = "0:00:00"
+            If Me.txtFecEntr.Text = "  /  / " Or Me.txtFecEntr.Text = vbEmpty Then
+                Me.txtFecEntr.Text = "0:00:00"
+            End If
+            '  If Me.txtFecEntr.Text = "  /  / " Then Me.txtFecEntr.Text = "0:00:00"
 
-            .FecEntr = CDate(Me.txtInFecha.Text)
-            '.FecEntr = Convert.ToDateTime(Me.txtFecEntr.Text)
+            ' .FecEntr = CDate(Me.txtInFecha.Text)
+            .FecEntr = Convert.ToDateTime(Me.txtFecEntr.Text)
 
             '.FecEntr = CDate(Me.txtFecEntr.Text)
             .Valoracion = Me.txtValoracion.Text
@@ -162,7 +178,8 @@ Public Class FrmFichas
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
         Try
-            MsgBox(alum.Fnac.ToString)
+            'If Me.txtFNac.mas Then
+            '    MsgBox(alum.Fnac.ToString)
             Dim alumnoModificado As Alumno
             Dim fallos As Boolean = fallosEnCamposPrincipales()
             If fallos = False Then
