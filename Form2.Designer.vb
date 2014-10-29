@@ -26,6 +26,7 @@ Partial Class Form2
         Me.Button1 = New System.Windows.Forms.Button()
         Me.TextBox2 = New System.Windows.Forms.TextBox()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
+        Me.MaskedTextBox1 = New System.Windows.Forms.MaskedTextBox()
         Me.SuspendLayout()
         '
         'TextBox1
@@ -59,11 +60,21 @@ Partial Class Form2
         Me.ListBox1.Size = New System.Drawing.Size(340, 121)
         Me.ListBox1.TabIndex = 3
         '
+        'MaskedTextBox1
+        '
+        Me.MaskedTextBox1.Location = New System.Drawing.Point(303, 12)
+        Me.MaskedTextBox1.Mask = "00/00/0000"
+        Me.MaskedTextBox1.Name = "MaskedTextBox1"
+        Me.MaskedTextBox1.Size = New System.Drawing.Size(100, 20)
+        Me.MaskedTextBox1.TabIndex = 4
+        Me.MaskedTextBox1.ValidatingType = GetType(Date)
+        '
         'Form2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(675, 294)
+        Me.Controls.Add(Me.MaskedTextBox1)
         Me.Controls.Add(Me.ListBox1)
         Me.Controls.Add(Me.TextBox2)
         Me.Controls.Add(Me.Button1)
@@ -78,4 +89,5 @@ Partial Class Form2
     Friend WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
     Friend WithEvents ListBox1 As System.Windows.Forms.ListBox
+    Friend WithEvents MaskedTextBox1 As System.Windows.Forms.MaskedTextBox
 End Class

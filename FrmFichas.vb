@@ -96,23 +96,23 @@ Public Class FrmFichas
     Private Function rellenarObjetoDesdeCampos() As Alumno
         a = New Alumno
 
-        Me.txtFecEntr.Mask.Remove(0)
-        Me.txtInFecha.Mask.Remove(0)
+        'Me.txtFecEntr.Mask.Remove(0)
+        'Me.txtInFecha.Mask.Remove(0)
+        Dim fechanula As String = "999912310000"
+
         With a
             .Apellido1 = Me.txtApellido1.Text
             .Apellido2 = Me.txtApellido2.Text
             .Nombre = Me.txtNombre.Text
             .DNI = Me.txtDNI.Text
             .NumSS = Me.txtNumSS.Text
-
-            If Me.txtFNac.Text = "  /  / " Or Me.txtFNac.Text = vbEmpty Then
-                Me.txtFNac.Text = "0:00:00"
-            End If
-            .Fnac = Convert.ToDateTime(Me.txtFNac.Text)
-            '.Fnac = CDate(Me.txtFNac.Text)
-
+            If Me.txtFNac.Text = "  /  /" Then Me.txtFNac.Text = fechanula
+            '.Fnac = DateTime.Parse(DateTime.ParseExact(fechanula, "yyyyMMddhhmm", Nothing))
+            '.Fnac = Convert.ToDateTime(Me.txtFNac.Text)
+            ''.Fnac = CDate(Me.txtFNac.Text)
+            .Fnac = DateTime.ParseExact(Me.txtFNac.Text, "yyyyMMddhhmm", Nothing)
             .LugNac = Me.txtLugNac.Text
-            If Me.txtEdad.Text = vbEmpty Then Me.txtEdad.Text = "0"
+            If Me.txtEdad.Text = "" Then Me.txtEdad.Text = "0"
             .Edad = CInt(Me.txtEdad.Text)
             .Tel1 = Me.txtTel1.Text
             .Tel2 = Me.txtTel2.Text
@@ -125,10 +125,9 @@ Public Class FrmFichas
             Else
                 .InInaem = "False"
             End If
-            If Me.txtInFecha.Text = "  /  / " Or Me.txtInFecha.Text = vbEmpty Then
-                Me.txtInFecha.Text = "0:00:00"
+            If Me.txtInFecha.Text = "  /  /" Then
+                .InFecha = DateTime.Parse(DateTime.ParseExact(fechanula, "yyyyMMddhhmm", Nothing))
             End If
-            ' If Me.txtInFecha.Text = "  /  / " Then Me.txtInFecha.Text = "0:00:00"
             .InFecha = Convert.ToDateTime(Me.txtInFecha.Text)
             '.InFecha = CDate(Me.txtInFecha.Text)
             .NivelEstudios = Me.txtNivelEstudios.Text
@@ -152,12 +151,9 @@ Public Class FrmFichas
             If Me.txtTallaCalzado.Text = "" Then Me.txtTallaCalzado.Text = "0"
             .TallaZapato = CInt(Me.txtTallaCalzado.Text)
             .Entrevistador = Me.txtEntrevistador.Text
-            If Me.txtFecEntr.Text = "  /  / " Or Me.txtFecEntr.Text = vbEmpty Then
-                Me.txtFecEntr.Text = "0:00:00"
+            If Me.txtFecEntr.Text = "  /  /" Then
+                .FecEntr = DateTime.Parse(DateTime.ParseExact(fechanula, "yyyyMMddhhmm", Nothing))
             End If
-            '  If Me.txtFecEntr.Text = "  /  / " Then Me.txtFecEntr.Text = "0:00:00"
-
-            ' .FecEntr = CDate(Me.txtInFecha.Text)
             .FecEntr = Convert.ToDateTime(Me.txtFecEntr.Text)
 
             '.FecEntr = CDate(Me.txtFecEntr.Text)
@@ -181,10 +177,10 @@ Public Class FrmFichas
             'If Me.txtFNac.mas Then
             '    MsgBox(alum.Fnac.ToString)
             Dim alumnoModificado As Alumno
-            Dim fallos As Boolean = fallosEnCamposPrincipales()
-            If fallos = False Then
-                alumnoModificado = rellenarObjetoDesdeCampos()
-            End If
+            ' Dim fallos As Boolean = fallosEnCamposPrincipales()
+            ' If fallos = False Then
+            alumnoModificado = rellenarObjetoDesdeCampos()
+            '   End If
             If Not IsNothing(alumnoModificado) Then
                 If nuevo = True Then Call CrearNuevoAlumnoEnBaseDeDatos(alum)
                 If nuevo = False Then Call cargarCambiosEnAlumnoYaCreado(alumnoModificado)
@@ -302,5 +298,10 @@ Public Class FrmFichas
         Dim nueva As String = "'" & años & meses & dias & "'"
         Return nueva
     End Function
+    Public Function cambiarPutoFormatoFecha(ByVal s As String) As Date
+        Dim fechacorrecta As Date
 
+        Return fechacorrecta
+
+    End Function
 End Class
