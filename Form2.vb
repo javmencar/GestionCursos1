@@ -51,11 +51,21 @@ Public Class Form2
     '    ''MsgBox(str)
     'End Sub
 
+    'Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    '    arr.Sort()
+    '    Me.ListBox1.Items.Clear()
+    '    For Each lin As String In arr
+    '        Me.ListBox1.Items.Add(lin.ToString)
+    '    Next
+    'End Sub
+
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        arr.Sort()
-        Me.ListBox1.Items.Clear()
-        For Each lin As String In arr
-            Me.ListBox1.Items.Add(lin.ToString)
-        Next
+        Dim vieja As String = Me.TextBox1.Text
+        Dim dias, meses, años As String
+        dias = vieja.Substring(0, 2)
+        meses = vieja.Substring(3, 2)
+        años = vieja.Substring(6, 4)
+        Dim nueva As String = años & meses & dias
+        MsgBox(nueva)
     End Sub
 End Class

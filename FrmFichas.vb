@@ -1,6 +1,11 @@
-﻿Public Class FrmFichas
+﻿
+
+'Imports System.Reflection
+Imports System.Data.SqlClient
+Public Class FrmFichas
     Dim nuevo As Boolean
     Public alum, a As Alumno
+    Public cn As SqlConnection
     'Public profe As profesor
     Sub New()
 
@@ -19,6 +24,7 @@
         alum = al
     End Sub
     Private Sub FrmFichas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        cn = New SqlConnection(ConeStr)
         If IsNothing(alum) Then
             'nada, viene vacío y lo tenemos que rellenar
             alum = New Alumno
@@ -152,6 +158,7 @@
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
         Try
+            MsgBox(alum.Fnac.ToString)
             Dim alumnoModificado As Alumno
             Dim fallos As Boolean = fallosEnCamposPrincipales()
             If fallos = False Then
@@ -164,7 +171,7 @@
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
         Catch ex As Exception
-
+            MsgBox(ex.ToString)
         End Try
     End Sub
     Private Function fallosEnCamposPrincipales() As Boolean
@@ -201,8 +208,8 @@
             End If
             For Each dato As String In cambios
                 respuesta = MsgBox(String.Format("Va generar una ficha con cambios en la casilla '{0}'" &
-            '                                    vbCrLf & "¿Es correcto?", c), MsgBoxStyle.YesCancel)
-                If respuesta = MsgBoxResult.Cancel Then Throw New miExcepcion("Modificacion anulada a peticion del usuario")
+                                               vbCrLf & "¿Es correcto?", dato), MsgBoxStyle.YesNo)
+                If respuesta = MsgBoxResult.No Then Throw New miExcepcion("Modificacion anulada a peticion del usuario")
             Next
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
@@ -217,8 +224,61 @@
 
     End Sub
     Public Sub CrearNuevoAlumnoEnBaseDeDatos(ByVal al As Alumno)
-        Dim tablas, valores As String
+        Try
+            Dim listanombres As List(Of String)
+            Dim listavalores As ArrayList
+            listanombres = al.ListadoNombreDeLasPropiedades
+            listavalores = al.ListadoDeValoresDeLasPropiedades
+            Dim tablas As String = ""
+            Dim valores As String = ""
 
-        Dim sql As String = ""
+            For i As Integer = 1 To listanombres.Count - 1
+                'solo meto los campos que tengan valores y empiezo en 1 para no meter la Id, que es Identity
+                If Not IsNothing(listavalores(i)) Then
+                    If TypeOf (listavalores(i)) Is String Then
+                        tablas &= ", " & listanombres(i).ToString
+                        valores &= ", '" & listavalores(i).ToString & "'"
+                    ElseIf TypeOf (listavalores(i)) Is Integer Then
+                        tablas &= ", " & listanombres(i).ToString
+                        valores &= ", " & listavalores(i).ToString
+                    ElseIf TypeOf (listavalores(i)) Is Date Then
+                        tablas &= ", " & listanombres(i).ToString
+                        Dim fechaFormatoCorrecto As String = cambiarFormatoFecha(listavalores(i))
+                        valores &= ", " & fechaFormatoCorrecto
+                    ElseIf TypeOf (listavalores(i)) Is Boolean Then
+                        tablas &= ", " & listanombres(i).ToString
+                        'creo recordar que los valores booleanos se meten con 0 y 1
+                        If listavalores(i) = True Then valores &= ", 1"
+                        If listavalores(i) = False Then valores &= ", 0"
+                    End If
+                End If
+            Next
+            'Le quito la primera coma y el primer espacio a las dos variables
+            tablas = tablas.Substring(2)
+            valores = valores.Substring(2)
+            Dim sql As String = String.Format("insert into ({0}) values ({1})", tablas, valores)
+            cn.Open()
+            Dim cmd As New SqlCommand(sql, cn)
+            Dim i As Integer = cmd.ExecuteNonQuery()
+            If i <= 0 Then Throw New miExcepcion("error en la insercion")
+        Catch ex2 As miExcepcion
+            MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        Finally
+            cn.Close()
+        End Try
+
+
     End Sub
+    Public Function cambiarFormatoFecha(ByVal f As Date) As String
+        Dim vieja, dias, meses, años As String
+        vieja = f.ToString
+        dias = vieja.Substring(0, 2)
+        meses = vieja.Substring(3, 2)
+        años = vieja.Substring(6, 4)
+        Dim nueva As String = "'" & años & meses & dias & "'"
+        Return nueva
+    End Function
+
 End Class
