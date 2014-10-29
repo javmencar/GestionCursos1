@@ -96,9 +96,9 @@ Public Class FrmFichas
             .Nombre = Me.txtNombre.Text
             .DNI = Me.txtDNI.Text
             .NumSS = Me.txtNumSS.Text
-            If Me.txtFNac.Text <> "00/00/0" Then
-                .Fnac = Convert.ToDateTime(Me.txtFNac.Text)
-                ' .Fnac = CDate(Me.txtFNac.Text)
+            If Me.txtFNac.Text <> "  /  / " Then
+                '.Fnac = Convert.ToDateTime(Me.txtFNac.Text)
+                .Fnac = CDate(Me.txtFNac.Text)
             End If
             .LugNac = Me.txtLugNac.Text
             .Edad = CInt(Me.txtEdad.Text)
@@ -112,9 +112,9 @@ Public Class FrmFichas
             Else
                 .InInaem = False
             End If
-            If Me.txtInFecha.Text <> "00/00/0" Then
-                .InFecha = Convert.ToDateTime(Me.txtInFecha.Text)
-                ' .InFecha = CDate(Me.txtInFecha.Text)
+            If Me.txtInFecha.Text <> "  /  / " Then
+                '.InFecha = Convert.ToDateTime(Me.txtInFecha.Text)
+                .InFecha = CDate(Me.txtInFecha.Text)
             End If
 
             .NivelEstudios = Me.txtNivelEstudios.Text
@@ -138,7 +138,8 @@ Public Class FrmFichas
             .TallaZapato = CInt(Me.txtTallaCalzado.Text)
             .Entrevistador = Me.txtEntrevistador.Text
             If Me.txtFecEntr.Text <> "00/00/0" Then
-                .FecEntr = Convert.ToDateTime(Me.txtFecEntr.Text)
+                .FecEntr = CDate(Me.txtInFecha.Text)
+                '.FecEntr = Convert.ToDateTime(Me.txtFecEntr.Text)
             End If
             '.FecEntr = CDate(Me.txtFecEntr.Text)
             .Valoracion = Me.txtValoracion.Text
@@ -232,31 +233,31 @@ Public Class FrmFichas
             Dim tablas As String = ""
             Dim valores As String = ""
 
-            For i As Integer = 1 To listanombres.Count - 1
+            For j As Integer = 1 To listanombres.Count - 1
                 'solo meto los campos que tengan valores y empiezo en 1 para no meter la Id, que es Identity
-                If Not IsNothing(listavalores(i)) Then
-                    If TypeOf (listavalores(i)) Is String Then
-                        tablas &= ", " & listanombres(i).ToString
-                        valores &= ", '" & listavalores(i).ToString & "'"
-                    ElseIf TypeOf (listavalores(i)) Is Integer Then
-                        tablas &= ", " & listanombres(i).ToString
-                        valores &= ", " & listavalores(i).ToString
-                    ElseIf TypeOf (listavalores(i)) Is Date Then
-                        tablas &= ", " & listanombres(i).ToString
-                        Dim fechaFormatoCorrecto As String = cambiarFormatoFecha(listavalores(i))
+                If Not IsNothing(listavalores(j)) Then
+                    If TypeOf (listavalores(j)) Is String Then
+                        tablas &= ", " & listanombres(j).ToString
+                        valores &= ", '" & listavalores(j).ToString & "'"
+                    ElseIf TypeOf (listavalores(j)) Is Integer Then
+                        tablas &= ", " & listanombres(j).ToString
+                        valores &= ", " & listavalores(j).ToString
+                    ElseIf TypeOf (listavalores(j)) Is Date Then
+                        tablas &= ", " & listanombres(j).ToString
+                        Dim fechaFormatoCorrecto As String = cambiarFormatoFecha(listavalores(j))
                         valores &= ", " & fechaFormatoCorrecto
-                    ElseIf TypeOf (listavalores(i)) Is Boolean Then
-                        tablas &= ", " & listanombres(i).ToString
+                    ElseIf TypeOf (listavalores(j)) Is Boolean Then
+                        tablas &= ", " & listanombres(j).ToString
                         'creo recordar que los valores booleanos se meten con 0 y 1
-                        If listavalores(i) = True Then valores &= ", 1"
-                        If listavalores(i) = False Then valores &= ", 0"
+                        If listavalores(j) = True Then valores &= ", 1"
+                        If listavalores(j) = False Then valores &= ", 0"
                     End If
                 End If
             Next
             'Le quito la primera coma y el primer espacio a las dos variables
             tablas = tablas.Substring(2)
             valores = valores.Substring(2)
-            Dim sql As String = String.Format("insert into ({0}) values ({1})", tablas, valores)
+            Dim sql As String = String.Format("insert into {0} values ({1})", tablas, valores)
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
             Dim i As Integer = cmd.ExecuteNonQuery()

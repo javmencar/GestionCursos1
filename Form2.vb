@@ -59,13 +59,13 @@ Public Class Form2
     '    Next
     'End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim vieja As String = Me.TextBox1.Text
-        Dim dias, meses, años As String
-        dias = vieja.Substring(0, 2)
-        meses = vieja.Substring(3, 2)
-        años = vieja.Substring(6, 4)
-        Dim nueva As String = años & meses & dias
-        MsgBox(nueva)
-    End Sub
+    'Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    '    Dim vieja As String = Me.TextBox1.Text
+    '    Dim dias, meses, años As String
+    '    dias = vieja.Substring(0, 2)
+    '    meses = vieja.Substring(3, 2)
+    '    años = vieja.Substring(6, 4)
+    '    Dim nueva As String = años & meses & dias
+    '    MsgBox(nueva)
+    'End Sub
 End Class
