@@ -104,15 +104,15 @@ Public Class FrmFichas
                 .Nombre = Me.txtNombre.Text
                 .DNI = Me.txtDNI.Text
                 .NumSS = Me.txtNumSS.Text
-                Dim t As String = "311299990000"
-                If Me.txtFNac.Text = "  /  /" Then Me.txtFNac.Text = t
-                Dim fechacorrecta As Date = DateTime.ParseExact(Me.txtFNac.Text, "ddMMyyyyhhmm", Nothing)
-                .Fnac = CStr(fechacorrecta)
-                'If Me.txtFNac.Text = "  /  /" Then Me.txtFNac.Text = fechanula
-                ''.Fnac = DateTime.Parse(DateTime.ParseExact(fechanula, "yyyyMMddhhmm", Nothing))
-                ''.Fnac = Convert.ToDateTime(Me.txtFNac.Text)
-                ' ''.Fnac = CDate(Me.txtFNac.Text)
-                '.Fnac = DateTime.ParseExact(Me.txtFNac.Text, "yyyyMMddhhmm", Nothing)
+
+                Dim t As String = Me.txtFNac.Text
+                Dim fechacorrecta As Date
+                'Dim fechac As Boolean = comprobarFormatoFechas(t)
+                Dim fechac As Boolean = comprobarformatofechaPorExcepciones(t)
+                If fechac = False Then t = "99991231"
+                fechacorrecta = cambiarPutoFormatoFecha(t)
+                .Fnac = t
+                MsgBox(.Fnac.ToString)
                 .LugNac = Me.txtLugNac.Text
                 If Me.txtEdad.Text = "" Then Me.txtEdad.Text = "0"
                 .Edad = CInt(Me.txtEdad.Text)
@@ -127,12 +127,13 @@ Public Class FrmFichas
                 Else
                     .InInaem = "False"
                 End If
-                .InFecha = cambiarFormatoFecha(Me.txtInFecha.Text)
-                'If Me.txtInFecha.Text = "  /  /" Then
-                '    .InFecha = DateTime.Parse(DateTime.ParseExact(fechanula, "yyyyMMddhhmm", Nothing))
-                'End If
-                '.InFecha = Convert.ToDateTime(Me.txtInFecha.Text)
-                ''.InFecha = CDate(Me.txtInFecha.Text)
+
+                t = Me.txtInFecha.Text
+                fechac = comprobarFormatoFechas(t)
+                If fechac = False Then t = "31/12/9999"
+                fechacorrecta = cambiarPutoFormatoFecha(t)
+                .InFecha = CStr(fechacorrecta)
+              
                 .NivelEstudios = Me.txtNivelEstudios.Text
                 If Me.LstExpSector.Items.Count > 0 Then
                     Dim str As String = ""
@@ -154,13 +155,13 @@ Public Class FrmFichas
                 If Me.txtTallaCalzado.Text = "" Then Me.txtTallaCalzado.Text = "0"
                 .TallaZapato = CInt(Me.txtTallaCalzado.Text)
                 .Entrevistador = Me.txtEntrevistador.Text
-                .FecEntr = cambiarFormatoFecha(Me.txtFecEntr.Text)
-                'If Me.txtFecEntr.Text = "  /  /" Then
-                '    .FecEntr = DateTime.Parse(DateTime.ParseExact(fechanula, "yyyyMMddhhmm", Nothing))
-                'End If
-                '.FecEntr = Convert.ToDateTime(Me.txtFecEntr.Text)
 
-                '.FecEntr = CDate(Me.txtFecEntr.Text)
+                t = Me.txtFecEntr.Text
+                fechac = comprobarFormatoFechas(t)
+                If fechac = False Then t = "99991231"
+                fechacorrecta = cambiarPutoFormatoFecha(t)
+                .FecEntr = CStr(fechacorrecta)
+              
                 .Valoracion = Me.txtValoracion.Text
                 If Me.optAptoSi.Checked = True Then
                     .Apto = "Apto"
@@ -177,6 +178,7 @@ Public Class FrmFichas
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
         Catch ex As Exception
+
             MsgBox(ex.ToString)
         End Try
     End Function
@@ -308,9 +310,62 @@ Public Class FrmFichas
         Return nueva
     End Function
     Public Function cambiarPutoFormatoFecha(ByVal s As String) As Date
-        Dim t As String = "311299990000"
-        If s = "  /  /" Then s = t
-        Dim fechacorrecta As Date = DateTime.ParseExact(s, "ddMMyyyyhhmm", Nothing)
+        '  Dim t As String = "999931120000"
+        Dim dd, MM, yyyy As String
+        dd = s.Substring(0, 2)
+        MM = s.Substring(3, 2)
+        yyyy = s.Substring(6, 4)
+        s = yyyy & MM & dd
+        Dim fechacorrecta As Date = DateTime.ParseExact(s, "yyyyMMdd", Nothing)
         Return fechacorrecta
+    End Function
+
+    Public Function comprobarFormatoFechas(ByVal s As String) As Boolean
+        ' MsgBox("Fecha completa: " & "*" & s & "*")
+        Dim dias, meses, años As Integer
+        Dim longitud, locHuecos As Integer
+        locHuecos = s.LastIndexOf(" ")
+        If locHuecos >= 0 Then Return False
+        longitud = s.Length
+        If longitud <> 10 Then Return False
+        Try
+            dias = CInt(s.Substring(0, 2))
+            meses = CInt(s.Substring(3, 2))
+            años = CInt(s.Substring(6, 4))
+        Catch ex2 As InvalidCastException
+            MsgBox(ex2.ToString)
+            Return False
+        Catch ex As Exception
+        End Try
+
+        If CInt(años) < 1 Then Return False
+        If CInt(meses) < 1 Or CInt(meses) > 12 Then Return False
+        If CInt(dias) < 1 Or CInt(dias) > 31 Then Return False
+        Select Case CInt(meses)
+            Case 2
+                If CInt(dias) > 28 Then
+                    Return False
+                ElseIf CInt(dias) = 29 AndAlso CInt(años) Mod 4 <> 0 Then
+                    Return False
+                End If
+            Case 2, 4, 6, 9, 11
+                If CInt(dias) > 30 Then Return False
+            Case Else
+                If CInt(dias) > 31 Then Return False
+        End Select
+        Return True
+    End Function
+    Public Function comprobarformatofechaPorExcepciones(ByVal s As String) As Boolean
+        Try
+            Dim dias, meses, años As Integer
+            dias = CInt(s.Substring(0, 2))
+            meses = CInt(s.Substring(3, 2))
+            años = CInt(s.Substring(6, 4))
+            Dim t As String = años & meses & dias
+            Dim fechacorrecta As Date = DateTime.ParseExact(t, "yyyyMMdd", Nothing)
+        Catch
+            Return False
+        End Try
+        Return True
     End Function
 End Class
