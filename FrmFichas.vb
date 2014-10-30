@@ -96,7 +96,6 @@ Public Class FrmFichas
     Private Function rellenarObjetoDesdeCampos() As Alumno
         Try
             a = New Alumno
-            '   Dim fechanula As String = "999912310000"
 
             With a
                 .Apellido1 = Me.txtApellido1.Text
@@ -104,16 +103,20 @@ Public Class FrmFichas
                 .Nombre = Me.txtNombre.Text
                 .DNI = Me.txtDNI.Text
                 .NumSS = Me.txtNumSS.Text
-
+                Dim err As Integer = 0
                 Dim t As String = Me.txtFNac.Text
-                Dim fechacorrecta As Date
-                'Dim fechac As Boolean = comprobarFormatoFechas(t)
-                Dim fechac As Boolean = comprobarformatofechaPorExcepciones(t)
-                If fechac = False Then Throw New miExcepcion("formato de fecha incorrecto")
-                'If fechac = False Then t = "99991231"
-                fechacorrecta = cambiarPutoFormatoFecha(t)
-                .Fnac = t
-                MsgBox(.Fnac.ToString)
+
+                err = comprobarformatofechaPorExcepciones(t)
+                Select Case err
+                    Case 0
+                        .Fnac = t
+                    Case 1
+                        MsgBox("Error de formato en fecha de Nacimiento")
+                    Case 2 - 4
+                        Throw New miExcepcion("error en fecha de nacimiento de tipo: " & err)
+                End Select
+                '.Fnac = t
+                ' MsgBox(.Fnac.ToString)
                 .LugNac = Me.txtLugNac.Text
                 If Me.txtEdad.Text = "" Then Me.txtEdad.Text = "0"
                 .Edad = CInt(Me.txtEdad.Text)
@@ -125,17 +128,21 @@ Public Class FrmFichas
                 If Me.optInaemSi.Checked = True Then
                     'ojo, la propiedad alumno.Ininaem es un string
                     .InInaem = "True"
+                    t = Me.txtInFecha.Text
+                    err = comprobarformatofechaPorExcepciones(t)
+                    Select Case err
+                        Case 0
+                            .InFecha = t
+                        Case 2
+                            MsgBox("Error de formato en la fecha de inscripcin de la Oficina de empleo")
+                        Case 1, 3, 4
+                            Throw New miExcepcion("error en fecha de inscripcion en el Inaem: " & err)
+                    End Select
+                    '.InFecha = t
+                    ' MsgBox(.InFecha.ToString)
                 Else
                     .InInaem = "False"
                 End If
-
-                t = Me.txtInFecha.Text
-                fechac = comprobarformatofechaPorExcepciones(t)
-                If fechac = False Then Throw New miExcepcion("formato de fecha incorrecto")
-                ' If fechac = False Then t = "31/12/9999"
-                fechacorrecta = cambiarPutoFormatoFecha(t)
-                .InFecha = CStr(fechacorrecta)
-                MsgBox(.InFecha.ToString)
                 .NivelEstudios = Me.txtNivelEstudios.Text
                 If Me.LstExpSector.Items.Count > 0 Then
                     Dim str As String = ""
@@ -157,14 +164,20 @@ Public Class FrmFichas
                 If Me.txtTallaCalzado.Text = "" Then Me.txtTallaCalzado.Text = "0"
                 .TallaZapato = CInt(Me.txtTallaCalzado.Text)
                 .Entrevistador = Me.txtEntrevistador.Text
+                If Me.txtEntrevistador.Text <> "" Xor Me.txtValoracion.Text <> "" Then
+                    t = Me.txtFecEntr.Text
+                    err = comprobarformatofechaPorExcepciones(t)
+                    Select Case err
+                        Case 0
+                            .FecEntr = t
+                        Case 2
 
-                t = Me.txtFecEntr.Text
-                fechac = comprobarformatofechaPorExcepciones(t)
-                If fechac = False Then Throw New miExcepcion("formato de fecha incorrecto")
-                ' If fechac = False Then t = "99991231"
-                fechacorrecta = cambiarPutoFormatoFecha(t)
-                .FecEntr = CStr(fechacorrecta)
-                MsgBox(.FecEntr.ToString)
+                        Case 1, 3, 4
+                            Throw New miExcepcion("error en fecha de inscripcion en el Inaem: " & err)
+                    End Select
+                    '.FecEntr = t
+                    'MsgBox(.FecEntr.ToString)
+                End If
                 .Valoracion = Me.txtValoracion.Text
                 If Me.optAptoSi.Checked = True Then
                     .Apto = "Apto"
@@ -177,13 +190,12 @@ Public Class FrmFichas
                 End If
                 'falta la foto
             End With
-            Return a
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
         Catch ex As Exception
-
             MsgBox(ex.ToString)
         End Try
+        Return a
     End Function
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
@@ -312,34 +324,21 @@ Public Class FrmFichas
         Dim nueva As String = "'" & años & meses & dias & "'"
         Return nueva
     End Function
-    Public Function cambiarPutoFormatoFecha(ByVal s As String) As Date
-        '  Dim t As String = "999931120000"
-        Dim dd, MM, yyyy As String
-        dd = s.Substring(0, 2)
-        MM = s.Substring(3, 2)
-        yyyy = s.Substring(6, 4)
-        s = yyyy & MM & dd
-        Dim fechacorrecta As Date = DateTime.ParseExact(s, "yyyyMMdd", Nothing)
-        Return fechacorrecta
-    End Function
-
-  
-    Public Function comprobarformatofechaPorExcepciones(ByVal s As String) As Boolean
+    Public Function comprobarformatofechaPorExcepciones(ByVal s As String) As Integer
         Try
-            Dim dias, meses, años As Integer
-            dias = CInt(s.Substring(0, 2))
-            meses = CInt(s.Substring(3, 2))
-            años = CInt(s.Substring(6, 4))
-            Dim t As String = años & meses & dias
-            Dim fechacorrecta As Date = DateTime.ParseExact(t, "yyyyMMdd", Nothing)
-        Catch ex As Exception
-            If TypeOf (ex) Is ArgumentException OrElse TypeOf (ex) Is System.FormatException OrElse TypeOf (ex) Is System.InvalidCastException Then
-                Return False
-            Else
-                MsgBox(ex.ToString)
-                Return False
-            End If
+            Dim fechacorrecta As Date = DateTime.Parse(s)
+
+        Catch ex1 As FormatException
+            Return 1
+        Catch ex2 As InvalidCastException
+            Return 2
+        Catch ex2 As FormatException
+            Return 2
+        Catch ex3 As ArgumentException
+            Return 3
+        Catch ex4 As Exception
+            Return 4
         End Try
-        Return True
+        Return 0
     End Function
 End Class

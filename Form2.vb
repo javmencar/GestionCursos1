@@ -21,15 +21,21 @@ Public Class Form2
     Public Function cambiarPutoFormatoFecha(ByVal s As String) As Date
         Dim t As String = "311299990000"
         If s = "  /  /" Then s = t
-        Dim fechacorrecta As Date = DateTime.ParseExact(s, "ddMMyyyyhhmm", Nothing)
+        Dim fechacorrecta As Date = DateTime.ParseExact(s, "ddMMyyyy", Nothing)
         Return fechacorrecta
     End Function
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim fecha As Date = cambiarPutoFormatoFecha(Me.MaskedTextBox1.Text)
+        Dim fecha As Date = cambiarFormatoFecha(Me.MaskedTextBox1.Text)
         MsgBox(fecha.ToShortDateString)
 
 
     End Sub
+    Public Function cambiarFormatoFecha(ByVal s As String) As Date
+        MsgBox(s)
+        Dim fechacorrecta As Date = DateTime.Parse(s)
+        MsgBox(fechacorrecta)
+        Return fechacorrecta
+    End Function
     'Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
     '       prueba para ver como sacaba los valores de un objeto a string
     '    Dim i As Integer = CInt(Me.TextBox1.Text)
