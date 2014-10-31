@@ -202,14 +202,17 @@ Public Class FrmFichas
         Try
             'If Me.txtFNac.mas Then
             '    MsgBox(alum.Fnac.ToString)
-            Dim alumnoModificado As Alumno
+            Dim alumnoConDatosDelFormulario As Alumno
             ' Dim fallos As Boolean = fallosEnCamposPrincipales()
             ' If fallos = False Then
-            alumnoModificado = rellenarObjetoDesdeCampos()
+            alumnoConDatosDelFormulario = rellenarObjetoDesdeCampos()
             '   End If
-            If Not IsNothing(alumnoModificado) Then
-                If nuevo = True Then Call CrearNuevoAlumnoEnBaseDeDatos(alum)
-                If nuevo = False Then Call cargarCambiosEnAlumnoYaCreado(alumnoModificado)
+            If Not IsNothing(alumnoConDatosDelFormulario) Then
+                If nuevo = True Then
+                    Call CrearNuevoAlumnoEnBaseDeDatos(alumnoConDatosDelFormulario)
+                Else
+                    Call cargarCambiosEnAlumnoYaCreado(alumnoConDatosDelFormulario)
+                End If
             End If
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
@@ -275,8 +278,9 @@ Public Class FrmFichas
             Dim tablas As String = ""
             Dim valores As String = ""
 
-            For j As Integer = 1 To listanombres.Count - 1
-                'solo meto los campos que tengan valores y empiezo en 1 para no meter la Id, que es Identity
+            For j As Integer = 1 To listanombres.Count - 2
+                'solo meto los campos que tengan valores y empiezo en 1 para no meter la Id, que es Identity 
+                'y tampoco pongo por ahora la foto
                 If Not IsNothing(listavalores(j)) Then
                     If TypeOf (listavalores(j)) Is String Then
                         tablas &= ", " & listanombres(j)
@@ -299,12 +303,13 @@ Public Class FrmFichas
             'Le quito la primera coma y el primer espacio a las dos variables
             tablas = tablas.Substring(2)
             valores = valores.Substring(2)
-            Dim sql As String = String.Format("insert into {0} values ({1})", tablas, valores)
+            Dim sql As String = String.Format("INSERT INTO DatosPersonales ({0}) VALUES ({1})", tablas, valores)
             MsgBox(sql)
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
             Dim i As Integer = cmd.ExecuteNonQuery()
             If i <= 0 Then Throw New miExcepcion("error en la insercion")
+            MsgBox("Alumno insertado en la base de datos")
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
         Catch ex As Exception
@@ -342,6 +347,7 @@ Public Class FrmFichas
     Public Function ListadoDeValoresDeLasPropiedades(ByVal a As Alumno) As ArrayList
         'List(Of String)
         Dim lista As New ArrayList
+        Dim arreglafallos As String = ""
         With lista
             .Add(a.Id)
             .Add(a.DNI)
@@ -354,9 +360,12 @@ Public Class FrmFichas
             .Add(a.Domicilio)
             .Add(a.CP)
             .Add(a.Poblacion)
-            .Add(a.Tel1)
-            .Add(a.Tel2)
-            .Add(a.NumSS)
+            arreglafallos = a.Tel1.Replace("-", "")
+            .Add(arreglafallos)
+            arreglafallos = a.Tel2.Replace("-", "")
+            .Add(arreglafallos)
+            arreglafallos = a.NumSS.Replace("/", "")
+            .Add(arreglafallos)
             .Add(a.InInaem)
             .Add(a.InFecha)
             .Add(a.NivelEstudios)
