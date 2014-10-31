@@ -26,7 +26,7 @@ Public Class FrmFichas
 
     Private Sub FrmFichas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         cn = New SqlConnection(ConeStr)
-        Call ordenarTabIndex()
+
         If IsNothing(alum) Then
             'nada, viene vacío y lo tenemos que rellenar
             alum = New Alumno
@@ -207,6 +207,13 @@ Public Class FrmFichas
             If Not IsNothing(alumnoConDatosDelFormulario) Then
                 If nuevo = True Then
                     Call CrearNuevoAlumnoEnBaseDeDatos(alumnoConDatosDelFormulario)
+                    'con el alumno en datos personales cargo de nuevo el formulario y asi tengo la ID
+                    Dim nuevaId As Integer = cogerUltimaId()
+                    If nuevaId = -1 Then Throw New miExcepcion("Error al calcular la ultima ID")
+                    'ya controlare luego si es en alumnos o en profesores
+                    Dim comp As Integer = insertarEnTablaAlumnos(nuevaId)
+                    If comp = -1 Then Throw New miExcepcion("Problema al insertar en tabla alumnos")
+                    MsgBox("Alumno insertado con éxito")
                 Else
                     Call cargarCambiosEnAlumnoYaCreado(alumnoConDatosDelFormulario)
                 End If
@@ -306,6 +313,7 @@ Public Class FrmFichas
             Dim cmd As New SqlCommand(sql, cn)
             Dim i As Integer = cmd.ExecuteNonQuery()
             If i <= 0 Then Throw New miExcepcion("error en la insercion")
+
             MsgBox("Alumno insertado en la base de datos")
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
@@ -377,10 +385,7 @@ Public Class FrmFichas
             .Add(a.IdFoto)
         End With
         Return lista
-    End Function
-    
-    End Sub
-
+    End Function  
     Private Sub cmdExperiencia_Click(sender As Object, e As EventArgs) Handles cmdExperiencia.Click
         If Me.CboExpSector.SelectedIndex = -1 Then
             MsgBox("seleccione un sector de experiencia laboral")
@@ -409,4 +414,39 @@ Public Class FrmFichas
     Private Sub cmdSalir_Click(sender As Object, e As EventArgs) Handles cmdSalir.Click
         Me.DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
+    Public Function cogerUltimaId() As Integer
+        Dim i As Integer = 0
+        cn = New SqlConnection(ConeStr)
+        Try
+            cn.Open()
+            Dim sql As String = "select top 1 DatosPersonales.id from DatosPersonales order by id desc"
+            Dim cmd As New SqlCommand(sql, cn)
+            i = cmd.ExecuteScalar
+
+        Catch ex As Exception
+            i = -1
+        Finally
+            cn.Close()
+        End Try
+        Return i
+    End Function
+    Public Function insertarEnTablaAlumnos(ByVal nid As Integer) As Integer
+        Dim i As Integer
+        cn = New SqlConnection(ConeStr)
+        Try
+            cn.Open()
+            MsgBox(nid)
+            Dim sql As String = String.Format("insert into alumnos (alumnos.idDP)values ({0})", nid)
+            MsgBox(sql)
+            Dim cmd As New SqlCommand(sql, cn)
+
+            i = cmd.ExecuteNonQuery
+
+        Catch ex As Exception
+            i = -1
+        Finally
+            cn.Close()
+        End Try
+        Return i
+    End Function
 End Class
