@@ -271,7 +271,7 @@ Public Class FrmFichas
             Dim listanombres As List(Of String)
             Dim listavalores As ArrayList
             listanombres = al.ListadoNombreDeLasPropiedades
-            listavalores = al.ListadoDeValoresDeLasPropiedades
+            listavalores = ListadoDeValoresDeLasPropiedades(al)
             Dim tablas As String = ""
             Dim valores As String = ""
 
@@ -279,17 +279,17 @@ Public Class FrmFichas
                 'solo meto los campos que tengan valores y empiezo en 1 para no meter la Id, que es Identity
                 If Not IsNothing(listavalores(j)) Then
                     If TypeOf (listavalores(j)) Is String Then
-                        tablas &= ", " & listanombres(j).ToString
-                        valores &= ", '" & listavalores(j).ToString & "'"
+                        tablas &= ", " & listanombres(j)
+                        valores &= ", '" & listavalores(j) & "'"
                     ElseIf TypeOf (listavalores(j)) Is Integer Then
                         tablas &= ", " & listanombres(j).ToString
-                        valores &= ", " & listavalores(j).ToString
+                        valores &= ", " & listavalores(j)
                     ElseIf TypeOf (listavalores(j)) Is Date Then
-                        tablas &= ", " & listanombres(j).ToString
+                        tablas &= ", " & listanombres(j)
                         Dim fechaFormatoCorrecto As String = cambiarFormatoFecha(listavalores(j))
                         valores &= ", " & fechaFormatoCorrecto
                     ElseIf TypeOf (listavalores(j)) Is Boolean Then
-                        tablas &= ", " & listanombres(j).ToString
+                        tablas &= ", " & listanombres(j)
                         'creo recordar que los valores booleanos se meten con 0 y 1
                         If listavalores(j) = True Then valores &= ", 1"
                         If listavalores(j) = False Then valores &= ", 0"
@@ -332,13 +332,44 @@ Public Class FrmFichas
             Return 1
         Catch ex2 As InvalidCastException
             Return 2
-        Catch ex2 As FormatException
-            Return 2
         Catch ex3 As ArgumentException
             Return 3
         Catch ex4 As Exception
             Return 4
         End Try
         Return 0
+    End Function
+    Public Function ListadoDeValoresDeLasPropiedades(ByVal a As Alumno) As ArrayList
+        'List(Of String)
+        Dim lista As New ArrayList
+        With lista
+            .Add(a.Id)
+            .Add(a.DNI)
+            .Add(a.Nombre)
+            .Add(a.Apellido1)
+            .Add(a.Apellido2)
+            .Add(a.Fnac)
+            .Add(a.LugNac)
+            .Add(a.Edad)
+            .Add(a.Domicilio)
+            .Add(a.CP)
+            .Add(a.Poblacion)
+            .Add(a.Tel1)
+            .Add(a.Tel2)
+            .Add(a.NumSS)
+            .Add(a.InInaem)
+            .Add(a.InFecha)
+            .Add(a.NivelEstudios)
+            .Add(a.ExpSector)
+            .Add(a.TallaCamiseta)
+            .Add(a.TallaPantalon)
+            .Add(a.TallaZapato)
+            .Add(a.Entrevistador)
+            .Add(a.FecEntr)
+            .Add(a.Valoracion)
+            .Add(a.Apto)
+            .Add(a.IdFoto)
+        End With
+        Return lista
     End Function
 End Class
