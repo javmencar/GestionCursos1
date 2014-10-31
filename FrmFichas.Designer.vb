@@ -48,9 +48,12 @@ Partial Class FrmFichas
         Me.txtDNI = New System.Windows.Forms.MaskedTextBox()
         Me.txtNumSS = New System.Windows.Forms.MaskedTextBox()
         Me.GbInaem = New System.Windows.Forms.GroupBox()
+        Me.txtInFecha = New System.Windows.Forms.MaskedTextBox()
+        Me.lblInFecha = New System.Windows.Forms.Label()
         Me.OptInaemNo = New System.Windows.Forms.RadioButton()
         Me.optInaemSi = New System.Windows.Forms.RadioButton()
         Me.GbExperiencia = New System.Windows.Forms.GroupBox()
+        Me.cmdExperiencia = New System.Windows.Forms.Button()
         Me.LstExpSector = New System.Windows.Forms.ListBox()
         Me.CboExpSector = New System.Windows.Forms.ComboBox()
         Me.GbUniforme = New System.Windows.Forms.GroupBox()
@@ -77,8 +80,7 @@ Partial Class FrmFichas
         Me.OptAptoPendiente = New System.Windows.Forms.RadioButton()
         Me.OptAptoNo = New System.Windows.Forms.RadioButton()
         Me.optAptoSi = New System.Windows.Forms.RadioButton()
-        Me.txtInFecha = New System.Windows.Forms.MaskedTextBox()
-        Me.lblInFecha = New System.Windows.Forms.Label()
+        Me.cmdSalir = New System.Windows.Forms.Button()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GbInaem.SuspendLayout()
         Me.GbExperiencia.SuspendLayout()
@@ -320,6 +322,25 @@ Partial Class FrmFichas
         Me.GbInaem.Tag = "14"
         Me.GbInaem.Text = "¿Está inscrito en laOficina de Empleo?"
         '
+        'txtInFecha
+        '
+        Me.txtInFecha.Location = New System.Drawing.Point(131, 36)
+        Me.txtInFecha.Mask = "00/00/0000"
+        Me.txtInFecha.Name = "txtInFecha"
+        Me.txtInFecha.Size = New System.Drawing.Size(67, 20)
+        Me.txtInFecha.TabIndex = 49
+        Me.txtInFecha.Tag = "15"
+        Me.txtInFecha.ValidatingType = GetType(Date)
+        '
+        'lblInFecha
+        '
+        Me.lblInFecha.AutoSize = True
+        Me.lblInFecha.Location = New System.Drawing.Point(20, 39)
+        Me.lblInFecha.Name = "lblInFecha"
+        Me.lblInFecha.Size = New System.Drawing.Size(105, 13)
+        Me.lblInFecha.TabIndex = 48
+        Me.lblInFecha.Text = "Fecha de inscripción"
+        '
         'OptInaemNo
         '
         Me.OptInaemNo.AutoSize = True
@@ -346,15 +367,25 @@ Partial Class FrmFichas
         '
         'GbExperiencia
         '
+        Me.GbExperiencia.Controls.Add(Me.cmdExperiencia)
         Me.GbExperiencia.Controls.Add(Me.LstExpSector)
         Me.GbExperiencia.Controls.Add(Me.CboExpSector)
-        Me.GbExperiencia.Location = New System.Drawing.Point(609, 228)
+        Me.GbExperiencia.Location = New System.Drawing.Point(580, 222)
         Me.GbExperiencia.Name = "GbExperiencia"
-        Me.GbExperiencia.Size = New System.Drawing.Size(235, 130)
+        Me.GbExperiencia.Size = New System.Drawing.Size(278, 130)
         Me.GbExperiencia.TabIndex = 34
         Me.GbExperiencia.TabStop = False
         Me.GbExperiencia.Tag = "17"
         Me.GbExperiencia.Text = "Sectores Experiencia Laboral"
+        '
+        'cmdExperiencia
+        '
+        Me.cmdExperiencia.Location = New System.Drawing.Point(224, 19)
+        Me.cmdExperiencia.Name = "cmdExperiencia"
+        Me.cmdExperiencia.Size = New System.Drawing.Size(50, 22)
+        Me.cmdExperiencia.TabIndex = 50
+        Me.cmdExperiencia.Text = "Elegir"
+        Me.cmdExperiencia.UseVisualStyleBackColor = True
         '
         'LstExpSector
         '
@@ -618,30 +649,21 @@ Partial Class FrmFichas
         Me.optAptoSi.Text = "Apto"
         Me.optAptoSi.UseVisualStyleBackColor = True
         '
-        'txtInFecha
+        'cmdSalir
         '
-        Me.txtInFecha.Location = New System.Drawing.Point(131, 36)
-        Me.txtInFecha.Mask = "00/00/0000"
-        Me.txtInFecha.Name = "txtInFecha"
-        Me.txtInFecha.Size = New System.Drawing.Size(67, 20)
-        Me.txtInFecha.TabIndex = 49
-        Me.txtInFecha.Tag = "15"
-        Me.txtInFecha.ValidatingType = GetType(Date)
-        '
-        'lblInFecha
-        '
-        Me.lblInFecha.AutoSize = True
-        Me.lblInFecha.Location = New System.Drawing.Point(20, 39)
-        Me.lblInFecha.Name = "lblInFecha"
-        Me.lblInFecha.Size = New System.Drawing.Size(105, 13)
-        Me.lblInFecha.TabIndex = 48
-        Me.lblInFecha.Text = "Fecha de inscripción"
+        Me.cmdSalir.Location = New System.Drawing.Point(897, 366)
+        Me.cmdSalir.Name = "cmdSalir"
+        Me.cmdSalir.Size = New System.Drawing.Size(104, 52)
+        Me.cmdSalir.TabIndex = 49
+        Me.cmdSalir.Text = "Salir"
+        Me.cmdSalir.UseVisualStyleBackColor = True
         '
         'FrmFichas
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1013, 636)
+        Me.Controls.Add(Me.cmdSalir)
         Me.Controls.Add(Me.GbApto)
         Me.Controls.Add(Me.txtNivelEstudios)
         Me.Controls.Add(Me.lblNivelEstudios)
@@ -752,4 +774,6 @@ Partial Class FrmFichas
     Friend WithEvents optAptoSi As System.Windows.Forms.RadioButton
     Friend WithEvents txtInFecha As System.Windows.Forms.MaskedTextBox
     Friend WithEvents lblInFecha As System.Windows.Forms.Label
+    Friend WithEvents cmdSalir As System.Windows.Forms.Button
+    Friend WithEvents cmdExperiencia As System.Windows.Forms.Button
 End Class
