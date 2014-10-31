@@ -378,38 +378,7 @@ Public Class FrmFichas
         End With
         Return lista
     End Function
-    Public Sub ordenarTabIndex()
-        Me.txtApellido1.TabIndex = 1
-        Me.txtApellido2.TabIndex = 2
-        Me.txtNombre.TabIndex = 3
-        Me.txtDNI.TabIndex = 4
-        Me.txtNumSS.TabIndex = 5
-        Me.txtFNac.TabIndex = 6
-        Me.txtLugNac.TabIndex = 7
-        Me.txtEdad.TabIndex = 8
-        Me.txtTel1.TabIndex = 9
-        Me.txtTel2.TabIndex = 10
-        Me.txtDomicilio.TabIndex = 11
-        Me.txtCP.TabIndex = 12
-        Me.txtPoblacion.TabIndex = 13
-        Me.optInaemSi.TabIndex = 14
-        Me.OptInaemNo.TabIndex = 15
-        Me.txtInFecha.TabIndex = 16
-        Me.txtNivelEstudios.TabIndex = 17
-        Me.CboExpSector.TabIndex = 18
-        Me.CboTallaCamiseta.TabIndex = 19
-        Me.CboTallaPantalon.TabIndex = 20
-        Me.txtTallaCalzado.TabIndex = 21
-        Me.txtEntrevistador.TabIndex = 22
-        Me.txtFecEntr.TabIndex = 23
-        Me.txtValoracion.TabIndex = 24
-        Me.optAptoSi.TabIndex = 25
-        Me.OptAptoNo.TabIndex = 26
-        Me.OptAptoPendiente.TabIndex = 27
-        Me.cmdModificar.TabIndex = 28
-        Me.cmdCancelar.TabIndex = 29
-        Me.cmdSalir.TabIndex = 30
-
+    
     End Sub
 
     Private Sub cmdExperiencia_Click(sender As Object, e As EventArgs) Handles cmdExperiencia.Click
@@ -417,7 +386,7 @@ Public Class FrmFichas
             MsgBox("seleccione un sector de experiencia laboral")
         Else
             Dim repetido As Boolean = False
-            For Each s As ListViewItem In Me.LstExpSector.Items
+            For Each s As String In Me.LstExpSector.Items
                 If s.ToString = Me.CboExpSector.SelectedItem.ToString Then
                     repetido = True
                     Exit For
@@ -431,5 +400,13 @@ Public Class FrmFichas
 
         End If
 
+    End Sub
+
+    Private Sub cmdCancelar_Click(sender As Object, e As EventArgs) Handles cmdCancelar.Click
+        Me.DialogResult = Windows.Forms.DialogResult.Abort
+    End Sub
+
+    Private Sub cmdSalir_Click(sender As Object, e As EventArgs) Handles cmdSalir.Click
+        Me.DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
 End Class
