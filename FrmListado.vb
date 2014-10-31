@@ -86,6 +86,7 @@ Public Class FrmListado
                     MsgBox("Proceso cancelado a peticicion del usuario")
                 ElseIf frm.ShowDialog = Windows.Forms.DialogResult.OK Then
                     ' recupero el objeto alumno ya rellenado y la vuelco en la base de datos
+                    MsgBox(alu.Nombre & " ha sido insertado con exito")
                     Call insertarAlumnoEnBaseDatos(alu)
                     MsgBox("Se ha insertado correctamente el alumno en la base de datos")
                 End If

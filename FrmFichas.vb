@@ -107,13 +107,12 @@ Public Class FrmFichas
                 Select Case err
                     Case 0
                         .Fnac = t
-                    Case 1
-                        MsgBox("Error de formato en fecha de Nacimiento")
-                    Case 2 - 4
+                    Case 1, 2
+                        Throw New miExcepcion("Error de formato en la fecha de nacimiento" & vbCrLf &
+                                              "El formato debe ser dd/MM/yyyy ")
+                    Case 3, 4
                         Throw New miExcepcion("error en fecha de nacimiento de tipo: " & err)
                 End Select
-                '.Fnac = t
-                ' MsgBox(.Fnac.ToString)
                 .LugNac = Me.txtLugNac.Text
                 If Me.txtEdad.Text = "" Then Me.txtEdad.Text = "0"
                 .Edad = CInt(Me.txtEdad.Text)
@@ -130,9 +129,10 @@ Public Class FrmFichas
                     Select Case err
                         Case 0
                             .InFecha = t
-                        Case 2
-                            MsgBox("Error de formato en la fecha de inscripcin de la Oficina de empleo")
-                        Case 1, 3, 4
+                        Case 1, 2
+                            Throw New miExcepcion("Error de formato en la fecha de inscripcion en la oficina de empleo" & vbCrLf &
+                                              "El formato debe ser dd/MM/yyyy ")
+                        Case 3, 4
                             Throw New miExcepcion("error en fecha de inscripcion en el Inaem: " & err)
                     End Select
                     '.InFecha = t
@@ -167,9 +167,10 @@ Public Class FrmFichas
                     Select Case err
                         Case 0
                             .FecEntr = t
-                        Case 2
-
-                        Case 1, 3, 4
+                        Case 1, 2
+                            Throw New miExcepcion("Error de formato en la fecha de entrevista" & vbCrLf &
+                                             "El formato debe ser dd/MM/yyyy ")
+                        Case 3, 4
                             Throw New miExcepcion("error en fecha de inscripcion en el Inaem: " & err)
                     End Select
                     '.FecEntr = t
@@ -218,6 +219,7 @@ Public Class FrmFichas
                     Call cargarCambiosEnAlumnoYaCreado(alumnoConDatosDelFormulario)
                 End If
             End If
+            DialogResult = Windows.Forms.DialogResult.OK
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
         Catch ex As Exception
@@ -314,7 +316,7 @@ Public Class FrmFichas
             Dim i As Integer = cmd.ExecuteNonQuery()
             If i <= 0 Then Throw New miExcepcion("error en la insercion")
 
-            MsgBox("Alumno insertado en la base de datos")
+            MsgBox("Datos personales introducidos en la base de datos")
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
         Catch ex As Exception
@@ -337,7 +339,6 @@ Public Class FrmFichas
     Public Function comprobarformatofechaPorExcepciones(ByVal s As String) As Integer
         Try
             Dim fechacorrecta As Date = DateTime.Parse(s)
-
         Catch ex1 As FormatException
             Return 1
         Catch ex2 As InvalidCastException
@@ -402,15 +403,11 @@ Public Class FrmFichas
             Else
                 MsgBox("Ese sector ya está elegido")
             End If
-
         End If
-
     End Sub
-
     Private Sub cmdCancelar_Click(sender As Object, e As EventArgs) Handles cmdCancelar.Click
         Me.DialogResult = Windows.Forms.DialogResult.Abort
     End Sub
-
     Private Sub cmdSalir_Click(sender As Object, e As EventArgs) Handles cmdSalir.Click
         Me.DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
@@ -422,7 +419,6 @@ Public Class FrmFichas
             Dim sql As String = "select top 1 DatosPersonales.id from DatosPersonales order by id desc"
             Dim cmd As New SqlCommand(sql, cn)
             i = cmd.ExecuteScalar
-
         Catch ex As Exception
             i = -1
         Finally
@@ -436,12 +432,10 @@ Public Class FrmFichas
         Try
             cn.Open()
             MsgBox(nid)
-            Dim sql As String = String.Format("insert into alumnos (alumnos.idDP)values ({0})", nid)
+            Dim sql As String = String.Format("INSERT INTO Alumnos (alumnos.idDP) VALUES ({0})", nid)
             MsgBox(sql)
             Dim cmd As New SqlCommand(sql, cn)
-
             i = cmd.ExecuteNonQuery
-
         Catch ex As Exception
             i = -1
         Finally
