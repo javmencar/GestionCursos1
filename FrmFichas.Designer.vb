@@ -199,7 +199,7 @@ Partial Class FrmFichas
         Me.txtDomicilio.Location = New System.Drawing.Point(77, 183)
         Me.txtDomicilio.Name = "txtDomicilio"
         Me.txtDomicilio.Size = New System.Drawing.Size(457, 20)
-        Me.txtDomicilio.TabIndex = 9
+        Me.txtDomicilio.TabIndex = 10
         Me.txtDomicilio.Tag = "8"
         '
         'lblDomicilio
@@ -225,7 +225,7 @@ Partial Class FrmFichas
         Me.txtPoblacion.Location = New System.Drawing.Point(680, 183)
         Me.txtPoblacion.Name = "txtPoblacion"
         Me.txtPoblacion.Size = New System.Drawing.Size(164, 20)
-        Me.txtPoblacion.TabIndex = 11
+        Me.txtPoblacion.TabIndex = 12
         Me.txtPoblacion.Tag = "10"
         '
         'lblPoblacion
@@ -261,7 +261,7 @@ Partial Class FrmFichas
         Me.txtTel1.Mask = "000-00-00-00"
         Me.txtTel1.Name = "txtTel1"
         Me.txtTel1.Size = New System.Drawing.Size(67, 20)
-        Me.txtTel1.TabIndex = 7
+        Me.txtTel1.TabIndex = 8
         Me.txtTel1.Tag = "11"
         '
         'txtTel2
@@ -270,7 +270,7 @@ Partial Class FrmFichas
         Me.txtTel2.Mask = "000-00-00-00"
         Me.txtTel2.Name = "txtTel2"
         Me.txtTel2.Size = New System.Drawing.Size(67, 20)
-        Me.txtTel2.TabIndex = 8
+        Me.txtTel2.TabIndex = 9
         Me.txtTel2.Tag = "12"
         '
         'lblNumSS
@@ -309,7 +309,7 @@ Partial Class FrmFichas
         Me.GbInaem.Location = New System.Drawing.Point(25, 246)
         Me.GbInaem.Name = "GbInaem"
         Me.GbInaem.Size = New System.Drawing.Size(235, 60)
-        Me.GbInaem.TabIndex = 12
+        Me.GbInaem.TabIndex = 13
         Me.GbInaem.TabStop = False
         Me.GbInaem.Tag = "14"
         Me.GbInaem.Text = "¿Está inscrito en laOficina de Empleo?"
@@ -365,7 +365,7 @@ Partial Class FrmFichas
         Me.GbExperiencia.Location = New System.Drawing.Point(580, 222)
         Me.GbExperiencia.Name = "GbExperiencia"
         Me.GbExperiencia.Size = New System.Drawing.Size(278, 130)
-        Me.GbExperiencia.TabIndex = 14
+        Me.GbExperiencia.TabIndex = 15
         Me.GbExperiencia.TabStop = False
         Me.GbExperiencia.Tag = "17"
         Me.GbExperiencia.Text = "Sectores Experiencia Laboral"
@@ -409,7 +409,7 @@ Partial Class FrmFichas
         Me.GbUniforme.Location = New System.Drawing.Point(25, 358)
         Me.GbUniforme.Name = "GbUniforme"
         Me.GbUniforme.Size = New System.Drawing.Size(172, 130)
-        Me.GbUniforme.TabIndex = 15
+        Me.GbUniforme.TabIndex = 16
         Me.GbUniforme.TabStop = False
         Me.GbUniforme.Tag = "18"
         Me.GbUniforme.Text = "Tallaje Uniforme"
@@ -479,7 +479,7 @@ Partial Class FrmFichas
         Me.GbEntrevista.Location = New System.Drawing.Point(230, 358)
         Me.GbEntrevista.Name = "GbEntrevista"
         Me.GbEntrevista.Size = New System.Drawing.Size(519, 147)
-        Me.GbEntrevista.TabIndex = 16
+        Me.GbEntrevista.TabIndex = 17
         Me.GbEntrevista.TabStop = False
         Me.GbEntrevista.Tag = "21"
         Me.GbEntrevista.Text = "Entrevista"
@@ -537,7 +537,7 @@ Partial Class FrmFichas
         Me.txtCP.Mask = "00000"
         Me.txtCP.Name = "txtCP"
         Me.txtCP.Size = New System.Drawing.Size(46, 20)
-        Me.txtCP.TabIndex = 10
+        Me.txtCP.TabIndex = 11
         Me.txtCP.Tag = "9"
         '
         'cmdModificar
@@ -545,7 +545,7 @@ Partial Class FrmFichas
         Me.cmdModificar.Location = New System.Drawing.Point(897, 161)
         Me.cmdModificar.Name = "cmdModificar"
         Me.cmdModificar.Size = New System.Drawing.Size(104, 52)
-        Me.cmdModificar.TabIndex = 18
+        Me.cmdModificar.TabIndex = 19
         Me.cmdModificar.Text = "Crear/Modificar"
         Me.cmdModificar.UseVisualStyleBackColor = True
         '
@@ -554,7 +554,7 @@ Partial Class FrmFichas
         Me.cmdCancelar.Location = New System.Drawing.Point(897, 275)
         Me.cmdCancelar.Name = "cmdCancelar"
         Me.cmdCancelar.Size = New System.Drawing.Size(104, 52)
-        Me.cmdCancelar.TabIndex = 19
+        Me.cmdCancelar.TabIndex = 20
         Me.cmdCancelar.Text = "Cancelar"
         Me.cmdCancelar.UseVisualStyleBackColor = True
         '
@@ -591,7 +591,7 @@ Partial Class FrmFichas
         Me.lblNivelEstudios.Location = New System.Drawing.Point(297, 222)
         Me.lblNivelEstudios.Name = "lblNivelEstudios"
         Me.lblNivelEstudios.Size = New System.Drawing.Size(102, 13)
-        Me.lblNivelEstudios.TabIndex = 13
+        Me.lblNivelEstudios.TabIndex = 14
         Me.lblNivelEstudios.Text = "Estudios Realizados"
         '
         'GbApto
@@ -602,7 +602,7 @@ Partial Class FrmFichas
         Me.GbApto.Location = New System.Drawing.Point(230, 512)
         Me.GbApto.Name = "GbApto"
         Me.GbApto.Size = New System.Drawing.Size(519, 48)
-        Me.GbApto.TabIndex = 17
+        Me.GbApto.TabIndex = 18
         Me.GbApto.TabStop = False
         Me.GbApto.Text = "Calificacion"
         '
@@ -647,7 +647,7 @@ Partial Class FrmFichas
         Me.cmdSalir.Location = New System.Drawing.Point(897, 366)
         Me.cmdSalir.Name = "cmdSalir"
         Me.cmdSalir.Size = New System.Drawing.Size(104, 52)
-        Me.cmdSalir.TabIndex = 20
+        Me.cmdSalir.TabIndex = 21
         Me.cmdSalir.Text = "Salir"
         Me.cmdSalir.UseVisualStyleBackColor = True
         '
@@ -657,7 +657,7 @@ Partial Class FrmFichas
         Me.txtEdad.Mask = "99"
         Me.txtEdad.Name = "txtEdad"
         Me.txtEdad.Size = New System.Drawing.Size(24, 20)
-        Me.txtEdad.TabIndex = 50
+        Me.txtEdad.TabIndex = 7
         Me.txtEdad.Tag = "9"
         '
         'FrmFichas

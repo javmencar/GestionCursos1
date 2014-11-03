@@ -95,6 +95,9 @@ Public Class FrmFichas
         Try
             a = New Alumno
             With a
+                If Me.txtId.Text <> "" Then
+                    .Id = Me.txtId.Text
+                End If
                 .Apellido1 = Me.txtApellido1.Text
                 .Apellido2 = Me.txtApellido2.Text
                 .Nombre = Me.txtNombre.Text
@@ -201,78 +204,106 @@ Public Class FrmFichas
             'If Me.txtFNac.mas Then
             '    MsgBox(alum.Fnac.ToString)
             Dim alumnoConDatosDelFormulario As Alumno
-            ' Dim fallos As Boolean = fallosEnCamposPrincipales()
-            ' If fallos = False Then
-            alumnoConDatosDelFormulario = rellenarObjetoDesdeCampos()
-            '   End If
-            If Not IsNothing(alumnoConDatosDelFormulario) Then
-                If nuevo = True Then
-                    Call CrearNuevoAlumnoEnBaseDeDatos(alumnoConDatosDelFormulario)
-                    'con el alumno en datos personales cargo de nuevo el formulario y asi tengo la ID
-                    Dim nuevaId As Integer = cogerUltimaId()
-                    If nuevaId = -1 Then Throw New miExcepcion("Error al calcular la ultima ID")
-                    'ya controlare luego si es en alumnos o en profesores
-                    Dim comp As Integer = insertarEnTablaAlumnos(nuevaId)
-                    If comp = -1 Then Throw New miExcepcion("Problema al insertar en tabla alumnos")
-                    MsgBox("Alumno insertado con éxito")
-                Else
-                    Call cargarCambiosEnAlumnoYaCreado(alumnoConDatosDelFormulario)
-                End If
+            Dim fallos As List(Of String) = fallosEnCamposPrincipales()
+           
+            If Not IsNothing(fallos) Then
+                Dim respuesta As MsgBoxResult
+                For Each s As String In fallos
+                    respuesta = MsgBox(String.Format("Está creando una ficha con esta incidencia: " & vbCrLf & s &
+                                                     vbCrLf & "¿Seguro que desea seguir?", s), MsgBoxStyle.YesNo)
+                    If respuesta = MsgBoxResult.No Then Throw New miExcepcion("Operación cancelada a peticion del usuario")
+                Next
             End If
-            DialogResult = Windows.Forms.DialogResult.OK
+            alumnoConDatosDelFormulario = rellenarObjetoDesdeCampos()
+                If Not IsNothing(alumnoConDatosDelFormulario) Then
+                    If nuevo = True Then
+                        Call CrearNuevoAlumnoEnBaseDeDatos(alumnoConDatosDelFormulario)
+                        'con el alumno en datos personales cargo de nuevo el formulario y asi tengo la ID
+                        Dim nuevaId As Integer = cogerUltimaId()
+                        If nuevaId = -1 Then Throw New miExcepcion("Error al calcular la ultima ID")
+                        'ya controlare luego si es en alumnos o en profesores
+                        Dim comp As Integer = insertarEnTablaAlumnos(nuevaId)
+                        If comp = -1 Then Throw New miExcepcion("Problema al insertar en tabla alumnos")
+                        MsgBox("Alumno insertado con éxito")
+                Else
+                    'Falta por hacer la consulta de update
+                    Dim alumnoConModificaciones As Alumno = rellenarObjetoDesdeCampos()
+                    Call cargarCambiosEnAlumnoYaCreado(alumnoConModificaciones)
+                    End If
+                End If
+                DialogResult = Windows.Forms.DialogResult.OK
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
         Catch ex As Exception
             MsgBox(ex.ToString)
         End Try
     End Sub
-    Private Function fallosEnCamposPrincipales() As Boolean
+    Private Function fallosEnCamposPrincipales() As List(Of String)
         Dim cambios As New List(Of String)
-        Dim vacios As New List(Of String)
-        Dim respuesta As MsgBoxResult
+
         Try
-            If alum.Nombre <> Me.txtNombre.Text Then cambios.Add("Nombre")
-            If alum.Apellido1 <> Me.txtApellido1.Text Then cambios.Add("Apellido1")
-            If alum.Apellido2 <> Me.txtApellido2.Text Then cambios.Add("Apellido2")
-            If Me.txtDNI.Text = "" Then vacios.Add("DNI")
-            If Me.txtNombre.Text = "" Then vacios.Add("Nombre")
-            If Me.txtApellido1.Text = "" Then vacios.Add("Apellido1")
-            If Me.txtApellido2.Text = "" Then vacios.Add("Apellido2")
-            If Me.lblNumSS.Text = "  /        /" Then vacios.Add("NumSS")
-            For Each v As String In vacios
-                respuesta = MsgBox(String.Format("Va generar una ficha con un campo vacío en la casilla '{0}'" &
-                                                vbCrLf & "¿Es correcto?", v), MsgBoxStyle.YesNo)
-                If respuesta = MsgBoxResult.No Then Throw New miExcepcion("Modificacion anulada a peticion del usuario")
-            Next
+            If Me.txtNombre.Text = "" Then cambios.Add("El campo 'Nombre' está vacío")
+            If Me.txtApellido1.Text = "" Then cambios.Add("El campo 'Primer Apellido'  está vacío")
+            If Me.txtApellido2.Text = "" Then cambios.Add("El campo 'Segundo Apellido' está vacío")
+            If Me.txtDNI.Text = "" Then cambios.Add("El campo 'DNI' está vacío")
             Dim numSSSinBarras As String
             numSSSinBarras = Me.txtNumSS.Text.Replace("/", "")
-            If alum.NumSS <> numSSSinBarras Then
-                respuesta = MsgBox(String.Format("El numero de la Seguridad Social va a pasar de '{0}' a '{1}'" &
-                                                 vbCrLf & "¿Es correcto?", alum.NumSS, Me.txtNumSS.Text), MsgBoxStyle.YesNoCancel)
-                If respuesta = MsgBoxResult.No Then Me.txtNumSS.Text = alum.NumSS
-                If respuesta = MsgBoxResult.Cancel Then Throw New miExcepcion("Modificacion anulada a peticion del usuario")
-            End If
-            If alum.DNI <> Me.txtDNI.Text Then
-                respuesta = MsgBox(String.Format("El numero del DNI va a pasar de '{0}' a '{1}'" &
-                                            vbCrLf & "¿Es correcto?", alum.DNI, Me.txtDNI.Text), MsgBoxStyle.YesNoCancel)
-                If respuesta = MsgBoxResult.No Then Me.txtDNI.Text = alum.DNI
-                If respuesta = MsgBoxResult.Cancel Then Throw New miExcepcion("Modificacion anulada a peticion del usuario")
-            End If
-            For Each dato As String In cambios
-                respuesta = MsgBox(String.Format("Va generar una ficha con cambios en la casilla '{0}'" &
-                                               vbCrLf & "¿Es correcto?", dato), MsgBoxStyle.YesNo)
-                If respuesta = MsgBoxResult.No Then Throw New miExcepcion("Modificacion anulada a peticion del usuario")
-            Next
+            If numSSSinBarras = "" Then cambios.Add("El campo 'Numero de la seguridad Social' está vacío")
+            If nuevo = False AndAlso alum.Nombre <> Me.txtNombre.Text Then cambios.Add("El campo 'Nombre' va a ser cambiado")
+            If nuevo = False AndAlso alum.Apellido1 <> Me.txtApellido1.Text Then cambios.Add("El campo 'Primer Apellido'  va a ser cambiado")
+            If nuevo = False AndAlso alum.Apellido2 <> Me.txtApellido2.Text Then cambios.Add("El campo 'Segundo Apellido'  va a ser cambiado")
+            If nuevo = False AndAlso alum.DNI <> Me.txtDNI.Text Then cambios.Add("El campo 'DNI'  va a ser cambiadoo")
+            If nuevo = False AndAlso alum.NumSS <> numSSSinBarras Then cambios.Add("El campo 'Numero de la Seguridad Social'  va a ser cambiado")
+           
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
-            Return True
+            '  Return True
         Catch ex As Exception
             MsgBox(ex.ToString)
         End Try
-        Return False
+        Return cambios
     End Function
 
     Public Sub cargarCambiosEnAlumnoYaCreado(ByVal al As Alumno)
+        Try
+            Dim listanombres As List(Of String)
+            Dim listavalores As ArrayList
+            listanombres = al.ListadoNombreDeLasPropiedades
+            listavalores = ListadoDeValoresDeLasPropiedades(al)
+            Dim Datos As String = ""
+            Dim fechaFormatoCorrecto As String = ""
+            For i As Integer = 1 To 25
+                If TypeOf (listavalores(i)) Is String Then
+                    Datos &= String.Format(", {0}='{1}'", listanombres(i), listavalores(i))
+                ElseIf TypeOf (listavalores(i)) Is Integer Then
+                    Datos &= String.Format(", {0}={1}", listanombres(i), listavalores(i))
+                ElseIf TypeOf (listavalores(i)) Is Date Then
+                    fechaFormatoCorrecto = cambiarFormatoFecha(listavalores(i))
+                    Datos &= String.Format(", {0}={1}", listanombres(i), listavalores(i))
+                ElseIf TypeOf (listavalores(i)) Is Boolean Then
+                    If listavalores(i) = True Then
+                        Datos &= String.Format(", {0}={1}", listanombres(i), "1")
+                    Else
+                        Datos &= String.Format(", {0}={1}", listanombres(i), "0")
+                    End If
+                End If
+            Next
+            Datos = Datos.Substring(1)
+            Dim sql As String = String.Format("UPDATE DatosPersonales SET {0} Where DatosPersonales.Id={1}", Datos, CInt(al.Id))
+            MsgBox(sql)
+            cn.Open()
+            Dim cmd As New SqlCommand(sql, cn)
+            Dim j As Integer = cmd.ExecuteNonQuery()
+            If j <= 0 Then Throw New miExcepcion("error en la insercion")
+            MsgBox("Datos personales modificados en la base de datos")
+
+        Catch ex2 As miExcepcion
+            MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        Finally
+            cn.Close()
+        End Try
 
     End Sub
     Public Sub CrearNuevoAlumnoEnBaseDeDatos(ByVal al As Alumno)
@@ -292,8 +323,8 @@ Public Class FrmFichas
                         tablas &= ", " & listanombres(j)
                         valores &= ", '" & listavalores(j) & "'"
                     ElseIf TypeOf (listavalores(j)) Is Integer Then
-                        tablas &= ", " & listanombres(j).ToString
-                        valores &= ", " & listavalores(j)
+                        tablas &= ", " & listanombres(j)
+                        valores &= ", " & listavalores(j).ToString
                     ElseIf TypeOf (listavalores(j)) Is Date Then
                         tablas &= ", " & listanombres(j)
                         Dim fechaFormatoCorrecto As String = cambiarFormatoFecha(listavalores(j))
