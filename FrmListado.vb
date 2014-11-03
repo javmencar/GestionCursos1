@@ -139,7 +139,9 @@ Public Class FrmListado
                         .Apellido2 = dr(4)
                     End If
                     If Not IsDBNull(dr(5)) Then
+                        MsgBox("Antes de pasarlo al objeto: " & dr(5).ToString)
                         .Fnac = dr(5)
+                        MsgBox("Despues de pasarlo al objeto: " & .Fnac)
                     End If
                     If Not IsDBNull(dr(6)) Then
                         .LugNac = dr(6)
@@ -169,7 +171,7 @@ Public Class FrmListado
                         .InInaem = dr(14)
                     End If
                     If Not IsDBNull(dr(15)) Then
-                        .Fnac = dr(15)
+                        .InFecha = dr(15)
                     End If
                     If Not IsDBNull(dr(16)) Then
                         .NivelEstudios = dr(16)
@@ -190,7 +192,7 @@ Public Class FrmListado
                         .Entrevistador = dr(21)
                     End If
                     If Not IsDBNull(dr(22)) Then
-                        .Fnac = dr(22)
+                        .FecEntr = dr(22)
                     End If
                     If Not IsDBNull(dr(23)) Then
                         .Valoracion = dr(23)

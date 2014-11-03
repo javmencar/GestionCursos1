@@ -26,7 +26,7 @@ Public Class FrmFichas
 
     Private Sub FrmFichas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         cn = New SqlConnection(ConeStr)
-
+        Me.LstExpSector.Items.Clear()
         If IsNothing(alum) Then
             'nada, viene vacío y lo tenemos que rellenar
             alum = New Alumno
@@ -36,50 +36,53 @@ Public Class FrmFichas
             '   MsgBox(alum.Nombre & vbCrLf & alum.DNI)
             nuevo = False
             'cargamos el objeto en los campos
-            Call rellenarCamposDesdeObjeto()
+            Call rellenarCamposDesdeObjeto(alum)
+
             Me.txtId.Enabled = False
         End If
     End Sub
 
-    Private Sub rellenarCamposDesdeObjeto()
-        Me.txtId.Text = CStr(alum.Id)
-        Me.txtApellido1.Text = alum.Apellido1
-        Me.txtApellido2.Text = alum.Apellido2
-        Me.txtNombre.Text = alum.Nombre
-        Me.txtDNI.Text = alum.DNI
-        Me.txtNumSS.Text = alum.NumSS
-        MsgBox(alum.Fnac.ToString)
-        Me.txtFNac.Text = CStr(alum.Fnac)
-        Me.txtLugNac.Text = alum.LugNac
-        Me.txtEdad.Text = CStr(alum.Edad)
-        Me.txtTel1.Text = alum.Tel1
-        Me.txtTel2.Text = alum.Tel2
-        Me.txtDomicilio.Text = alum.Domicilio
-        Me.txtCP.Text = alum.CP
-        Me.txtPoblacion.Text = alum.Poblacion
-        If alum.InInaem = True Then
+    Private Sub rellenarCamposDesdeObjeto(ByVal al As Alumno)
+        Me.txtId.Text = CStr(al.Id)
+        Me.txtApellido1.Text = al.Apellido1
+        Me.txtApellido2.Text = al.Apellido2
+        Me.txtNombre.Text = al.Nombre
+        Me.txtDNI.Text = al.DNI
+        Me.txtNumSS.Text = al.NumSS
+        MsgBox("Propiedad del objeto sin pasar a string" & al.Fnac)
+        MsgBox("Propiedad del objeto pasada a string" & al.Fnac.ToString)
+        Me.txtFNac.Text = CStr(al.Fnac)
+        Me.txtLugNac.Text = al.LugNac
+        Me.txtEdad.Text = CStr(al.Edad)
+        Me.txtTel1.Text = al.Tel1
+        Me.txtTel2.Text = al.Tel2
+        Me.txtDomicilio.Text = al.Domicilio
+        Me.txtCP.Text = al.CP
+        Me.txtPoblacion.Text = al.Poblacion
+        If al.InInaem = True Then
             Me.optInaemSi.Select()
         Else
             Me.OptInaemNo.Select()
         End If
-        Me.txtInFecha.Text = CStr(alum.InFecha)
-        Me.txtNivelEstudios.Text = alum.NivelEstudios
+        Me.txtInFecha.Text = CStr(al.InFecha)
+        Me.txtNivelEstudios.Text = al.NivelEstudios
         'hago una matriz con la string de experiencia y la vuelco en el listbox
         'controlo si hay algo en el string
-        If Not IsNothing(alum.ExpSector) Then
-            Dim sectores() As String = alum.ExpSector.Split(";")
+        Me.LstExpSector.Items.Clear()
+        If Not IsNothing(al.ExpSector) Then
+            Dim sectores() As String = al.ExpSector.Split(";")
             For Each s As String In sectores
                 Me.LstExpSector.Items.Add(s)
             Next
         End If
-        Me.CboTallaCamiseta.SelectedItem = alum.TallaCamiseta
-        Me.CboTallaPantalon.SelectedItem = alum.TallaPantalon
-        Me.txtTallaCalzado.Text = CStr(alum.TallaZapato)
-        Me.txtEntrevistador.Text = alum.Entrevistador
-        Me.txtFecEntr.Text = CStr(alum.FecEntr)
-        Me.txtValoracion.Text = alum.Valoracion
-        If Not IsNothing(alum.Apto) Then
-            Select Case alum.Apto
+        Me.CboTallaCamiseta.SelectedItem = al.TallaCamiseta
+        Me.CboTallaPantalon.SelectedItem = al.TallaPantalon
+        Me.txtTallaCalzado.Text = CStr(al.TallaZapato)
+        Me.txtEntrevistador.Text = al.Entrevistador
+        Me.txtFecEntr.Text = CStr(al.FecEntr)
+        Me.txtValoracion.Text = al.Valoracion
+        If Not IsNothing(al.Apto) Then
+            Select Case al.Apto
                 Case "Apto"
                     Me.optAptoSi.Select()
                 Case "No Apto"
@@ -145,17 +148,16 @@ Public Class FrmFichas
                     .InInaem = "False"
                 End If
                 .NivelEstudios = Me.txtNivelEstudios.Text
+                Dim expSect As String = ""
                 If Me.LstExpSector.Items.Count > 0 Then
-                    Dim str As String = ""
                     For Each l As String In Me.LstExpSector.Items
-                        String.Format("{0} ; {1}", str, l)
+                        expSect &= ";" & l
                     Next
-                    If str.Length > 0 Then
-                        str.Substring(1)
-                        MsgBox(str)
-                    End If
-                    .ExpSector = str
+                    MsgBox("Antes del subString: " & vbCrLf & expSect)
+                    expSect.Substring(2)
+                    MsgBox("Despues del subString: " & vbCrLf & expSect)
                 End If
+                .ExpSector = expSect
                 If Me.CboTallaCamiseta.SelectedIndex <> -1 Then
                     .TallaCamiseta = Me.CboTallaCamiseta.SelectedItem.ToString
                 End If
