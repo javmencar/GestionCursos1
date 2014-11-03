@@ -105,7 +105,12 @@ Public Class FrmListado
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
         Dim alu As Alumno = RellenarAlumno()
         Dim frm As New FrmFichas(alu)
-        frm.ShowDialog()
+        If frm.ShowDialog() = Windows.Forms.DialogResult.Cancel Then
+            MsgBox("Salida sin modificar nada")
+        ElseIf frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            MsgBox("Operacion Realizada con éxito")
+            Call cargarDatosEnListview("Alumnos")
+        End If
 
     End Sub
     Private Function RellenarAlumno() As Alumno
@@ -139,9 +144,9 @@ Public Class FrmListado
                         .Apellido2 = dr(4)
                     End If
                     If Not IsDBNull(dr(5)) Then
-                        MsgBox("Antes de pasarlo al objeto: " & dr(5).ToString)
+                        '  MsgBox("Antes de pasarlo al objeto: " & dr(5).ToString)
                         .Fnac = dr(5)
-                        MsgBox("Despues de pasarlo al objeto: " & .Fnac)
+                        '   MsgBox("Despues de pasarlo al objeto: " & .Fnac)
                     End If
                     If Not IsDBNull(dr(6)) Then
                         .LugNac = dr(6)
@@ -219,4 +224,63 @@ Public Class FrmListado
     Private Sub cmdSalir_Click(sender As Object, e As EventArgs) Handles cmdSalir.Click
         Me.DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
+
+    Private Sub cmdCerrar_Click(sender As Object, e As EventArgs) Handles cmdCerrar.Click
+        Try
+            Dim respuesta1, respuesta2 As MsgBoxResult
+            Dim nombre As String = ""
+            Dim id As Integer = CInt(Me.ListView1.SelectedItems(0).Text)
+            MsgBox(id)
+            If Me.ListView1.SelectedItems.Count = 0 Then
+                MsgBox("Debe seleccionar el elemento a borrar")
+            Else
+                For i As Integer = 2 To 4
+                    nombre &= " " & Me.ListView1.SelectedItems.Item(0).SubItems(i).Text
+                Next
+                respuesta1 = MsgBox(String.Format("Ha seleccionado el elemento: {0} para ser borrado" & vbCrLf & "¿Está seguro?", nombre), MsgBoxStyle.YesNo)
+                If respuesta1 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
+                respuesta2 = MsgBox("¿Seguro que desea continuar?" & vbCrLf & "Una vez borrado no se puede recuperar", MsgBoxStyle.YesNo)
+                If respuesta2 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
+
+                Dim resultadoBorrar As Integer = borrarAlumno(id)
+                If resultadoBorrar = -1 Then Throw New miExcepcion("Error al borrar")
+                MsgBox("Alumno y sus datos borrados con éxito")
+            End If
+        Catch ex2 As miExcepcion
+            MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        End Try
+
+
+
+    End Sub
+
+    Public Function borrarAlumno(ByVal i As Integer) As Integer
+        Dim num As Integer
+        Dim sqlalumnos As String = "delete from Alumnos where alumnos.id=" & i
+        Dim sqlDatosPersonales As String = String.Format("delete from DatosPersonales where DatosPersonales.Id=" &
+                                                         "(select datospersonales.id from datosPersonales,alumnos where DatosPersonales.id=Alumnos.IdDP and Alumnos.Id={0})", i)
+        Dim cn2 As New SqlConnection(ConeStr)
+        Try
+            cn.Open()
+            cn2.Open()
+            Dim cmd1, cmd2 As SqlCommand
+            cmd1 = New SqlCommand(sqlalumnos, cn)
+            cmd2 = New SqlCommand(sqlDatosPersonales, cn2)
+            num = cmd1.ExecuteNonQuery
+            If num <= 0 Then Throw New miExcepcion("Error al borrar Alumno")
+            num = cmd2.ExecuteNonQuery
+            If num <= 0 Then Throw New miExcepcion("Error al borrar datos personales del alumno")
+        Catch ex2 As miExcepcion
+            num = -1
+            'MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        Finally
+            cn.Close()
+            cn2.Close()
+        End Try
+        Return num
+    End Function
 End Class

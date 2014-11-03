@@ -49,8 +49,8 @@ Public Class FrmFichas
         Me.txtNombre.Text = al.Nombre
         Me.txtDNI.Text = al.DNI
         Me.txtNumSS.Text = al.NumSS
-        MsgBox("Propiedad del objeto sin pasar a string" & al.Fnac)
-        MsgBox("Propiedad del objeto pasada a string" & al.Fnac.ToString)
+        ' MsgBox("Propiedad del objeto sin pasar a string" & al.Fnac)
+        ' MsgBox("Propiedad del objeto pasada a string" & al.Fnac.ToString)
         Me.txtFNac.Text = CStr(al.Fnac)
         Me.txtLugNac.Text = al.LugNac
         Me.txtEdad.Text = CStr(al.Edad)
@@ -148,16 +148,17 @@ Public Class FrmFichas
                     .InInaem = "False"
                 End If
                 .NivelEstudios = Me.txtNivelEstudios.Text
-                Dim expSect As String = ""
+
+                Dim expSect1, expSect2 As String
                 If Me.LstExpSector.Items.Count > 0 Then
                     For Each l As String In Me.LstExpSector.Items
-                        expSect &= ";" & l
+                        expSect1 &= ";" & l
                     Next
-                    MsgBox("Antes del subString: " & vbCrLf & expSect)
-                    expSect.Substring(2)
-                    MsgBox("Despues del subString: " & vbCrLf & expSect)
+                    MsgBox("Antes del subString: " & vbCrLf & expSect1)
+                    expSect2 = expSect1.Substring(1)
+                    MsgBox("Despues del subString: " & vbCrLf & expSect2)
                 End If
-                .ExpSector = expSect
+                .ExpSector = expSect2
                 If Me.CboTallaCamiseta.SelectedIndex <> -1 Then
                     .TallaCamiseta = Me.CboTallaCamiseta.SelectedItem.ToString
                 End If
