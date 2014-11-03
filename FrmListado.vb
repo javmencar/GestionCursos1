@@ -264,12 +264,13 @@ Public Class FrmListado
         Dim cn2 As New SqlConnection(ConeStr)
         Try
             cn.Open()
-            cn2.Open()
+
             Dim cmd1, cmd2 As SqlCommand
             cmd1 = New SqlCommand(sqlalumnos, cn)
             cmd2 = New SqlCommand(sqlDatosPersonales, cn2)
             num = cmd1.ExecuteNonQuery
             If num <= 0 Then Throw New miExcepcion("Error al borrar Alumno")
+            cn2.Open()
             num = cmd2.ExecuteNonQuery
             If num <= 0 Then Throw New miExcepcion("Error al borrar datos personales del alumno")
         Catch ex2 As miExcepcion
