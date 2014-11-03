@@ -48,6 +48,7 @@ Public Class FrmFichas
         Me.txtNombre.Text = alum.Nombre
         Me.txtDNI.Text = alum.DNI
         Me.txtNumSS.Text = alum.NumSS
+        MsgBox(alum.Fnac.ToString)
         Me.txtFNac.Text = CStr(alum.Fnac)
         Me.txtLugNac.Text = alum.LugNac
         Me.txtEdad.Text = CStr(alum.Edad)
