@@ -4,7 +4,7 @@
 Imports System.Data.SqlClient
 Public Class FrmFichas
     Dim nuevo As Boolean
-    Public alum, a As Alumno
+    Public alum, a As DatosPersonales
     Public cn As SqlConnection
     'Public profe As profesor
     Sub New()
@@ -15,7 +15,7 @@ Public Class FrmFichas
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
 
     End Sub
-    Sub New(ByVal al As Alumno)
+    Sub New(ByVal al As DatosPersonales)
 
         ' Llamada necesaria para el diseñador.
         InitializeComponent()
@@ -29,7 +29,7 @@ Public Class FrmFichas
         Me.LstExpSector.Items.Clear()
         If IsNothing(alum) Then
             'nada, viene vacío y lo tenemos que rellenar
-            alum = New Alumno
+            alum = New DatosPersonales
             nuevo = True
             Me.txtId.Enabled = False
         Else
@@ -42,7 +42,7 @@ Public Class FrmFichas
         End If
     End Sub
 
-    Private Sub rellenarCamposDesdeObjeto(ByVal al As Alumno)
+    Private Sub rellenarCamposDesdeObjeto(ByVal al As DatosPersonales)
         Me.txtId.Text = CStr(al.Id)
         Me.txtApellido1.Text = al.Apellido1
         Me.txtApellido2.Text = al.Apellido2
@@ -95,9 +95,9 @@ Public Class FrmFichas
         End If
         'falta la foto
     End Sub
-    Private Function rellenarObjetoDesdeCampos() As Alumno
+    Private Function rellenarObjetoDesdeCampos() As DatosPersonales
         Try
-            a = New Alumno
+            a = New DatosPersonales
             With a
                 If Me.txtId.Text <> "" Then
                     .Id = Me.txtId.Text
@@ -207,9 +207,9 @@ Public Class FrmFichas
         Try
             'If Me.txtFNac.mas Then
             '    MsgBox(alum.Fnac.ToString)
-            Dim alumnoConDatosDelFormulario As Alumno
+            Dim alumnoConDatosDelFormulario As DatosPersonales
             Dim fallos As List(Of String) = fallosEnCamposPrincipales()
-           
+
             If Not IsNothing(fallos) Then
                 Dim respuesta As MsgBoxResult
                 For Each s As String In fallos
@@ -219,23 +219,23 @@ Public Class FrmFichas
                 Next
             End If
             alumnoConDatosDelFormulario = rellenarObjetoDesdeCampos()
-                If Not IsNothing(alumnoConDatosDelFormulario) Then
-                    If nuevo = True Then
-                        Call CrearNuevoAlumnoEnBaseDeDatos(alumnoConDatosDelFormulario)
-                        'con el alumno en datos personales cargo de nuevo el formulario y asi tengo la ID
-                        Dim nuevaId As Integer = cogerUltimaId()
-                        If nuevaId = -1 Then Throw New miExcepcion("Error al calcular la ultima ID")
-                        'ya controlare luego si es en alumnos o en profesores
-                        Dim comp As Integer = insertarEnTablaAlumnos(nuevaId)
-                        If comp = -1 Then Throw New miExcepcion("Problema al insertar en tabla alumnos")
-                        MsgBox("Alumno insertado con éxito")
+            If Not IsNothing(alumnoConDatosDelFormulario) Then
+                If nuevo = True Then
+                    Call CrearNuevoAlumnoEnBaseDeDatos(alumnoConDatosDelFormulario)
+                    'con el alumno en datos personales cargo de nuevo el formulario y asi tengo la ID
+                    Dim nuevaId As Integer = cogerUltimaId()
+                    If nuevaId = -1 Then Throw New miExcepcion("Error al calcular la ultima ID")
+                    'ya controlare luego si es en alumnos o en profesores
+                    Dim comp As Integer = insertarEnTablaAlumnos(nuevaId)
+                    If comp = -1 Then Throw New miExcepcion("Problema al insertar en tabla alumnos")
+                    MsgBox("Alumno insertado con éxito")
                 Else
                     'Falta por hacer la consulta de update
-                    Dim alumnoConModificaciones As Alumno = rellenarObjetoDesdeCampos()
+                    Dim alumnoConModificaciones As DatosPersonales = rellenarObjetoDesdeCampos()
                     Call cargarCambiosEnAlumnoYaCreado(alumnoConModificaciones)
-                    End If
                 End If
-                DialogResult = Windows.Forms.DialogResult.OK
+            End If
+            DialogResult = Windows.Forms.DialogResult.OK
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
         Catch ex As Exception
@@ -258,7 +258,7 @@ Public Class FrmFichas
             If nuevo = False AndAlso alum.Apellido2 <> Me.txtApellido2.Text Then cambios.Add("El campo 'Segundo Apellido'  va a ser cambiado")
             If nuevo = False AndAlso alum.DNI <> Me.txtDNI.Text Then cambios.Add("El campo 'DNI'  va a ser cambiadoo")
             If nuevo = False AndAlso alum.NumSS <> numSSSinBarras Then cambios.Add("El campo 'Numero de la Seguridad Social'  va a ser cambiado")
-           
+
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
             '  Return True
@@ -268,7 +268,7 @@ Public Class FrmFichas
         Return cambios
     End Function
 
-    Public Sub cargarCambiosEnAlumnoYaCreado(ByVal al As Alumno)
+    Public Sub cargarCambiosEnAlumnoYaCreado(ByVal al As DatosPersonales)
         Try
             Dim listanombres As List(Of String)
             Dim listavalores As ArrayList
@@ -310,7 +310,7 @@ Public Class FrmFichas
         End Try
 
     End Sub
-    Public Sub CrearNuevoAlumnoEnBaseDeDatos(ByVal al As Alumno)
+    Public Sub CrearNuevoAlumnoEnBaseDeDatos(ByVal al As DatosPersonales)
         Try
             Dim listanombres As List(Of String)
             Dim listavalores As ArrayList
@@ -385,7 +385,7 @@ Public Class FrmFichas
         End Try
         Return 0
     End Function
-    Public Function ListadoDeValoresDeLasPropiedades(ByVal a As Alumno) As ArrayList
+    Public Function ListadoDeValoresDeLasPropiedades(ByVal a As DatosPersonales) As ArrayList
         'List(Of String)
         Dim lista As New ArrayList
         Dim arreglafallos As String = ""
@@ -421,7 +421,7 @@ Public Class FrmFichas
             .Add(a.IdFoto)
         End With
         Return lista
-    End Function  
+    End Function
     Private Sub cmdExperiencia_Click(sender As Object, e As EventArgs) Handles cmdExperiencia.Click
         If Me.CboExpSector.SelectedIndex = -1 Then
             MsgBox("seleccione un sector de experiencia laboral")

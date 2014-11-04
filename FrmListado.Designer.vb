@@ -25,7 +25,7 @@ Partial Class FrmListado
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.cmdNuevo = New System.Windows.Forms.Button()
         Me.cmdModificar = New System.Windows.Forms.Button()
-        Me.cmdCerrar = New System.Windows.Forms.Button()
+        Me.cmdBorrar = New System.Windows.Forms.Button()
         Me.cmdSalir = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
@@ -55,14 +55,14 @@ Partial Class FrmListado
         Me.cmdModificar.Text = "Modificar"
         Me.cmdModificar.UseVisualStyleBackColor = True
         '
-        'cmdCerrar
+        'cmdBorrar
         '
-        Me.cmdCerrar.Location = New System.Drawing.Point(687, 219)
-        Me.cmdCerrar.Name = "cmdCerrar"
-        Me.cmdCerrar.Size = New System.Drawing.Size(121, 48)
-        Me.cmdCerrar.TabIndex = 3
-        Me.cmdCerrar.Text = "Borrar"
-        Me.cmdCerrar.UseVisualStyleBackColor = True
+        Me.cmdBorrar.Location = New System.Drawing.Point(687, 219)
+        Me.cmdBorrar.Name = "cmdBorrar"
+        Me.cmdBorrar.Size = New System.Drawing.Size(121, 48)
+        Me.cmdBorrar.TabIndex = 3
+        Me.cmdBorrar.Text = "Borrar"
+        Me.cmdBorrar.UseVisualStyleBackColor = True
         '
         'cmdSalir
         '
@@ -79,7 +79,7 @@ Partial Class FrmListado
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(836, 492)
         Me.Controls.Add(Me.cmdSalir)
-        Me.Controls.Add(Me.cmdCerrar)
+        Me.Controls.Add(Me.cmdBorrar)
         Me.Controls.Add(Me.cmdModificar)
         Me.Controls.Add(Me.cmdNuevo)
         Me.Controls.Add(Me.ListView1)
@@ -91,6 +91,6 @@ Partial Class FrmListado
     Friend WithEvents ListView1 As System.Windows.Forms.ListView
     Friend WithEvents cmdNuevo As System.Windows.Forms.Button
     Friend WithEvents cmdModificar As System.Windows.Forms.Button
-    Friend WithEvents cmdCerrar As System.Windows.Forms.Button
+    Friend WithEvents cmdBorrar As System.Windows.Forms.Button
     Friend WithEvents cmdSalir As System.Windows.Forms.Button
 End Class
