@@ -45,6 +45,7 @@ Public Class FrmListado
   
     Private Sub cargarDatosEnListview()
         Try
+            Me.ListView1.Items.Clear()
             cn.Open()
             Dim sql As String = String.Format("SELECT {0}.id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2" &
                    " FROM {0}, DatosPersonales WHERE DatosPersonales.Id={0}.IdDP", cat)
@@ -120,22 +121,22 @@ Public Class FrmListado
                 Dim pr As DatosPersonales = RellenarDatosPersonales()
                 'el objeto, si el profesor o alumno, si es nuevo o no
                 Dim frm As New FrmFichas(pr, 0, False)
-                If frm.ShowDialog() = Windows.Forms.DialogResult.Cancel Then
-                    MsgBox("Salida sin modificar nada")
-                ElseIf frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
                     MsgBox("Operacion Realizada con éxito")
                     Call cargarDatosEnListview()
+                Else
+                    MsgBox("Salida sin crear nada")
                 End If
             Case 1
 
                 Dim alu As DatosPersonales = RellenarDatosPersonales()
                 'el objeto, si el profesor o alumno, si es nuevo o no
                 Dim frm As New FrmFichas(alu, 1, False)
-                If frm.ShowDialog() = Windows.Forms.DialogResult.Cancel Then
-                    MsgBox("Salida sin modificar nada")
-                ElseIf frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
-                    MsgBox("Operacion Realizada con éxito")
+                    If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                        MsgBox("Operacion Realizada con éxito")
                     Call cargarDatosEnListview()
+                Else
+                    MsgBox("Salida sin modificar nada")
                 End If
         End Select
     End Sub
@@ -270,7 +271,7 @@ Public Class FrmListado
             cn.Open()
             cmd2 = New SqlCommand(sqlalumnos, cn)
             num = cmd2.ExecuteNonQuery
-            If num <= 0 Then
+            If num < 0 Then
                 If cat = "Alumnos" Then Throw New miExcepcion("Error al borrar Alumno")
                 If cat = "Profesores" Then Throw New miExcepcion("Error al borrar Profesor")
             End If

@@ -37,8 +37,12 @@ Public Class FrmFichas
         If nuevo = True Then
             DP = New DatosPersonales
             Me.cmdModificar.Text = "CREAR NUEVA FICHA"
+            Me.cmdCancelar.Text = "Cancelar La Creación"
+
         Else
             Me.cmdModificar.Text = "MODIFICAR FICHA"
+            Me.cmdCancelar.Text = "Cancelar La Modificación"
+
             Call rellenarCamposDesdeObjeto(DP)
         End If
     End Sub
@@ -112,14 +116,16 @@ Public Class FrmFichas
                 .NumSS = Me.txtNumSS.Text
                 Dim err As Integer = 0
                 Dim t As String = Me.txtFNac.Text
-
                 err = comprobarformatofecha(t)
                 Select Case err
                     Case 0
                         .Fnac = t
-                    Case 1, 2
+                    Case 1
                         Throw New miExcepcion("Error de formato en la fecha de nacimiento" & vbCrLf &
-                                              "El formato debe ser dd/MM/yyyy ")
+                                              "El formato debe ser dd/MM/yyyy " & vbCrLf & " case 1")
+                    Case 2
+                        Throw New miExcepcion("Error de formato en la fecha de nacimiento" & vbCrLf &
+                                              "El formato debe ser dd/MM/yyyy " & vbCrLf & " case 2")
                     Case 3, 4
                         Throw New miExcepcion("error en fecha de nacimiento de tipo: " & err)
                 End Select
@@ -200,8 +206,10 @@ Public Class FrmFichas
             End With
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
+            D = Nothing
         Catch ex As Exception
             MsgBox(ex.ToString)
+            D = Nothing
         End Try
         Return D
     End Function
@@ -210,16 +218,26 @@ Public Class FrmFichas
         Try
   
             Dim DPConDatosDelFormulario As DatosPersonales
-            Dim fallos As List(Of String) = fallosEnCamposPrincipales()
-
-            If Not IsNothing(fallos) Then
-                Dim respuesta As MsgBoxResult
-                For Each s As String In fallos
-                    respuesta = MsgBox(String.Format("Está creando una ficha con esta incidencia: " & vbCrLf & s &
-                                                     vbCrLf & "¿Seguro que desea seguir?", s), MsgBoxStyle.YesNo)
-                    If respuesta = MsgBoxResult.No Then Throw New miExcepcion("Operación cancelada a peticion del usuario")
-                Next
+            Dim fallos As List(Of String)
+            	If nuevo = True Then
+                fallos = camposvacios()
+            Else
+                fallos = fallosEnCampos()
             End If
+            If fallos.Count > 0 Then
+                'If Not IsNothing(fallos) Then
+                Dim respuesta As MsgBoxResult
+                Dim recogefallos As String = ""
+                For Each s As String In fallos
+                    recogefallos &= "' " & s & " '" & vbCrLf
+                Next
+                respuesta = MsgBox("Está creando una ficha con estas incidencias: " & vbCrLf & recogefallos &
+                            vbCrLf & "¿Seguro que desea seguir?", MsgBoxStyle.YesNo)
+                If respuesta = MsgBoxResult.No Then Throw New miExcepcion("Operación cancelada a peticion del usuario")
+            Else
+                ' MsgBox("No hay fallos")
+            End If
+            'Primera llamada controlada
             DPConDatosDelFormulario = rellenarObjetoDesdeCampos()
             If Not IsNothing(DPConDatosDelFormulario) Then
                 If nuevo = True Then
@@ -227,52 +245,50 @@ Public Class FrmFichas
                     'con el alumno en datos personales cargo de nuevo el formulario y asi tengo la ID
                     Dim nuevaId As Integer = cogerUltimaId()
                     If nuevaId = -1 Then Throw New miExcepcion("Error al calcular la ultima ID")
-                    'ya controlare luego si es en alumnos o en profesores
-                    Dim comp As Integer = insertarEnTablaCategoria(nuevaId)
-                    If comp = -1 Then Throw New miExcepcion(String.Format("Problema al insertar en tabla {0}", cat))
-                    MsgBox("Alumno insertado con éxito")
+                    Dim comp As Integer = insertarEnTablacategoria(nuevaId)
+                    If comp = -1 Then Throw New miExcepcion(String.Format("Problema al insertar en {0}", cat))
                 Else
-                    'Falta por hacer la consulta de update
-                    Dim DPConModificaciones As DatosPersonales = rellenarObjetoDesdeCampos()
-                    Call cargarCambiosEnDPYaCreado(DPConModificaciones)
+                    'estoy modificando
+                    'Dim DPConModificaciones As DatosPersonales = rellenarObjetoDesdeCampos()
+                    Call cargarCambiosEnDPYaCreado(DPConDatosDelFormulario)
                 End If
             Else
-                MsgBox("Callejon sin salida")
+                Throw New miExcepcion("No hay nada en el objeto DPConDatosDelFormulario")
             End If
-            DialogResult = Windows.Forms.DialogResult.OK
+            Me.DialogResult = Windows.Forms.DialogResult.OK
         Catch ex2 As miExcepcion
-            MsgBox(ex2.ToString)
+
+            Me.DialogResult = Windows.Forms.DialogResult.None
         Catch ex As Exception
             MsgBox(ex.ToString)
+            Me.DialogResult = Windows.Forms.DialogResult.None
         End Try
     End Sub
-    Private Function fallosEnCamposPrincipales() As List(Of String)
+    Private Function camposvacios() As List(Of String)
+        Dim vacios As New List(Of String)
+        If Me.txtNombre.Text = "" Then vacios.Add("El campo 'Nombre' está vacío")
+        If Me.txtApellido1.Text = "" Then vacios.Add("El campo 'Primer Apellido'  está vacío")
+        If Me.txtApellido2.Text = "" Then vacios.Add("El campo 'Segundo Apellido' está vacío")
+        If Me.txtDNI.Text = "" Then vacios.Add("El campo 'DNI' está vacío")
+        Dim numSSSinBarras As String
+        numSSSinBarras = Me.txtNumSS.Text.Replace("/", "")
+        If numSSSinBarras = "" Then vacios.Add("El campo 'Numero de la seguridad Social' está vacío")
+        'añadir o quitar los campos que queramos comprobar
+        Return vacios
+    End Function
+    Private Function fallosEnCampos() As List(Of String)
         Dim cambios As New List(Of String)
-
-        Try
-            If Me.txtNombre.Text = "" Then cambios.Add("El campo 'Nombre' está vacío")
-            If Me.txtApellido1.Text = "" Then cambios.Add("El campo 'Primer Apellido'  está vacío")
-            If Me.txtApellido2.Text = "" Then cambios.Add("El campo 'Segundo Apellido' está vacío")
-            If Me.txtDNI.Text = "" Then cambios.Add("El campo 'DNI' está vacío")
-            Dim numSSSinBarras As String
-            numSSSinBarras = Me.txtNumSS.Text.Replace("/", "")
-            If numSSSinBarras = "" Then cambios.Add("El campo 'Numero de la seguridad Social' está vacío")
-            If nuevo = False AndAlso DP.Nombre <> Me.txtNombre.Text Then cambios.Add("El campo 'Nombre' va a ser cambiado")
-            If nuevo = False AndAlso DP.Apellido1 <> Me.txtApellido1.Text Then cambios.Add("El campo 'Primer Apellido'  va a ser cambiado")
-            If nuevo = False AndAlso DP.Apellido2 <> Me.txtApellido2.Text Then cambios.Add("El campo 'Segundo Apellido'  va a ser cambiado")
-            If nuevo = False AndAlso DP.DNI <> Me.txtDNI.Text Then cambios.Add("El campo 'DNI'  va a ser cambiadoo")
-            If nuevo = False AndAlso DP.NumSS <> numSSSinBarras Then cambios.Add("El campo 'Numero de la Seguridad Social'  va a ser cambiado")
-
-        Catch ex2 As miExcepcion
-            MsgBox(ex2.ToString)
-            '  Return True
-        Catch ex As Exception
-            MsgBox(ex.ToString)
-        End Try
+        Dim numSSSinBarras As String = Me.txtNumSS.Text.Replace("/", "")
+            If DP.Nombre <> Me.txtNombre.Text Then cambios.Add(String.Format("El campo 'Nombre' va a ser cambiado de '{0}' a '{1}", DP.Nombre, Me.txtNombre.Text))
+            If DP.Apellido1 <> Me.txtApellido1.Text Then cambios.Add(String.Format("El campo 'Primer Apellido' va a ser cambiado de '{0}' a '{1}", DP.Apellido1, Me.txtApellido1.Text))
+            If DP.Apellido2 <> Me.txtApellido2.Text Then cambios.Add(String.Format("El campo 'Segundo Apellido' va a ser cambiado de '{0}' a '{1}", DP.Apellido2, Me.txtApellido2.Text))
+            If DP.DNI <> Me.txtDNI.Text Then cambios.Add(String.Format("El campo 'DNI' va a ser cambiado de '{0}' a '{1}", DP.DNI, Me.txtDNI.Text))
+            If DP.NumSS <> numSSSinBarras Then cambios.Add(String.Format("El campo 'Numero de la Seguridad Social' va a ser cambiado de '{0}' a '{1}", DP.NumSS, Me.txtNumSS.Text))
         Return cambios
     End Function
 
     Public Sub cargarCambiosEnDPYaCreado(ByVal dat As DatosPersonales)
+        'UPDATE
         Try
             Dim listanombres As List(Of String)
             Dim listavalores As ArrayList
@@ -290,31 +306,33 @@ Public Class FrmFichas
                     Datos &= String.Format(", {0}={1}", listanombres(i), listavalores(i))
                 ElseIf TypeOf (listavalores(i)) Is Boolean Then
                     If listavalores(i) = True Then
-                        Datos &= String.Format(", {0}={1}", listanombres(i), "1")
+                        Datos &= String.Format(", {0}=1", listanombres(i))
                     Else
-                        Datos &= String.Format(", {0}={1}", listanombres(i), "0")
+                        Datos &= String.Format(", {0}=0", listanombres(i))
                     End If
                 End If
             Next
+            '   le quito la primera coma
             Datos = Datos.Substring(1)
-            Dim sql As String = String.Format("UPDATE DatosPersonales SET {0} Where DatosPersonales.Id={1}", Datos, CInt(d.Id))
+            Dim sql As String = String.Format("UPDATE DatosPersonales SET {0} Where DatosPersonales.Id={1}", Datos, CInt(D.Id))
             MsgBox(sql)
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
             Dim j As Integer = cmd.ExecuteNonQuery()
-            If j <= 0 Then Throw New miExcepcion("error en la insercion")
+            If j <> 1 Then Throw New miExcepcion("error en la insercion") '   No debería dar distinto de 1, poeque solo afecta a un registro
             MsgBox("Datos personales modificados en la base de datos")
 
         Catch ex2 As miExcepcion
-            MsgBox(ex2.ToString)
+            '    MsgBox(ex2.ToString)   '   Así devolvera la excepcion en el cmd y lo parará
         Catch ex As Exception
-            MsgBox(ex.ToString)
+            '     MsgBox(ex.ToString)
         Finally
             cn.Close()
         End Try
 
     End Sub
     Public Sub CrearNuevoDPEnBaseDeDatos(ByVal Datos As DatosPersonales)
+        'INSERT INTO
         Try
             Dim listanombres As List(Of String)
             Dim listavalores As ArrayList
@@ -492,5 +510,5 @@ Public Class FrmFichas
         Return i
     End Function
 
-    
+
 End Class
