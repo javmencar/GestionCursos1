@@ -439,7 +439,7 @@ Public Class FrmFichas
     End Function
     Private Sub cmdExperiencia_Click(sender As Object, e As EventArgs) Handles cmdExperiencia.Click
         If Me.CboExpSector.SelectedIndex = -1 Then
-            MsgBox("seleccione un sector de experiencia laboral")
+            MsgBox("seleccione un sector de experiencia laboral a añadir al listado")
         Else
             Dim repetido As Boolean = False
             For Each s As String In Me.LstExpSector.Items
@@ -450,9 +450,18 @@ Public Class FrmFichas
             Next
             If repetido = False Then
                 Me.LstExpSector.Items.Add(Me.CboExpSector.SelectedItem.ToString)
+                MsgBox("Sector añadido al listado")
             Else
                 MsgBox("Ese sector ya está elegido")
             End If
+        End If
+    End Sub
+    Private Sub cmdQuitar_Click(sender As Object, e As EventArgs) Handles cmdQuitar.Click
+        If Me.LstExpSector.SelectedIndex = -1 Then
+            MsgBox("Seleccione del listado el sector que desse quitar")
+        Else
+            Me.LstExpSector.Items.RemoveAt(Me.LstExpSector.SelectedIndex)
+            MsgBox("Sector eliminado del listado")
         End If
     End Sub
     Private Sub cmdCancelar_Click(sender As Object, e As EventArgs) Handles cmdCancelar.Click
@@ -493,4 +502,6 @@ Public Class FrmFichas
         End Try
         Return i
     End Function
+
+    
 End Class

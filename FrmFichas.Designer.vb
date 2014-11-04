@@ -81,6 +81,7 @@ Partial Class FrmFichas
         Me.optAptoSi = New System.Windows.Forms.RadioButton()
         Me.cmdSalir = New System.Windows.Forms.Button()
         Me.txtEdad = New System.Windows.Forms.MaskedTextBox()
+        Me.cmdQuitar = New System.Windows.Forms.Button()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GbInaem.SuspendLayout()
         Me.GbExperiencia.SuspendLayout()
@@ -359,6 +360,7 @@ Partial Class FrmFichas
         '
         'GbExperiencia
         '
+        Me.GbExperiencia.Controls.Add(Me.cmdQuitar)
         Me.GbExperiencia.Controls.Add(Me.cmdExperiencia)
         Me.GbExperiencia.Controls.Add(Me.LstExpSector)
         Me.GbExperiencia.Controls.Add(Me.CboExpSector)
@@ -376,7 +378,7 @@ Partial Class FrmFichas
         Me.cmdExperiencia.Name = "cmdExperiencia"
         Me.cmdExperiencia.Size = New System.Drawing.Size(50, 22)
         Me.cmdExperiencia.TabIndex = 1
-        Me.cmdExperiencia.Text = "Elegir"
+        Me.cmdExperiencia.Text = "Añadir"
         Me.cmdExperiencia.UseVisualStyleBackColor = True
         '
         'LstExpSector
@@ -660,6 +662,15 @@ Partial Class FrmFichas
         Me.txtEdad.TabIndex = 7
         Me.txtEdad.Tag = "9"
         '
+        'cmdQuitar
+        '
+        Me.cmdQuitar.Location = New System.Drawing.Point(224, 54)
+        Me.cmdQuitar.Name = "cmdQuitar"
+        Me.cmdQuitar.Size = New System.Drawing.Size(50, 22)
+        Me.cmdQuitar.TabIndex = 2
+        Me.cmdQuitar.Text = "Quitar"
+        Me.cmdQuitar.UseVisualStyleBackColor = True
+        '
         'FrmFichas
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -778,4 +789,5 @@ Partial Class FrmFichas
     Friend WithEvents cmdSalir As System.Windows.Forms.Button
     Friend WithEvents cmdExperiencia As System.Windows.Forms.Button
     Friend WithEvents txtEdad As System.Windows.Forms.MaskedTextBox
+    Friend WithEvents cmdQuitar As System.Windows.Forms.Button
 End Class
