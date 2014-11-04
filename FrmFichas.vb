@@ -4,11 +4,9 @@
 Imports System.Data.SqlClient
 Public Class FrmFichas
     Dim nuevo As Boolean
-    '  Public alum, a As DatosPersonales
     Public DP, D As DatosPersonales
     Public cat As String
     Public cn As SqlConnection
-    'Public profe As profesor
     Sub New()
 
         ' Llamada necesaria para el diseñador.
@@ -17,42 +15,31 @@ Public Class FrmFichas
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
 
     End Sub
-    Sub New(ByVal D As DatosPersonales, ByVal c As Integer)
+    Sub New(ByVal Da As DatosPersonales, ByVal c As Integer, ByVal nw As Boolean)
         ' Llamada necesaria para el diseñador.
         InitializeComponent()
-
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
-        DP = D
+        nuevo = nw
+        DP = Da
         If c = 0 Then
             cat = "Profesores"
         ElseIf c = 1 Then
             cat = "Alumnos"
         End If
     End Sub
-    'Sub New(ByVal al As DatosPersonales)
-
-    '    ' Llamada necesaria para el diseñador.
-    '    InitializeComponent()
-
-    '    ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
-    '    alum = al
-    'End Sub
 
     Private Sub FrmFichas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         cn = New SqlConnection(ConeStr)
+        Me.txtId.Enabled = False
         Me.LstExpSector.Items.Clear()
-        If IsNothing(DP) Then
-            'nada, viene vacío y lo tenemos que rellenar
+        'hola
+        Me.CboExpSector.SelectedIndex = -1
+        If nuevo = True Then
             DP = New DatosPersonales
-            nuevo = True
-            Me.txtId.Enabled = False
+            Me.cmdModificar.Text = "CREAR NUEVA FICHA"
         Else
-            '   MsgBox(alum.Nombre & vbCrLf & alum.DNI)
-            nuevo = False
-            'cargamos el objeto en los campos
+            Me.cmdModificar.Text = "MODIFICAR FICHA"
             Call rellenarCamposDesdeObjeto(DP)
-
-            Me.txtId.Enabled = False
         End If
     End Sub
 
@@ -249,6 +236,8 @@ Public Class FrmFichas
                     Dim DPConModificaciones As DatosPersonales = rellenarObjetoDesdeCampos()
                     Call cargarCambiosEnDPYaCreado(DPConModificaciones)
                 End If
+            Else
+                MsgBox("Callejon sin salida")
             End If
             DialogResult = Windows.Forms.DialogResult.OK
         Catch ex2 As miExcepcion
@@ -268,11 +257,11 @@ Public Class FrmFichas
             Dim numSSSinBarras As String
             numSSSinBarras = Me.txtNumSS.Text.Replace("/", "")
             If numSSSinBarras = "" Then cambios.Add("El campo 'Numero de la seguridad Social' está vacío")
-            If nuevo = False AndAlso alum.Nombre <> Me.txtNombre.Text Then cambios.Add("El campo 'Nombre' va a ser cambiado")
-            If nuevo = False AndAlso alum.Apellido1 <> Me.txtApellido1.Text Then cambios.Add("El campo 'Primer Apellido'  va a ser cambiado")
-            If nuevo = False AndAlso alum.Apellido2 <> Me.txtApellido2.Text Then cambios.Add("El campo 'Segundo Apellido'  va a ser cambiado")
-            If nuevo = False AndAlso alum.DNI <> Me.txtDNI.Text Then cambios.Add("El campo 'DNI'  va a ser cambiadoo")
-            If nuevo = False AndAlso alum.NumSS <> numSSSinBarras Then cambios.Add("El campo 'Numero de la Seguridad Social'  va a ser cambiado")
+            If nuevo = False AndAlso DP.Nombre <> Me.txtNombre.Text Then cambios.Add("El campo 'Nombre' va a ser cambiado")
+            If nuevo = False AndAlso DP.Apellido1 <> Me.txtApellido1.Text Then cambios.Add("El campo 'Primer Apellido'  va a ser cambiado")
+            If nuevo = False AndAlso DP.Apellido2 <> Me.txtApellido2.Text Then cambios.Add("El campo 'Segundo Apellido'  va a ser cambiado")
+            If nuevo = False AndAlso DP.DNI <> Me.txtDNI.Text Then cambios.Add("El campo 'DNI'  va a ser cambiadoo")
+            If nuevo = False AndAlso DP.NumSS <> numSSSinBarras Then cambios.Add("El campo 'Numero de la Seguridad Social'  va a ser cambiado")
 
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
@@ -283,12 +272,12 @@ Public Class FrmFichas
         Return cambios
     End Function
 
-    Public Sub cargarCambiosEnDPYaCreado(ByVal d As DatosPersonales)
+    Public Sub cargarCambiosEnDPYaCreado(ByVal dat As DatosPersonales)
         Try
             Dim listanombres As List(Of String)
             Dim listavalores As ArrayList
-            listanombres = d.ListadoNombreDeLasPropiedades
-            listavalores = ListadoDeValoresDeLasPropiedades(d)
+            listanombres = dat.ListadoNombreDeLasPropiedades
+            listavalores = ListadoDeValoresDeLasPropiedades(dat)
             Dim Datos As String = ""
             Dim fechaFormatoCorrecto As String = ""
             For i As Integer = 1 To 25

@@ -78,7 +78,8 @@ Public Class FrmListado
         Select Case pos
             Case 0
                 Dim pro As New DatosPersonales
-                Dim frm As New FrmFichas(pro, 0)
+                'el objeto, si el profesor o alumno, si es nuevo o no
+                Dim frm As New FrmFichas(pro, 0, True)
                 If frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
                     MsgBox("Proceso cancelado")
                 ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
@@ -90,9 +91,9 @@ Public Class FrmListado
                     Call cargarDatosEnListview()
                 End If
             Case 1
-                'creo un objeto alumno y lo paso vacío
+                'el objeto, si el profesor o alumno, si es nuevo o no
                 Dim alu As New DatosPersonales
-                Dim frm As New FrmFichas(alu, 1)
+                Dim frm As New FrmFichas(alu, 1, True)
                 If frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
                     MsgBox("Proceso cancelado")
                 ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
@@ -117,7 +118,8 @@ Public Class FrmListado
         Select pos
             Case 0
                 Dim pr As DatosPersonales = RellenarDatosPersonales()
-                Dim frm As New FrmFichas(pr, 0)
+                'el objeto, si el profesor o alumno, si es nuevo o no
+                Dim frm As New FrmFichas(pr, 0, False)
                 If frm.ShowDialog() = Windows.Forms.DialogResult.Cancel Then
                     MsgBox("Salida sin modificar nada")
                 ElseIf frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
@@ -127,7 +129,8 @@ Public Class FrmListado
             Case 1
 
                 Dim alu As DatosPersonales = RellenarDatosPersonales()
-                Dim frm As New FrmFichas(alu, 1)
+                'el objeto, si el profesor o alumno, si es nuevo o no
+                Dim frm As New FrmFichas(alu, 1, False)
                 If frm.ShowDialog() = Windows.Forms.DialogResult.Cancel Then
                     MsgBox("Salida sin modificar nada")
                 ElseIf frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
