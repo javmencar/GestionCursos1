@@ -3,6 +3,7 @@ Imports System.Data.SqlClient
 Public Class FrmListado
     Public pos As Integer
     Public cn As SqlConnection
+    Public cat As String
     Public Sub New()
 
         ' Llamada necesaria para el diseñador.
@@ -25,9 +26,11 @@ Public Class FrmListado
         Call cargarSoloColumnasPrincipalesListview()
         Select Case pos
             Case 0
-                Call cargarDatosEnListview("Profesores")
+                cat = "Profesores"
+                Call cargarDatosEnListview()
             Case 1
-                Call cargarDatosEnListview("Alumnos")
+                cat = "Alumnos"
+                Call cargarDatosEnListview()
             Case Else
                 MsgBox("Por ahora esto no debería salir")
         End Select
@@ -40,7 +43,7 @@ Public Class FrmListado
         Me.ListView1.Columns.Add("Apellido2", 180, HorizontalAlignment.Center)
     End Sub
   
-    Private Sub cargarDatosEnListview(ByVal cat As String)
+    Private Sub cargarDatosEnListview()
         Try
             cn.Open()
             Dim sql As String = String.Format("SELECT {0}.id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2" &
@@ -54,10 +57,10 @@ Public Class FrmListado
                 'aqui añado un dato nuevo
                 Me.ListView1.Items.Add(dr(0))
                 'aqui añado los subitems al recien añadido
-                Me.ListView1.Items(i).SubItems.Add(CStr(dr(1)))
-                Me.ListView1.Items(i).SubItems.Add(CStr(dr(2)))
-                Me.ListView1.Items(i).SubItems.Add(CStr(dr(3)))
-                Me.ListView1.Items(i).SubItems.Add(CStr(dr(4)))
+                Me.ListView1.Items(i).SubItems.Add(dr(1).ToString)
+                Me.ListView1.Items(i).SubItems.Add(dr(2).ToString)
+                Me.ListView1.Items(i).SubItems.Add(dr(3).ToString)
+                Me.ListView1.Items(i).SubItems.Add(dr(4).ToString)
                 'aumentamos el contador para la siguiente vuelta
                 i += 1
             End While
@@ -78,7 +81,7 @@ Public Class FrmListado
                 'Dim frm As New FrmFichas(pro)
             Case 1
                 'creo un objeto alumno y lo paso vacío
-                Dim alu As New Alumno
+                Dim alu As New DatosPersonales
                 Dim frm As New FrmFichas()
                 If frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
                     MsgBox("Proceso cancelado")
@@ -88,7 +91,7 @@ Public Class FrmListado
                     ' recupero el objeto alumno ya rellenado y lo vuelco en la base de datos
                     ' '  MsgBox(alu.Nombre & " ha sido insertado con exito")
                     MsgBox("Se ha insertado correctamente el alumno en la base de datos")
-                    Call cargarDatosEnListview("Alumnos")
+                    Call cargarDatosEnListview()
                 End If
             Case Else
 
@@ -98,36 +101,34 @@ Public Class FrmListado
 
 
     End Sub
-    Private Sub insertarAlumnoEnBaseDatos(ByVal a As Alumno)
-
-    End Sub
+    
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
-        Dim alu As Alumno = RellenarAlumno()
+        Dim alu As DatosPersonales = RellenarDatosPersonales()
         Dim frm As New FrmFichas(alu)
         If frm.ShowDialog() = Windows.Forms.DialogResult.Cancel Then
             MsgBox("Salida sin modificar nada")
         ElseIf frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
             MsgBox("Operacion Realizada con éxito")
-            Call cargarDatosEnListview("Alumnos")
+            Call cargarDatosEnListview()
         End If
 
     End Sub
-    Private Function RellenarAlumno() As Alumno
-        Dim alum As New Alumno
+    Private Function RellenarDatosPersonales() As DatosPersonales
+        Dim DP As New DatosPersonales
 
         Try
             cn = New SqlConnection(ConeStr)
             'recupero el id del alumno que quiero modificar a traves del listview
             Dim id As Integer = CInt(Me.ListView1.SelectedItems(0).Text)
-            Dim sql As String = "select * from DatosPersonales, alumnos where DatosPersonales.Id=Alumnos.IdDP and Alumnos.id=" & id
+            Dim sql As String = String.Format("select * from DatosPersonales, {0} where DatosPersonales.Id={0}.IdDP and {0}.id={1}", cat, id)
             MsgBox(sql)
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
             Dim dr As SqlDataReader
             dr = cmd.ExecuteReader
             If dr.Read Then
-                With alum
+                With DP
                     If Not IsNothing(dr(0)) Then
                         .Id = dr(0)
                     End If
@@ -144,9 +145,7 @@ Public Class FrmListado
                         .Apellido2 = dr(4)
                     End If
                     If Not IsDBNull(dr(5)) Then
-                        '  MsgBox("Antes de pasarlo al objeto: " & dr(5).ToString)
                         .Fnac = dr(5)
-                        '   MsgBox("Despues de pasarlo al objeto: " & .Fnac)
                     End If
                     If Not IsDBNull(dr(6)) Then
                         .LugNac = dr(6)
@@ -218,61 +217,47 @@ Public Class FrmListado
             cn.Close()
         End Try
 
-        Return alum
+        Return DP
     End Function
 
     Private Sub cmdSalir_Click(sender As Object, e As EventArgs) Handles cmdSalir.Click
         Me.DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
 
-    Private Sub cmdCerrar_Click(sender As Object, e As EventArgs) Handles cmdCerrar.Click
-        Try
-            Dim respuesta1, respuesta2 As MsgBoxResult
-            Dim nombre As String = ""
-            Dim id As Integer = CInt(Me.ListView1.SelectedItems(0).Text)
-            MsgBox(id)
-            If Me.ListView1.SelectedItems.Count = 0 Then
-                MsgBox("Debe seleccionar el elemento a borrar")
-            Else
-                For i As Integer = 2 To 4
-                    nombre &= " " & Me.ListView1.SelectedItems.Item(0).SubItems(i).Text
-                Next
-                respuesta1 = MsgBox(String.Format("Ha seleccionado el elemento: {0} para ser borrado" & vbCrLf & "¿Está seguro?", nombre), MsgBoxStyle.YesNo)
-                If respuesta1 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
-                respuesta2 = MsgBox("¿Seguro que desea continuar?" & vbCrLf & "Una vez borrado no se puede recuperar", MsgBoxStyle.YesNo)
-                If respuesta2 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
+   
 
-                Dim resultadoBorrar As Integer = borrarAlumno(id)
-                If resultadoBorrar = -1 Then Throw New miExcepcion("Error al borrar")
-                MsgBox("Alumno y sus datos borrados con éxito")
-            End If
-        Catch ex2 As miExcepcion
-            MsgBox(ex2.ToString)
-        Catch ex As Exception
-            MsgBox(ex.ToString)
-        End Try
-
-
-
-    End Sub
-
-    Public Function borrarAlumno(ByVal i As Integer) As Integer
-        Dim num As Integer
-        Dim sqlalumnos As String = "delete from Alumnos where alumnos.id=" & i
-        Dim sqlDatosPersonales As String = String.Format("delete from DatosPersonales where DatosPersonales.Id=" &
-                                                         "(select datospersonales.id from datosPersonales,alumnos where DatosPersonales.id=Alumnos.IdDP and Alumnos.Id={0})", i)
+    Public Function borrarDatosPersonales(ByVal i As Integer) As Integer
+        Dim num, idDP As Integer
+        Dim sqlIdDP As String = String.Format("Select DatosPersonales.Id from DatosPersonales, {0} where DatosPersonales.Id={0}.IdDP and {0}.id={1}", tipo, CStr(i))
+        '  MsgBox(sqlIdDP)
+        Dim sqlalumnos As String = String.Format("delete from {0} where {0}.id={1}", cat, CStr(i))
+        ' MsgBox(sqlalumnos)
+        Dim sqlDatosPersonales As String = "DELETE FROM DatosPersonales WHERE DatosPersonales.Id="
+        ' MsgBox(sqlDatosPersonales)
         Dim cn2 As New SqlConnection(ConeStr)
         Try
             cn.Open()
-
-            Dim cmd1, cmd2 As SqlCommand
-            cmd1 = New SqlCommand(sqlalumnos, cn)
-            cmd2 = New SqlCommand(sqlDatosPersonales, cn2)
-            num = cmd1.ExecuteNonQuery
-            If num <= 0 Then Throw New miExcepcion("Error al borrar Alumno")
-            cn2.Open()
+            'hago la consulta para obtener la ID de DatosPersonales
+            Dim cmd1, cmd2, cmd3 As SqlCommand
+            cmd1 = New SqlCommand(sqlIdDP, cn)
+            idDP = cmd1.ExecuteScalar
+            cn.Close()
+            cn.Open()
+            cmd2 = New SqlCommand(sqlalumnos, cn)
             num = cmd2.ExecuteNonQuery
-            If num <= 0 Then Throw New miExcepcion("Error al borrar datos personales del alumno")
+            If num <= 0 Then
+                If cat = "Alumnos" Then Throw New miExcepcion("Error al borrar Alumno")
+                If cat = "Profesores" Then Throw New miExcepcion("Error al borrar Profesor")
+            End If
+            cn2.Open()
+            sqlDatosPersonales &= CStr(idDP)
+            ' MsgBox("Ahora con el Id: " & vbCrLf & sqlDatosPersonales)
+            cmd3 = New SqlCommand(sqlDatosPersonales, cn2)
+            num = cmd2.ExecuteNonQuery
+            If num <= 0 Then
+                If cat = "Alumnos" Then Throw New miExcepcion("Error al borrar datos personales del Alumno")
+                If cat = "Profesores" Then Throw New miExcepcion("Error al borrar datos personales del Profesor")
+            End If
         Catch ex2 As miExcepcion
             num = -1
             'MsgBox(ex2.ToString)
@@ -284,4 +269,33 @@ Public Class FrmListado
         End Try
         Return num
     End Function
+
+    Private Sub cmdBorrar_Click(sender As Object, e As EventArgs) Handles cmdBorrar.Click
+        Try
+            Dim respuesta1, respuesta2 As MsgBoxResult
+            Dim nombre As String = ""
+            Dim id As Integer = CInt(Me.ListView1.SelectedItems(0).Text)
+            MsgBox(id)
+            If Me.ListView1.SelectedItems.Count = 0 Then
+                MsgBox("Debe seleccionar el elemento a borrar")
+            Else
+                For i As Integer = 2 To 4
+                    nombre &= " " & Me.ListView1.SelectedItems.Item(0).SubItems(i).Text
+                Next
+                respuesta1 = MsgBox(String.Format("Ha seleccionado el elemento: ' {0} ' para ser borrado" & vbCrLf & "¿Está seguro?", nombre), MsgBoxStyle.YesNo)
+                If respuesta1 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
+                respuesta2 = MsgBox("¿Seguro que desea continuar?" & vbCrLf & "Una vez borrado no se puede recuperar", MsgBoxStyle.YesNo)
+                If respuesta2 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
+
+                Dim resultadoBorrar As Integer = borrarDatosPersonales(id)
+                If resultadoBorrar = -1 Then Throw New miExcepcion("Error al borrar")
+                MsgBox("Alumno y sus datos borrados con éxito")
+                Call cargarDatosEnListview()
+            End If
+        Catch ex2 As miExcepcion
+            MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        End Try
+    End Sub
 End Class
