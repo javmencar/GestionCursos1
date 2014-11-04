@@ -22,6 +22,7 @@ Partial Class FrmFichas
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FrmFichas))
         Me.LblApellido1 = New System.Windows.Forms.Label()
         Me.txtApellido1 = New System.Windows.Forms.TextBox()
         Me.txtApellido2 = New System.Windows.Forms.TextBox()
@@ -143,6 +144,8 @@ Partial Class FrmFichas
         '
         'PictureBox2
         '
+        Me.PictureBox2.Image = Global.GestionCursos_0._1.My.Resources.Resources.female_silhouette_0
+        Me.PictureBox2.InitialImage = CType(resources.GetObject("PictureBox2.InitialImage"), System.Drawing.Image)
         Me.PictureBox2.Location = New System.Drawing.Point(719, 20)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(125, 140)

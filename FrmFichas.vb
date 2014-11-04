@@ -253,11 +253,11 @@ Public Class FrmFichas
                     Call cargarCambiosEnDPYaCreado(DPConDatosDelFormulario)
                 End If
             Else
-                Throw New miExcepcion("No hay nada en el objeto DPConDatosDelFormulario")
+                Throw New miExcepcion("Cambie los campos necesarios para poder continuar o salga de la pantalla")
             End If
             Me.DialogResult = Windows.Forms.DialogResult.OK
         Catch ex2 As miExcepcion
-
+            MsgBox(ex2.ToString)
             Me.DialogResult = Windows.Forms.DialogResult.None
         Catch ex As Exception
             MsgBox(ex.ToString)
@@ -511,4 +511,7 @@ Public Class FrmFichas
     End Function
 
 
+    Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
+        'mirar en marcadores/Modulo/practicas/ pictureBox
+    End Sub
 End Class
