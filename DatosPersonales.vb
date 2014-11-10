@@ -9,7 +9,7 @@ Public Class DatosPersonales
     Private mId, mEdad, mTallaZapato, mIdFoto As Integer
     Private mDNI, mNombre, mApellido1, mApellido2, mLugNac, mDomicilio, mCP, mPoblacion As String
     Private mTel1, mTel2, mNumSS, mNivelEstudios, mExpSector, mTallaCamiseta, mTallaPantalon As String
-    Private mEntrevistador, mValoracion, mApto As String
+    Private mEntrevistador, mValoracion, mApto, mPathFoto As String
     Private mFnac, mInFecha, mFecEntr As Date
     Private mInInaem As Boolean
 
@@ -35,14 +35,6 @@ Public Class DatosPersonales
         End Get
         Set(ByVal Value As String)
             mTallaZapato = CInt(Value)
-        End Set
-    End Property
-    Public Property IdFoto As String
-        Get
-            Return CStr(mIdFoto)
-        End Get
-        Set(ByVal Value As String)
-            mIdFoto = CInt(Value)
         End Set
     End Property
     Public Property DNI As String
@@ -232,6 +224,24 @@ Public Class DatosPersonales
             End If
         End Set
     End Property
+    Public Property IdFoto As String
+        Get
+            Return CStr(mIdFoto)
+        End Get
+        Set(ByVal Value As String)
+            mIdFoto = CInt(Value)
+        End Set
+    End Property
+    Public Property PathFoto As String
+        Get
+            Return CStr(mPathFoto)
+        End Get
+        Set(ByVal Value As String)
+            mPathFoto = Value
+        End Set
+    End Property
+
+
 
     'Public Overloads Function CompareTo(ByVal obj As Object, ByVal s As String) As Integer Implements IComparable.CompareTo
     '    Dim k As Integer
@@ -275,6 +285,7 @@ Public Class DatosPersonales
             .Add(Me.mValoracion)
             .Add(Me.mApto)
             .Add(Me.mIdFoto)
+            .Add(Me.mPathFoto)
         End With
         Return lista
     End Function
@@ -307,6 +318,7 @@ Public Class DatosPersonales
             .Add("Valoracion")
             .Add("Apto")
             .Add("IdFoto")
+            .Add("PathFoto")
         End With
         Return lista
     End Function

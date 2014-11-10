@@ -3,11 +3,11 @@
 'Imports System.Reflection
 Imports System.Data.SqlClient
 Public Class FrmFichas
-    Dim nuevo As Boolean
+    Dim nuevo, fotoCambiada As Boolean
     Public DP, D As DatosPersonales
     Public cat As String
     Public cn As SqlConnection
-    Dim fotoCambiada As Boolean
+    Dim NuIdDP As Integer
     Sub New()
 
         ' Llamada necesaria para el diseñador.
@@ -35,17 +35,20 @@ Public Class FrmFichas
         Me.LstExpSector.Items.Clear()
         'hola
         Me.CboExpSector.SelectedIndex = -1
+        NuIdDP = -1
         If nuevo = True Then
             DP = New DatosPersonales
             Me.cmdModificar.Text = "CREAR NUEVA FICHA"
             Me.cmdCancelar.Text = "Cancelar La Creación"
-
+            Me.PicBx1.Image = Image.FromFile("C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg")
+            Me.PicBx1.Tag = "C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg"
+            NuIdDP = cogerUltimaId() + 1
         Else
             Me.cmdModificar.Text = "MODIFICAR FICHA"
             Me.cmdCancelar.Text = "Cancelar La Modificación"
-
             Call rellenarCamposDesdeObjeto(DP)
         End If
+        'Este es el original
     End Sub
 
     Private Sub rellenarCamposDesdeObjeto(ByVal Datos As DatosPersonales)
@@ -100,7 +103,16 @@ Public Class FrmFichas
             Else
                 Me.OptAptoPendiente.Select()
             End If
-            'falta la foto
+
+            If .IdFoto <> 0 Then
+                Me.cmdCambiarFoto.Tag = .IdFoto
+                Call cargarFotoDeLaFicha(.Id)
+                Me.PicBx1.Tag = .PathFoto
+            Else
+                Me.PicBx1.Image = Image.FromFile("C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg")
+                Me.PicBx1.Tag = "C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg"
+                Me.cmdCambiarFoto.Tag = "0"
+            End If
         End With
     End Sub
     Private Function rellenarObjetoDesdeCampos() As DatosPersonales
@@ -203,7 +215,14 @@ Public Class FrmFichas
                 If Me.OptAptoPendiente.Checked = True Then
                     .Apto = "Pendiente"
                 End If
-                'falta la foto
+                If nuevo = True Then
+                    .IdFoto = "0"
+                Else
+
+                End If
+                .IdFoto = Me.cmdCambiarFoto.Tag
+                .PathFoto = Me.PicBx1.Tag
+                
             End With
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
@@ -241,6 +260,7 @@ Public Class FrmFichas
             'Primera llamada controlada
             DPConDatosDelFormulario = rellenarObjetoDesdeCampos()
             If Not IsNothing(DPConDatosDelFormulario) Then
+                'Primero inserto o modifico la foto
                 If nuevo = True Then
                     Call CrearNuevoDPEnBaseDeDatos(DPConDatosDelFormulario)
                     'con el alumno en datos personales cargo de nuevo el formulario y asi tengo la ID
@@ -320,7 +340,7 @@ Public Class FrmFichas
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
             Dim j As Integer = cmd.ExecuteNonQuery()
-            If j <> 1 Then Throw New miExcepcion("error en la insercion") '   No debería dar distinto de 1, poeque solo afecta a un registro
+            If j <> 1 Then Throw New miExcepcion("error en la insercion") '   No debería dar distinto de 1, porque solo afecta a un registro
             MsgBox("Datos personales modificados en la base de datos")
 
         Catch ex2 As miExcepcion
@@ -335,6 +355,15 @@ Public Class FrmFichas
     Public Sub CrearNuevoDPEnBaseDeDatos(ByVal Datos As DatosPersonales)
         'INSERT INTO
         Try
+            Dim Id As Integer = 0
+            If nuevo = True Then
+                Id = NuIdDP
+            Else
+                Id = Datos.Id
+            End If
+           
+
+
             Dim listanombres As List(Of String)
             Dim listavalores As ArrayList
             listanombres = Datos.ListadoNombreDeLasPropiedades
@@ -344,12 +373,16 @@ Public Class FrmFichas
 
             For j As Integer = 1 To listanombres.Count - 2
                 'solo meto los campos que tengan valores y empiezo en 1 para no meter la Id, que es Identity 
-                'y tampoco pongo por ahora la foto, cuando lo haga, el for irá hasta -1
+                'y tampoco pongo el PathFoto
                 If Not IsNothing(listavalores(j)) Then
                     If TypeOf (listavalores(j)) Is String Then
                         tablas &= ", " & listanombres(j)
                         valores &= ", '" & listavalores(j) & "'"
                     ElseIf TypeOf (listavalores(j)) Is Integer Then
+                        If listanombres(j) = "IdFoto" Then
+                            listavalores(j) = crearIdFoto(Id)
+                            If listavalores(j) = -1 Then Throw New miExcepcion("Error al crear La IdFoto")
+                        End If
                         tablas &= ", " & listanombres(j)
                         valores &= ", " & listavalores(j).ToString
                     ElseIf TypeOf (listavalores(j)) Is Date Then
@@ -385,6 +418,31 @@ Public Class FrmFichas
 
 
     End Sub
+    Public Function crearIdFoto(ByVal I As Integer) As Integer
+        Dim Id As Integer = -1
+        Try
+            Dim sql As String = String.Format("INSERT INTO Fotos (FotoPath,IdDP) VALUES ({0},{1})", Me.PicBx1.Tag, I)
+            MsgBox(sql)
+            cn.Open()
+            Dim cmd As New SqlCommand(sql, cn)
+            Dim j As Integer = cmd.ExecuteNonQuery()
+            If j <> 1 Then Throw New miExcepcion("Error en IdFoto")
+            Dim cn2 As New SqlConnection(ConeStr)
+            cn2.Open()
+            Dim sql2 As String = String.Format("Select Id from Fotos where Fotos.idDP={0}", I)
+            Dim cmd2 As New SqlCommand(sql2, cn2)
+            Id = cmd2.ExecuteScalar
+            cn2.Close()
+            MsgBox(String.Format("La IdFoto es: {0}", Id))
+        Catch ex2 As miExcepcion
+            MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        Finally
+            cn.Close()
+        End Try
+        Return Id
+    End Function
     Public Function cambiarFormatoFecha(ByVal f As Date) As String
         Dim vieja, dias, meses, años As String
         vieja = f.ToString
@@ -442,6 +500,7 @@ Public Class FrmFichas
             .Add(a.Valoracion)
             .Add(a.Apto)
             .Add(a.IdFoto)
+            .Add(a.PathFoto)
         End With
         Return lista
     End Function
@@ -511,18 +570,6 @@ Public Class FrmFichas
         Return i
     End Function
 
-
-    'Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
-    '    'mirar en marcadores/Modulo/practicas/ pictureBox
-    '    If OFGSelectImage.ShowDialog = Windows.Forms.DialogResult.OK Then
-    '        PictureBox1.Image = Image.FromFile(OFGSelectImage.FileName)
-    '        'y aqui una funcion o un procedimiento para guardar la foto
-    '        Dim FP As String = OFGSelectImage.FileName
-    '        'MsgBox(str)
-    '    End If
-
-    'End Sub
-
     Private Sub cmdCambiarFoto_Click(sender As Object, e As EventArgs) Handles cmdCambiarFoto.Click
         If OFGSelectImage.ShowDialog = Windows.Forms.DialogResult.OK Then
             PicBx1.Image = Image.FromFile(OFGSelectImage.FileName)
@@ -536,6 +583,9 @@ Public Class FrmFichas
         Try
             Dim sql As String = ""
             sql = String.Format("UPDATE Fotos SET FotoPath='{0}' WHERE Fotos.Id = (select fotos.id from Fotos where IdDP={1})", str, I)
+            MsgBox(sql)
+            'falta la insercion
+
         Catch ex As Exception
 
         End Try
@@ -582,7 +632,8 @@ Public Class FrmFichas
                 'Que es donde guardan las cosas en el servidor.
                 Path = (String.Format("c:\GIT\Fotos\Ficha{0}.bmp", DP.Id))
             Else
-                Path = (String.Format("c:\GIT\Fotos\Ficha{0}.bmp", "New"))
+                ' le cargo un IdProvisional
+                Path = (String.Format("c:\GIT\Fotos\Ficha{0}.bmp", NuIdDP))
             End If
             PicBx1.Image.Save(Path)
             MsgBox(String.Format("Imagen guardada en {0}", Path))
@@ -591,7 +642,10 @@ Public Class FrmFichas
         End If
     End Sub
 
-    Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PicBx1.Click
+   
+
+
+    Private Sub PicBx1_Click(sender As Object, e As EventArgs) Handles PicBx1.Click
 
     End Sub
 End Class

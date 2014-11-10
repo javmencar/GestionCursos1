@@ -85,6 +85,7 @@ Partial Class FrmFichas
         Me.txtEdad = New System.Windows.Forms.MaskedTextBox()
         Me.SFDSelectedImage = New System.Windows.Forms.SaveFileDialog()
         Me.OFGSelectImage = New System.Windows.Forms.OpenFileDialog()
+        Me.cmdCambiarFoto = New System.Windows.Forms.Button()
         CType(Me.PicBx1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GbInaem.SuspendLayout()
         Me.GbExperiencia.SuspendLayout()
@@ -146,11 +147,13 @@ Partial Class FrmFichas
         '
         'PicBx1
         '
+        Me.PicBx1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PicBx1.Image = Global.GestionCursos_0._1.My.Resources.Resources.female_silhouette_0
         Me.PicBx1.InitialImage = CType(resources.GetObject("PicBx1.InitialImage"), System.Drawing.Image)
         Me.PicBx1.Location = New System.Drawing.Point(719, 20)
         Me.PicBx1.Name = "PicBx1"
         Me.PicBx1.Size = New System.Drawing.Size(125, 140)
+        Me.PicBx1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PicBx1.TabIndex = 7
         Me.PicBx1.TabStop = False
         Me.PicBx1.Tag = "25"
@@ -684,11 +687,21 @@ Partial Class FrmFichas
         '
         Me.OFGSelectImage.Filter = "JPEG Files| *.JPG|GIF Files|*.GIF|WIndows Bitmaps|*.BMP|PNG Flies|*.PNG"
         '
+        'cmdCambiarFoto
+        '
+        Me.cmdCambiarFoto.Location = New System.Drawing.Point(850, 76)
+        Me.cmdCambiarFoto.Name = "cmdCambiarFoto"
+        Me.cmdCambiarFoto.Size = New System.Drawing.Size(53, 39)
+        Me.cmdCambiarFoto.TabIndex = 45
+        Me.cmdCambiarFoto.Text = "CambiarFoto"
+        Me.cmdCambiarFoto.UseVisualStyleBackColor = True
+        '
         'FrmFichas
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1013, 636)
+        Me.Controls.Add(Me.cmdCambiarFoto)
         Me.Controls.Add(Me.txtEdad)
         Me.Controls.Add(Me.cmdSalir)
         Me.Controls.Add(Me.GbApto)
@@ -805,4 +818,5 @@ Partial Class FrmFichas
     Friend WithEvents cmdQuitar As System.Windows.Forms.Button
     Friend WithEvents SFDSelectedImage As System.Windows.Forms.SaveFileDialog
     Friend WithEvents OFGSelectImage As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents cmdCambiarFoto As System.Windows.Forms.Button
 End Class
