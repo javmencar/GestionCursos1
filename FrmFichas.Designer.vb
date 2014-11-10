@@ -29,7 +29,7 @@ Partial Class FrmFichas
         Me.lblApellido2 = New System.Windows.Forms.Label()
         Me.txtNombre = New System.Windows.Forms.TextBox()
         Me.lblNombre = New System.Windows.Forms.Label()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.PicBx1 = New System.Windows.Forms.PictureBox()
         Me.lblFNac = New System.Windows.Forms.Label()
         Me.txtFNac = New System.Windows.Forms.MaskedTextBox()
         Me.txtLugNac = New System.Windows.Forms.TextBox()
@@ -53,6 +53,7 @@ Partial Class FrmFichas
         Me.OptInaemNo = New System.Windows.Forms.RadioButton()
         Me.optInaemSi = New System.Windows.Forms.RadioButton()
         Me.GbExperiencia = New System.Windows.Forms.GroupBox()
+        Me.cmdQuitar = New System.Windows.Forms.Button()
         Me.cmdExperiencia = New System.Windows.Forms.Button()
         Me.LstExpSector = New System.Windows.Forms.ListBox()
         Me.CboExpSector = New System.Windows.Forms.ComboBox()
@@ -82,8 +83,9 @@ Partial Class FrmFichas
         Me.optAptoSi = New System.Windows.Forms.RadioButton()
         Me.cmdSalir = New System.Windows.Forms.Button()
         Me.txtEdad = New System.Windows.Forms.MaskedTextBox()
-        Me.cmdQuitar = New System.Windows.Forms.Button()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SFDSelectedImage = New System.Windows.Forms.SaveFileDialog()
+        Me.OFGSelectImage = New System.Windows.Forms.OpenFileDialog()
+        CType(Me.PicBx1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GbInaem.SuspendLayout()
         Me.GbExperiencia.SuspendLayout()
         Me.GbUniforme.SuspendLayout()
@@ -142,16 +144,16 @@ Partial Class FrmFichas
         Me.lblNombre.TabIndex = 5
         Me.lblNombre.Text = "Nombre"
         '
-        'PictureBox2
+        'PicBx1
         '
-        Me.PictureBox2.Image = Global.GestionCursos_0._1.My.Resources.Resources.female_silhouette_0
-        Me.PictureBox2.InitialImage = CType(resources.GetObject("PictureBox2.InitialImage"), System.Drawing.Image)
-        Me.PictureBox2.Location = New System.Drawing.Point(719, 20)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(125, 140)
-        Me.PictureBox2.TabIndex = 7
-        Me.PictureBox2.TabStop = False
-        Me.PictureBox2.Tag = "25"
+        Me.PicBx1.Image = Global.GestionCursos_0._1.My.Resources.Resources.female_silhouette_0
+        Me.PicBx1.InitialImage = CType(resources.GetObject("PicBx1.InitialImage"), System.Drawing.Image)
+        Me.PicBx1.Location = New System.Drawing.Point(719, 20)
+        Me.PicBx1.Name = "PicBx1"
+        Me.PicBx1.Size = New System.Drawing.Size(125, 140)
+        Me.PicBx1.TabIndex = 7
+        Me.PicBx1.TabStop = False
+        Me.PicBx1.Tag = "25"
         '
         'lblFNac
         '
@@ -374,6 +376,15 @@ Partial Class FrmFichas
         Me.GbExperiencia.TabStop = False
         Me.GbExperiencia.Tag = "17"
         Me.GbExperiencia.Text = "Sectores Experiencia Laboral"
+        '
+        'cmdQuitar
+        '
+        Me.cmdQuitar.Location = New System.Drawing.Point(224, 54)
+        Me.cmdQuitar.Name = "cmdQuitar"
+        Me.cmdQuitar.Size = New System.Drawing.Size(50, 22)
+        Me.cmdQuitar.TabIndex = 2
+        Me.cmdQuitar.Text = "Quitar"
+        Me.cmdQuitar.UseVisualStyleBackColor = True
         '
         'cmdExperiencia
         '
@@ -665,14 +676,13 @@ Partial Class FrmFichas
         Me.txtEdad.TabIndex = 7
         Me.txtEdad.Tag = "9"
         '
-        'cmdQuitar
+        'SFDSelectedImage
         '
-        Me.cmdQuitar.Location = New System.Drawing.Point(224, 54)
-        Me.cmdQuitar.Name = "cmdQuitar"
-        Me.cmdQuitar.Size = New System.Drawing.Size(50, 22)
-        Me.cmdQuitar.TabIndex = 2
-        Me.cmdQuitar.Text = "Quitar"
-        Me.cmdQuitar.UseVisualStyleBackColor = True
+        Me.SFDSelectedImage.Filter = "JPEG Files| *.JPG|GIF Files|*.GIF|WIndows Bitmaps|*.BMP|PNG Flies|*.PNG"
+        '
+        'OFGSelectImage
+        '
+        Me.OFGSelectImage.Filter = "JPEG Files| *.JPG|GIF Files|*.GIF|WIndows Bitmaps|*.BMP|PNG Flies|*.PNG"
         '
         'FrmFichas
         '
@@ -710,7 +720,7 @@ Partial Class FrmFichas
         Me.Controls.Add(Me.txtLugNac)
         Me.Controls.Add(Me.txtFNac)
         Me.Controls.Add(Me.lblFNac)
-        Me.Controls.Add(Me.PictureBox2)
+        Me.Controls.Add(Me.PicBx1)
         Me.Controls.Add(Me.txtNombre)
         Me.Controls.Add(Me.lblNombre)
         Me.Controls.Add(Me.txtApellido2)
@@ -719,7 +729,7 @@ Partial Class FrmFichas
         Me.Controls.Add(Me.LblApellido1)
         Me.Name = "FrmFichas"
         Me.Text = "FrmFichas"
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PicBx1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GbInaem.ResumeLayout(False)
         Me.GbInaem.PerformLayout()
         Me.GbExperiencia.ResumeLayout(False)
@@ -739,7 +749,7 @@ Partial Class FrmFichas
     Friend WithEvents lblApellido2 As System.Windows.Forms.Label
     Friend WithEvents txtNombre As System.Windows.Forms.TextBox
     Friend WithEvents lblNombre As System.Windows.Forms.Label
-    Friend WithEvents PictureBox2 As System.Windows.Forms.PictureBox
+    Friend WithEvents PicBx1 As System.Windows.Forms.PictureBox
     Friend WithEvents lblFNac As System.Windows.Forms.Label
     Friend WithEvents txtFNac As System.Windows.Forms.MaskedTextBox
     Friend WithEvents txtLugNac As System.Windows.Forms.TextBox
@@ -793,4 +803,6 @@ Partial Class FrmFichas
     Friend WithEvents cmdExperiencia As System.Windows.Forms.Button
     Friend WithEvents txtEdad As System.Windows.Forms.MaskedTextBox
     Friend WithEvents cmdQuitar As System.Windows.Forms.Button
+    Friend WithEvents SFDSelectedImage As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents OFGSelectImage As System.Windows.Forms.OpenFileDialog
 End Class

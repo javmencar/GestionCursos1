@@ -7,6 +7,7 @@ Public Class FrmFichas
     Public DP, D As DatosPersonales
     Public cat As String
     Public cn As SqlConnection
+    Dim fotoCambiada As Boolean
     Sub New()
 
         ' Llamada necesaria para el diseñador.
@@ -159,7 +160,7 @@ Public Class FrmFichas
                 Dim expSect1 As String = ""
                 Dim expSect2 As String = ""
                 If Me.LstExpSector.Items.Count > 0 Then
-                   
+
                     For Each l As String In Me.LstExpSector.Items
                         expSect1 &= ";" & l
                     Next
@@ -216,10 +217,10 @@ Public Class FrmFichas
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
         Try
-  
+
             Dim DPConDatosDelFormulario As DatosPersonales
             Dim fallos As List(Of String)
-            	If nuevo = True Then
+            If nuevo = True Then
                 fallos = camposvacios()
             Else
                 fallos = fallosEnCampos()
@@ -279,11 +280,11 @@ Public Class FrmFichas
     Private Function fallosEnCampos() As List(Of String)
         Dim cambios As New List(Of String)
         Dim numSSSinBarras As String = Me.txtNumSS.Text.Replace("/", "")
-            If DP.Nombre <> Me.txtNombre.Text Then cambios.Add(String.Format("El campo 'Nombre' va a ser cambiado de '{0}' a '{1}", DP.Nombre, Me.txtNombre.Text))
-            If DP.Apellido1 <> Me.txtApellido1.Text Then cambios.Add(String.Format("El campo 'Primer Apellido' va a ser cambiado de '{0}' a '{1}", DP.Apellido1, Me.txtApellido1.Text))
-            If DP.Apellido2 <> Me.txtApellido2.Text Then cambios.Add(String.Format("El campo 'Segundo Apellido' va a ser cambiado de '{0}' a '{1}", DP.Apellido2, Me.txtApellido2.Text))
-            If DP.DNI <> Me.txtDNI.Text Then cambios.Add(String.Format("El campo 'DNI' va a ser cambiado de '{0}' a '{1}", DP.DNI, Me.txtDNI.Text))
-            If DP.NumSS <> numSSSinBarras Then cambios.Add(String.Format("El campo 'Numero de la Seguridad Social' va a ser cambiado de '{0}' a '{1}", DP.NumSS, Me.txtNumSS.Text))
+        If DP.Nombre <> Me.txtNombre.Text Then cambios.Add(String.Format("El campo 'Nombre' va a ser cambiado de '{0}' a '{1}", DP.Nombre, Me.txtNombre.Text))
+        If DP.Apellido1 <> Me.txtApellido1.Text Then cambios.Add(String.Format("El campo 'Primer Apellido' va a ser cambiado de '{0}' a '{1}", DP.Apellido1, Me.txtApellido1.Text))
+        If DP.Apellido2 <> Me.txtApellido2.Text Then cambios.Add(String.Format("El campo 'Segundo Apellido' va a ser cambiado de '{0}' a '{1}", DP.Apellido2, Me.txtApellido2.Text))
+        If DP.DNI <> Me.txtDNI.Text Then cambios.Add(String.Format("El campo 'DNI' va a ser cambiado de '{0}' a '{1}", DP.DNI, Me.txtDNI.Text))
+        If DP.NumSS <> numSSSinBarras Then cambios.Add(String.Format("El campo 'Numero de la Seguridad Social' va a ser cambiado de '{0}' a '{1}", DP.NumSS, Me.txtNumSS.Text))
         Return cambios
     End Function
 
@@ -511,7 +512,86 @@ Public Class FrmFichas
     End Function
 
 
-    Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
-        'mirar en marcadores/Modulo/practicas/ pictureBox
+    'Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox1.Click
+    '    'mirar en marcadores/Modulo/practicas/ pictureBox
+    '    If OFGSelectImage.ShowDialog = Windows.Forms.DialogResult.OK Then
+    '        PictureBox1.Image = Image.FromFile(OFGSelectImage.FileName)
+    '        'y aqui una funcion o un procedimiento para guardar la foto
+    '        Dim FP As String = OFGSelectImage.FileName
+    '        'MsgBox(str)
+    '    End If
+
+    'End Sub
+
+    Private Sub cmdCambiarFoto_Click(sender As Object, e As EventArgs) Handles cmdCambiarFoto.Click
+        If OFGSelectImage.ShowDialog = Windows.Forms.DialogResult.OK Then
+            PicBx1.Image = Image.FromFile(OFGSelectImage.FileName)
+            'y aqui una funcion o un procedimiento para guardar la foto
+            Dim FP As String = OFGSelectImage.FileName
+            'MsgBox(str)
+        End If
+    End Sub
+
+    Private Sub guardarFotoDeLaFicha(ByVal str As String, ByVal I As Integer)
+        Try
+            Dim sql As String = ""
+            sql = String.Format("UPDATE Fotos SET FotoPath='{0}' WHERE Fotos.Id = (select fotos.id from Fotos where IdDP={1})", str, I)
+        Catch ex As Exception
+
+        End Try
+
+    End Sub
+    Private Sub cargarFotoDeLaFicha(ByVal I As Integer)
+        Try
+            cn = New SqlConnection(ConeStr)
+            'Dim id As String = "22"
+            Dim sql As String = String.Format("select FotoPath from fotos WHERE Fotos.Id = (select fotos.id from Fotos where IdDP={0})", I)
+
+            cn.Open()
+
+            Dim cmd As New SqlCommand(sql, cn)
+            Dim str As String = ""
+            Dim dr1 As SqlDataReader = cmd.ExecuteReader
+            If dr1.Read Then
+                '  dr1.Read()
+                str = dr1(0)
+                Me.PicBx1.ImageLocation = str
+                Me.PicBx1.Show()
+                Me.PicBx1.Load(str)
+            Else
+                Throw New miExcepcion("No hay foto cargada")
+            End If
+        Catch ex2 As miExcepcion
+            MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        Finally
+            cn.Close()
+        End Try
+    End Sub
+
+    Private Sub PictureBox1_DoubleClick(sender As Object, e As EventArgs) Handles PicBx1.DoubleClick
+        fotoCambiada = True
+        ' PicBx1.Tag = ""
+        If OFGSelectImage.ShowDialog = Windows.Forms.DialogResult.OK Then
+            PicBx1.Image = Image.FromFile(OFGSelectImage.FileName)
+            Dim Path As String = ""
+            'El Path lo deberé ajustar una vez sepa donde se guardarán los archivos del programa
+            If nuevo = False Then
+                'por ahora es en GIT,pero lo más seguro es que sea en S:\
+                'Que es donde guardan las cosas en el servidor.
+                Path = (String.Format("c:\GIT\Fotos\Ficha{0}.bmp", DP.Id))
+            Else
+                Path = (String.Format("c:\GIT\Fotos\Ficha{0}.bmp", "New"))
+            End If
+            PicBx1.Image.Save(Path)
+            MsgBox(String.Format("Imagen guardada en {0}", Path))
+            'asi guardo la ubicacion de la foto en el picturebox
+            PicBx1.Tag = Path
+        End If
+    End Sub
+
+    Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles PicBx1.Click
+
     End Sub
 End Class
