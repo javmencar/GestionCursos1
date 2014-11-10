@@ -95,13 +95,8 @@ Public Class FrmListado
                 'el objeto, si el profesor o alumno, si es nuevo o no
                 Dim alu As New DatosPersonales
                 Dim frm As New FrmFichas(alu, 1, True)
-                If frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
-                    MsgBox("Proceso cancelado")
-                ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
-                    MsgBox("Proceso cancelado a peticicion del usuario")
-                ElseIf frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                    ' recupero el objeto alumno ya rellenado y lo vuelco en la base de datos
-                    ' '  MsgBox(alu.Nombre & " ha sido insertado con exito")
+               If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
+                  
                     MsgBox("Se ha insertado correctamente el alumno en la base de datos")
                     Call cargarDatosEnListview()
                 End If

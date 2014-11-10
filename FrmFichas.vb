@@ -43,9 +43,11 @@ Public Class FrmFichas
             Me.PicBx1.Image = Image.FromFile("C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg")
             Me.PicBx1.Tag = "C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg"
             NuIdDP = cogerUltimaId() + 1
+            MsgBox("UltimaID + 1=  " & NuIdDP)
         Else
             Me.cmdModificar.Text = "MODIFICAR FICHA"
             Me.cmdCancelar.Text = "Cancelar La Modificación"
+
             Call rellenarCamposDesdeObjeto(DP)
         End If
         'Este es el original
@@ -104,15 +106,10 @@ Public Class FrmFichas
                 Me.OptAptoPendiente.Select()
             End If
 
-            If .IdFoto <> 0 Then
-                Me.cmdCambiarFoto.Tag = .IdFoto
-                Call cargarFotoDeLaFicha(.Id)
-                Me.PicBx1.Tag = .PathFoto
-            Else
-                Me.PicBx1.Image = Image.FromFile("C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg")
-                Me.PicBx1.Tag = "C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg"
-                Me.cmdCambiarFoto.Tag = "0"
-            End If
+            Me.cmdCambiarFoto.Tag = .IdFoto
+            Call cargarFotoDeLaFicha(.Id)
+            Me.PicBx1.Tag = .PathFoto
+         
         End With
     End Sub
     Private Function rellenarObjetoDesdeCampos() As DatosPersonales
@@ -215,15 +212,12 @@ Public Class FrmFichas
                 If Me.OptAptoPendiente.Checked = True Then
                     .Apto = "Pendiente"
                 End If
-                If nuevo = True Then
-                    .IdFoto = "0"
-                Else
+              
+                    .IdFoto = Me.cmdCambiarFoto.Tag
+                    .PathFoto = Me.PicBx1.Tag
 
-                End If
-                .IdFoto = Me.cmdCambiarFoto.Tag
-                .PathFoto = Me.PicBx1.Tag
                 
-            End With
+            OptAptoPendiente+ With
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
             D = Nothing
