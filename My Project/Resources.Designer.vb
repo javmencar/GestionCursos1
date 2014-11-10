@@ -63,10 +63,10 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
-        Friend ReadOnly Property female_silhouette_0() As System.Drawing.Bitmap
+        Friend ReadOnly Property NuevaFicha01() As System.Drawing.Bitmap
             Get
-                Dim obj As Object = ResourceManager.GetObject("female-silhouette_0", resourceCulture)
-                Return CType(obj,System.Drawing.Bitmap)
+                Dim obj As Object = ResourceManager.GetObject("NuevaFicha01", resourceCulture)
+                Return CType(obj, System.Drawing.Bitmap)
             End Get
         End Property
     End Module

@@ -259,7 +259,7 @@ TableAdapterManager is used to coordinate TableAdapters in the dataset to enable
   Reemplaza la propiedad CurrentUICulture del subproceso actual para todas las
   búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
 </summary>
-</member><member name="P:GestionCursos_0._1.My.Resources.Resources.female_silhouette_0">
+</member><member name="P:GestionCursos_0._1.My.Resources.Resources.NuevaFicha01">
 	<summary>
   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
 </summary>
