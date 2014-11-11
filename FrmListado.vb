@@ -1,9 +1,10 @@
 ﻿
 Imports System.Data.SqlClient
 Public Class FrmListado
-    Public pos As Integer
+    ' Public pos As Integer
     Public cn As SqlConnection
     Public cat As String
+    Public Alum As Boolean
     Public Sub New()
 
         ' Llamada necesaria para el diseñador.
@@ -12,10 +13,10 @@ Public Class FrmListado
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
 
     End Sub
-    Public Sub New(ByVal i As Integer)
+    Public Sub New(ByVal Al As Boolean)
         ' Llamada necesaria para el diseñador.
         InitializeComponent()
-        pos = i
+        Alum = Al
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
     End Sub
     Private Sub FrmListado_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -24,16 +25,13 @@ Public Class FrmListado
         'cargo los nombres de las columnas
         Me.ListView1.Items.Clear()
         Call cargarSoloColumnasPrincipalesListview()
-        Select Case pos
-            Case 0
-                cat = "Profesores"
-                Call cargarDatosEnListview()
-            Case 1
-                cat = "Alumnos"
-                Call cargarDatosEnListview()
-            Case Else
-                MsgBox("Por ahora esto no debería salir")
-        End Select
+        If Alum = False Then
+            cat = "Profesores"
+            Call cargarDatosEnListview()
+        Else
+            cat = "Alumnos"
+            Call cargarDatosEnListview()
+        End If
     End Sub
     Private Sub cargarSoloColumnasPrincipalesListview()
         Me.ListView1.Columns.Add("Id", 25, HorizontalAlignment.Center)
@@ -41,8 +39,7 @@ Public Class FrmListado
         Me.ListView1.Columns.Add("Nombre", 180, HorizontalAlignment.Center)
         Me.ListView1.Columns.Add("Apellido1", 180, HorizontalAlignment.Center)
         Me.ListView1.Columns.Add("Apellido2", 180, HorizontalAlignment.Center)
-    End Sub
-  
+    End Sub  
     Private Sub cargarDatosEnListview()
         Try
             Me.ListView1.Items.Clear()
@@ -73,67 +70,33 @@ Public Class FrmListado
             cn.Close()
         End Try
     End Sub
-
     Private Sub cmdNuevo_Click(sender As Object, e As EventArgs) Handles cmdNuevo.Click
-
-        Select Case pos
-            Case 0
-                Dim pro As New DatosPersonales
-                'el objeto, si el profesor o alumno, si es nuevo o no
-                Dim frm As New FrmFichas(pro, 0, True)
-                If frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
-                    MsgBox("Proceso cancelado")
-                ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
-                    MsgBox("Proceso cancelado a peticicion del usuario")
-                ElseIf frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                    ' recupero el objeto alumno ya rellenado y lo vuelco en la base de datos
-                    ' '  MsgBox(alu.Nombre & " ha sido insertado con exito")
-                    MsgBox("Se ha insertado correctamente el Profesor en la base de datos")
-                    Call cargarDatosEnListview()
-                End If
-            Case 1
-                'el objeto, si el profesor o alumno, si es nuevo o no
-                Dim alu As New DatosPersonales
-                Dim frm As New FrmFichas(alu, 1, True)
-               If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                  
-                    MsgBox("Se ha insertado correctamente el alumno en la base de datos")
-                    Call cargarDatosEnListview()
-                End If
-            Case Else
-
-        End Select
-
-
-
-
+        Dim Dp As New DatosPersonales
+        Dim frm As New FrmFichas(Dp, Alum, True) 
+        If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
+            If Alum = False Then
+                MsgBox("Se ha insertado correctamente el Profesor en la base de datos")
+            Else
+                MsgBox("Se ha insertado correctamente el alumno en la base de datos")
+            End If
+            Call cargarDatosEnListview()
+        Else
+            MsgBox("Salida sin crear nada")
+        End If
     End Sub
-    
-
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
-        Select pos
-            Case 0
-                Dim pr As DatosPersonales = RellenarDatosPersonales()
-                'el objeto, si el profesor o alumno, si es nuevo o no
-                Dim frm As New FrmFichas(pr, 0, False)
-                If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
-                    MsgBox("Operacion Realizada con éxito")
-                    Call cargarDatosEnListview()
-                Else
-                    MsgBox("Salida sin crear nada")
-                End If
-            Case 1
-
-                Dim alu As DatosPersonales = RellenarDatosPersonales()
-                'el objeto, si el profesor o alumno, si es nuevo o no
-                Dim frm As New FrmFichas(alu, 1, False)
-                    If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
-                        MsgBox("Operacion Realizada con éxito")
-                    Call cargarDatosEnListview()
-                Else
-                    MsgBox("Salida sin modificar nada")
-                End If
-        End Select
+        Dim Dp As New DatosPersonales
+        Dim frm As New FrmFichas(Dp, Alum, False)
+        If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
+            If Alum = False Then
+                MsgBox("Se ha insertado correctamente el Profesor en la base de datos")
+            Else
+                MsgBox("Se ha insertado correctamente el alumno en la base de datos")
+            End If
+            Call cargarDatosEnListview()
+        Else
+            MsgBox("Salida sin Modificar nada")
+        End If
     End Sub
     Private Function RellenarDatosPersonales() As DatosPersonales
         Dim DP As New DatosPersonales
@@ -240,18 +203,14 @@ Public Class FrmListado
 
         Return DP
     End Function
-
     Private Sub cmdSalir_Click(sender As Object, e As EventArgs) Handles cmdSalir.Click
         Me.DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
-
-   
-
     Public Function borrarDatosPersonales(ByVal i As Integer) As Integer
         Dim num, idDP As Integer
-        Dim sqlIdDP As String = String.Format("Select DatosPersonales.Id from DatosPersonales, {0} where DatosPersonales.Id={0}.IdDP and {0}.id={1}", cat, CStr(i))
+        Dim sqlIdDP As String = String.Format("SELECT DatosPersonales.Id FROM DatosPersonales, {0} WHERE DatosPersonales.Id={0}.IdDP and {0}.id={1}", cat, CStr(i))
         '  MsgBox(sqlIdDP)
-        Dim sqlalumnos As String = String.Format("delete from {0} where {0}.id={1}", cat, CStr(i))
+        Dim sqlalumnos As String = String.Format("DELETE FROM {0} WHERE {0}.id={1}", cat, CStr(i))
         ' MsgBox(sqlalumnos)
         Dim sqlDatosPersonales As String = "DELETE FROM DatosPersonales WHERE DatosPersonales.Id="
         ' MsgBox(sqlDatosPersonales)
@@ -267,15 +226,18 @@ Public Class FrmListado
             cmd2 = New SqlCommand(sqlalumnos, cn)
             num = cmd2.ExecuteNonQuery
             If num < 0 Then
-                If cat = "Alumnos" Then Throw New miExcepcion("Error al borrar Alumno")
-                If cat = "Profesores" Then Throw New miExcepcion("Error al borrar Profesor")
+                If Alum = True Then
+                    Throw New miExcepcion("Error al borrar Alumno")
+                Else
+                    Throw New miExcepcion("Error al borrar Profesor")
+                End If
             End If
             cn2.Open()
             sqlDatosPersonales &= CStr(idDP)
             ' MsgBox("Ahora con el Id: " & vbCrLf & sqlDatosPersonales)
             cmd3 = New SqlCommand(sqlDatosPersonales, cn2)
             num = cmd2.ExecuteNonQuery
-            If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))    
+            If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))
         Catch ex2 As miExcepcion
             num = -1
             'MsgBox(ex2.ToString)
@@ -287,7 +249,6 @@ Public Class FrmListado
         End Try
         Return num
     End Function
-
     Private Sub cmdBorrar_Click(sender As Object, e As EventArgs) Handles cmdBorrar.Click
         Try
             Dim respuesta1, respuesta2 As MsgBoxResult
@@ -304,7 +265,6 @@ Public Class FrmListado
                 If respuesta1 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
                 respuesta2 = MsgBox("¿Seguro que desea continuar?" & vbCrLf & "Una vez borrado no se puede recuperar", MsgBoxStyle.YesNo)
                 If respuesta2 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
-
                 Dim resultadoBorrar As Integer = borrarDatosPersonales(id)
                 If resultadoBorrar = -1 Then Throw New miExcepcion("Error al borrar")
                 MsgBox("Alumno y sus datos borrados con éxito")

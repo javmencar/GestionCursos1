@@ -15,15 +15,15 @@ Public Class FrmFichas
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
 
     End Sub
-    Sub New(ByVal Da As DatosPersonales, ByVal c As Integer, ByVal nw As Boolean)
+    Sub New(ByVal Da As DatosPersonales, ByVal Al As Boolean, ByVal nw As Boolean)
         ' Llamada necesaria para el diseñador.
         InitializeComponent()
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
         nuevo = nw
         DP = Da
-        If c = 0 Then
+        If Al = False Then
             cat = "Profesores"
-        ElseIf c = 1 Then
+        Else
             cat = "Alumnos"
         End If
     End Sub
@@ -40,11 +40,9 @@ Public Class FrmFichas
             Me.cmdModificar.Text = "CREAR NUEVA FICHA"
             Me.cmdCancelar.Text = "Cancelar La Creación"
             Me.cmdCambiarFoto.Text = "Insertar Foto"
-            Me.PicBx1.Image = Image.FromFile("C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg")
-            Me.PicBx1.Tag = "C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg"
+            Me.PicBx1.Image = Image.FromFile("C:\GIT\Fotos\FichaNew.bmp")
+            Me.PicBx1.Tag = "C:\GIT\Fotos\FichaNew.bmp"
             NuIdDP = cogerUltimaId() + 1
-            ' MsgBox("UltimaID + 1=  " & NuIdDP)
-
             Me.OptAptoPendiente.Select()
         Else
             Me.cmdModificar.Text = "MODIFICAR FICHA"
