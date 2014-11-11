@@ -226,7 +226,7 @@ Public Class FrmListado
                         .Apto = dr(24)
                     End If
                     If Not IsDBNull(dr(25)) Then
-                        .IdFoto = dr(25)
+                        .PathFoto = dr(25)
                     End If
                 End With
             End If
