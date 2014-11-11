@@ -412,7 +412,7 @@ Public Class FrmFichas
     Public Function InsertarEnTablaFotos(ByVal path As String, ByVal I As Integer) As Integer
         Dim Id As Integer = -1
         Try
-            Dim sql As String = String.Format("INSERT INTO Fotos (FotoPath,IdDP) VALUES ({0},{1})", path, I)
+            Dim sql As String = String.Format("INSERT INTO Fotos (FotoPath,IdDP) VALUES ({'0'},{1})", path, I)
             MsgBox(sql)
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
@@ -565,36 +565,31 @@ Public Class FrmFichas
         Call CambiarFoto()
     End Sub
 
-    Private Sub guardarFotoDeLaFicha(ByVal str As String, ByVal I As Integer)
-        Try
-            Dim sql As String = ""
-            sql = String.Format("UPDATE Fotos SET FotoPath='{0}' WHERE Fotos.Id = (select fotos.id from Fotos where IdDP={1})", str, I)
-            MsgBox(sql)
-            'falta la insercion
+    'Private Sub guardarFotoDeLaFicha(ByVal str As String, ByVal I As Integer)
+    '    Try
+    '        Dim sql As String = ""
+    '        sql = String.Format("UPDATE Fotos SET FotoPath='{0}' WHERE Fotos.Id = (select fotos.id from Fotos where IdDP={1})", str, I)
+    '        MsgBox(sql)
+    '        'falta la insercion
 
-        Catch ex As Exception
+    '    Catch ex As Exception
 
-        End Try
+    '    End Try
 
-    End Sub
+    'End Sub
     Private Sub cargarFotoEnFormulario(ByVal I As Integer)
         Try
-            cn = New SqlConnection(ConeStr)
             'Dim id As String = "22"
-            Dim sql As String = String.Format("select FotoPath,Fotos.Id from fotos WHERE Fotos.Id = (select fotos.id from Fotos where IdDP={0})", I)
-
+            Dim sql As String = String.Format("select Fotos.FotoPath, Fotos.Id from fotos WHERE Fotos.Id = (select fotos.id from Fotos where IdDP={0})", I)
             cn.Open()
-
             Dim cmd As New SqlCommand(sql, cn)
             Dim str As String = ""
-            Dim dr1 As SqlDataReader = cmd.ExecuteReader
-            If dr1.Read Then
-                '  dr1.Read()
-                str = dr1(0)
-                Me.PicBx1.ImageLocation = str
-                'Me.PicBx1.Show()
-                Me.PicBx1.Load(str)
-                Me.LblFoto.Tag = dr1(1)
+            Dim dr As SqlDataReader = cmd.ExecuteReader
+            If dr.Read Then
+                Me.PicBx1.ImageLocation = dr(0)
+                Me.PicBx1.Show()
+                'Me.PicBx1.Load(str)
+                Me.LblFoto.Tag = dr(1)
             Else
                 Throw New miExcepcion("No hay foto cargada")
             End If
@@ -635,10 +630,10 @@ Public Class FrmFichas
             If nuevo = False Then
                 'por ahora es en GIT,pero lo más seguro es que sea en S:\
                 'Que es donde guardan las cosas en el servidor.
-                Path = (String.Format("c:\GIT\Fotos\Ficha{0}.bmp", DP.Id))
+                Path = (String.Format("C:\GIT\Fotos\Ficha{0}.bmp", DP.Id))
             Else
                 ' le cargo un IdProvisional
-                Path = (String.Format("c:\GIT\Fotos\Ficha{0}.bmp", NuIdDP))
+                Path = (String.Format("C:\GIT\Fotos\Ficha{0}.bmp", NuIdDP))
             End If
             PicBx1.Image.Save(Path)
             MsgBox(String.Format("Imagen guardada en {0}", Path))
