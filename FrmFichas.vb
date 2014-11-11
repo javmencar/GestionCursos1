@@ -1,7 +1,9 @@
-﻿Imports System.Data.SqlClient
+﻿'Este es el original
+Imports System.Data.SqlClient
 Public Class FrmFichas
     Dim nuevo, fotoCambiada As Boolean
-    Public DP, D As DatosPersonales
+    'Public DP, D As DatosPersonales
+    Public DP As DatosPersonales
     Public cat As String
     Public cn As SqlConnection
     Dim NuIdDP As Integer
@@ -37,17 +39,20 @@ Public Class FrmFichas
             DP = New DatosPersonales
             Me.cmdModificar.Text = "CREAR NUEVA FICHA"
             Me.cmdCancelar.Text = "Cancelar La Creación"
+            Me.cmdCambiarFoto.Text = "Insertar Foto"
             Me.PicBx1.Image = Image.FromFile("C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg")
             Me.PicBx1.Tag = "C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg"
             NuIdDP = cogerUltimaId() + 1
-            MsgBox("UltimaID + 1=  " & NuIdDP)
+            ' MsgBox("UltimaID + 1=  " & NuIdDP)
+            Me.LblFoto.Tag = "0"
+            Me.OptAptoPendiente.Select()
         Else
             Me.cmdModificar.Text = "MODIFICAR FICHA"
             Me.cmdCancelar.Text = "Cancelar La Modificación"
-
+            Me.cmdCambiarFoto.Text = "Cambiar Foto"
             Call rellenarCamposDesdeObjeto(DP)
         End If
-        'Este es el original
+
     End Sub
 
     Private Sub rellenarCamposDesdeObjeto(ByVal Datos As DatosPersonales)
@@ -110,9 +115,11 @@ Public Class FrmFichas
         End With
     End Sub
     Private Function rellenarObjetoDesdeCampos() As DatosPersonales
+        Dim D1 As New DatosPersonales
         Try
-            D = New DatosPersonales
-            With D
+
+            '   D = New DatosPersonales
+            With D1
                 If Me.txtId.Text <> "" Then
                     .Id = Me.txtId.Text
                 End If
@@ -136,6 +143,7 @@ Public Class FrmFichas
                     Case 3, 4
                         Throw New miExcepcion("error en fecha de nacimiento de tipo: " & err)
                 End Select
+                err = 0
                 .LugNac = Me.txtLugNac.Text
                 If Me.txtEdad.Text = "" Then Me.txtEdad.Text = "0"
                 .Edad = CInt(Me.txtEdad.Text)
@@ -158,23 +166,23 @@ Public Class FrmFichas
                         Case 3, 4
                             Throw New miExcepcion("error en fecha de inscripcion en el Inaem: " & err)
                     End Select
+                    err = 0
                 Else
                     .InInaem = "False"
                 End If
                 .NivelEstudios = Me.txtNivelEstudios.Text
 
                 Dim expSect1 As String = ""
-                Dim expSect2 As String = ""
+
                 If Me.LstExpSector.Items.Count > 0 Then
 
                     For Each l As String In Me.LstExpSector.Items
-                        expSect1 &= ";" & l
+                        expSect1 &= String.Format("; {0}", l)
                     Next
-                    ' MsgBox("Antes del subString: " & vbCrLf & expSect1)
-                    expSect2 = expSect1.Substring(1)
-                    ' MsgBox("Despues del subString: " & vbCrLf & expSect2)
+                    expSect1 = expSect1.Substring(1)
+
                 End If
-                .ExpSector = expSect2
+                .ExpSector = expSect1
                 If Me.CboTallaCamiseta.SelectedIndex <> -1 Then
                     .TallaCamiseta = Me.CboTallaCamiseta.SelectedItem.ToString
                 End If
@@ -196,32 +204,31 @@ Public Class FrmFichas
                         Case 3, 4
                             Throw New miExcepcion("error en fecha de inscripcion en el Inaem: " & err)
                     End Select
-                    '.FecEntr = t
-                    'MsgBox(.FecEntr.ToString)
+                    err = 0
+
                 End If
                 .Valoracion = Me.txtValoracion.Text
+
                 If Me.optAptoSi.Checked = True Then
                     .Apto = "Apto"
-                End If
-                If Me.OptAptoNo.Checked = True Then
+                ElseIf Me.OptAptoNo.Checked = True Then
                     .Apto = "No Apto"
-                End If
-                If Me.OptAptoPendiente.Checked = True Then
+                Else
                     .Apto = "Pendiente"
                 End If
-              
-                    .IdFoto = Me.cmdCambiarFoto.Tag
-                    .PathFoto = Me.PicBx1.Tag
 
+                .IdFoto = Me.LblFoto.Tag
+
+                .PathFoto = Me.PicBx1.Tag
             End With
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
-            D = Nothing
+            D1 = Nothing
         Catch ex As Exception
             MsgBox(ex.ToString)
-            D = Nothing
+            D1 = Nothing
         End Try
-        Return D
+        Return D1
     End Function
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
@@ -260,7 +267,6 @@ Public Class FrmFichas
                     If comp = -1 Then Throw New miExcepcion(String.Format("Problema al insertar en {0}", cat))
                 Else
                     'estoy modificando
-                    'Dim DPConModificaciones As DatosPersonales = rellenarObjetoDesdeCampos()
                     Call cargarCambiosEnDPYaCreado(DPConDatosDelFormulario)
                 End If
             Else
@@ -325,7 +331,7 @@ Public Class FrmFichas
             Next
             '   le quito la primera coma
             Datos = Datos.Substring(1)
-            Dim sql As String = String.Format("UPDATE DatosPersonales SET {0} Where DatosPersonales.Id={1}", Datos, CInt(D.Id))
+            Dim sql As String = String.Format("UPDATE DatosPersonales SET {0} Where DatosPersonales.Id={1}", Datos, CInt(dat.Id))
             MsgBox(sql)
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
@@ -342,13 +348,13 @@ Public Class FrmFichas
         End Try
 
     End Sub
-    Public Sub CrearNuevoDPEnBaseDeDatos(ByVal Datos As DatosPersonales)
+    Public Sub CrearNuevoDPEnBaseDeDatos(ByVal Dat As DatosPersonales)
         'INSERT INTO
         Try
             Dim listanombres As List(Of String)
             Dim listavalores As ArrayList
-            listanombres = Datos.ListadoNombreDeLasPropiedades
-            listavalores = ListadoDeValoresDeLasPropiedades(Datos)
+            listanombres = Dat.ListadoNombreDeLasPropiedades
+            listavalores = ListadoDeValoresDeLasPropiedades(Dat)
             Dim tablas As String = ""
             Dim valores As String = ""
 
@@ -384,7 +390,7 @@ Public Class FrmFichas
             Dim i As Integer = cmd.ExecuteNonQuery()
             If i <= 0 Then Throw New miExcepcion("error en la insercion")
             'recojo la nueva IdDP
-            Dim pathfoto As String = Datos.PathFoto
+            Dim pathfoto As String = Dat.PathFoto
             NuIdDP = cogerUltimaId()
             'Inserto en la tabla fotos
             Dim idfoto As Integer = InsertarEnTablaFotos(pathfoto, NuIdDP)
@@ -393,8 +399,10 @@ Public Class FrmFichas
             MsgBox("Datos personales introducidos en la base de datos")
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
+
         Catch ex As Exception
             MsgBox(ex.ToString)
+
         Finally
             cn.Close()
         End Try

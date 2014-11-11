@@ -86,6 +86,7 @@ Partial Class FrmFichas
         Me.SFDSelectedImage = New System.Windows.Forms.SaveFileDialog()
         Me.OFGSelectImage = New System.Windows.Forms.OpenFileDialog()
         Me.cmdCambiarFoto = New System.Windows.Forms.Button()
+        Me.LblFoto = New System.Windows.Forms.Label()
         CType(Me.PicBx1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GbInaem.SuspendLayout()
         Me.GbExperiencia.SuspendLayout()
@@ -150,7 +151,7 @@ Partial Class FrmFichas
         Me.PicBx1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PicBx1.Image = Global.GestionCursos_0._1.My.Resources.Resources.NuevaFicha01
         Me.PicBx1.InitialImage = CType(resources.GetObject("PicBx1.InitialImage"), System.Drawing.Image)
-        Me.PicBx1.Location = New System.Drawing.Point(719, 20)
+        Me.PicBx1.Location = New System.Drawing.Point(719, 23)
         Me.PicBx1.Name = "PicBx1"
         Me.PicBx1.Size = New System.Drawing.Size(125, 140)
         Me.PicBx1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
@@ -696,11 +697,22 @@ Partial Class FrmFichas
         Me.cmdCambiarFoto.Text = "CambiarFoto"
         Me.cmdCambiarFoto.UseVisualStyleBackColor = True
         '
+        'LblFoto
+        '
+        Me.LblFoto.AutoSize = True
+        Me.LblFoto.Location = New System.Drawing.Point(768, 9)
+        Me.LblFoto.Name = "LblFoto"
+        Me.LblFoto.Size = New System.Drawing.Size(28, 13)
+        Me.LblFoto.TabIndex = 46
+        Me.LblFoto.Text = "Foto"
+        Me.LblFoto.Visible = False
+        '
         'FrmFichas
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1013, 636)
+        Me.Controls.Add(Me.LblFoto)
         Me.Controls.Add(Me.cmdCambiarFoto)
         Me.Controls.Add(Me.txtEdad)
         Me.Controls.Add(Me.cmdSalir)
@@ -819,4 +831,5 @@ Partial Class FrmFichas
     Friend WithEvents SFDSelectedImage As System.Windows.Forms.SaveFileDialog
     Friend WithEvents OFGSelectImage As System.Windows.Forms.OpenFileDialog
     Friend WithEvents cmdCambiarFoto As System.Windows.Forms.Button
+    Friend WithEvents LblFoto As System.Windows.Forms.Label
 End Class
