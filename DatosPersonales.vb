@@ -255,40 +255,40 @@ Public Class DatosPersonales
     '    Return k
     'End Function
 
-    Public Function ListadoDeValoresDeLasPropiedades() As ArrayList
-        'List(Of String)
-        Dim lista As New ArrayList
-        With lista
-            .Add(Me.mId)
-            .Add(Me.mDNI)
-            .Add(Me.mNombre)
-            .Add(Me.mApellido1)
-            .Add(Me.mApellido2)
-            .Add(Me.mFnac)
-            .Add(Me.mLugNac)
-            .Add(Me.mEdad)
-            .Add(Me.mDomicilio)
-            .Add(Me.mCP)
-            .Add(Me.mPoblacion)
-            .Add(Me.mTel1)
-            .Add(Me.mTel2)
-            .Add(Me.mNumSS)
-            .Add(Me.mInInaem)
-            .Add(Me.mInFecha)
-            .Add(Me.mNivelEstudios)
-            .Add(Me.mExpSector)
-            .Add(Me.mTallaCamiseta)
-            .Add(Me.mTallaPantalon)
-            .Add(Me.mTallaZapato)
-            .Add(Me.mEntrevistador)
-            .Add(Me.mFecEntr)
-            .Add(Me.mValoracion)
-            .Add(Me.mApto)
-            .Add(Me.mIdFoto)
-            .Add(Me.mPathFoto)
-        End With
-        Return lista
-    End Function
+    'Public Function ListadoDeValoresDeLasPropiedades() As ArrayList
+    '    'List(Of String)
+    '    Dim lista As New ArrayList
+    '    With lista
+    '        .Add(Me.mId)
+    '        .Add(Me.mDNI)
+    '        .Add(Me.mNombre)
+    '        .Add(Me.mApellido1)
+    '        .Add(Me.mApellido2)
+    '        .Add(Me.mFnac)
+    '        .Add(Me.mLugNac)
+    '        .Add(Me.mEdad)
+    '        .Add(Me.mDomicilio)
+    '        .Add(Me.mCP)
+    '        .Add(Me.mPoblacion)
+    '        .Add(Me.mTel1)
+    '        .Add(Me.mTel2)
+    '        .Add(Me.mNumSS)
+    '        .Add(Me.mInInaem)
+    '        .Add(Me.mInFecha)
+    '        .Add(Me.mNivelEstudios)
+    '        .Add(Me.mExpSector)
+    '        .Add(Me.mTallaCamiseta)
+    '        .Add(Me.mTallaPantalon)
+    '        .Add(Me.mTallaZapato)
+    '        .Add(Me.mEntrevistador)
+    '        .Add(Me.mFecEntr)
+    '        .Add(Me.mValoracion)
+    '        .Add(Me.mApto)
+    '        .Add(Me.mIdFoto)
+    '        .Add(Me.mPathFoto)
+    '    End With
+    '    Return lista
+    'End Function
     Public Function ListadoNombreDeLasPropiedades() As List(Of String)
         Dim lista As New List(Of String)
         With lista

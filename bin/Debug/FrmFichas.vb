@@ -1,7 +1,4 @@
-﻿
-
-'Imports System.Reflection
-Imports System.Data.SqlClient
+﻿Imports System.Data.SqlClient
 Public Class FrmFichas
     Dim nuevo, fotoCambiada As Boolean
     Public DP, D As DatosPersonales
@@ -216,7 +213,6 @@ Public Class FrmFichas
                     .IdFoto = Me.cmdCambiarFoto.Tag
                     .PathFoto = Me.PicBx1.Tag
 
-                
             End With
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)

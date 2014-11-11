@@ -24,12 +24,12 @@ Public Class Form2
         Dim fechacorrecta As Date = DateTime.ParseExact(s, "ddMMyyyy", Nothing)
         Return fechacorrecta
     End Function
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim fecha As Date = cambiarFormatoFecha(Me.MaskedTextBox1.Text)
-        MsgBox(fecha.ToShortDateString)
+    'Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    '    Dim fecha As Date = cambiarFormatoFecha(Me.MaskedTextBox1.Text)
+    '    MsgBox(fecha.ToShortDateString)
 
 
-    End Sub
+    'End Sub
     Public Function cambiarFormatoFecha(ByVal s As String) As Date
         MsgBox(s)
         Dim fechacorrecta As Date = DateTime.Parse(s)
@@ -87,4 +87,13 @@ Public Class Form2
     'End Sub
 
    
+    'Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    '    Dim DP As New DatosPersonales
+    '    Dim lista As List(Of String) = DP.ListadoNombreDeLasPropiedades
+    '    Dim recogelista As String = ""
+    '    For Each s As String In lista
+    '        recogelista &= String.Format("' {0} ' {1}", s, vbCrLf)
+    '    Next
+    '    MsgBox(String.Format("Está creando una ficha con las siguientes incidencias: {0}{1}{0} ¿Esta seguro de que desea continuar? ", vbCrLf, recogelista), MsgBoxStyle.YesNo)
+    'End Sub
 End Class
