@@ -44,7 +44,7 @@ Public Class FrmFichas
             Me.PicBx1.Tag = "C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg"
             NuIdDP = cogerUltimaId() + 1
             ' MsgBox("UltimaID + 1=  " & NuIdDP)
-            Me.LblFoto.Tag = "0"
+
             Me.OptAptoPendiente.Select()
         Else
             Me.cmdModificar.Text = "MODIFICAR FICHA"
@@ -107,9 +107,8 @@ Public Class FrmFichas
             Else
                 Me.OptAptoPendiente.Select()
             End If
-
-            Me.LblFoto.Tag = .IdFoto
-            Call cargarFotoEnFormulario(.Id)
+            Me.PicBx1.ImageLocation = .PathFoto
+            Me.PicBx1.Show()
             Me.PicBx1.Tag = .PathFoto
          
         End With
@@ -117,8 +116,6 @@ Public Class FrmFichas
     Private Function rellenarObjetoDesdeCampos() As DatosPersonales
         Dim D1 As New DatosPersonales
         Try
-
-            '   D = New DatosPersonales
             With D1
                 If Me.txtId.Text <> "" Then
                     .Id = Me.txtId.Text
@@ -216,8 +213,6 @@ Public Class FrmFichas
                 Else
                     .Apto = "Pendiente"
                 End If
-
-                .IdFoto = Me.LblFoto.Tag
 
                 .PathFoto = Me.PicBx1.Tag
             End With
@@ -358,13 +353,13 @@ Public Class FrmFichas
             Dim tablas As String = ""
             Dim valores As String = ""
 
-            For j As Integer = 1 To listanombres.Count - 2
+            For j As Integer = 1 To listanombres.Count - 1
                 'solo meto los campos que tengan valores y empiezo en 1 para no meter la Id, que es Identity 
-                'y tampoco pongo el PathFoto
+
                 If Not IsNothing(listavalores(j)) Then
                     If TypeOf (listavalores(j)) Is String Then
                         tablas &= ", " & listanombres(j)
-                        valores &= ", '" & listavalores(j) & "'"
+                        valores &= String.Format(", '{0}'", listavalores(j))
                     ElseIf TypeOf (listavalores(j)) Is Integer Then
                         tablas &= ", " & listanombres(j)
                         valores &= ", " & listavalores(j).ToString
@@ -374,7 +369,6 @@ Public Class FrmFichas
                         valores &= ", " & fechaFormatoCorrecto
                     ElseIf TypeOf (listavalores(j)) Is Boolean Then
                         tablas &= ", " & listanombres(j)
-                        'creo recordar que los valores booleanos se meten con 0 y 1
                         If listavalores(j) = True Then valores &= ", 1"
                         If listavalores(j) = False Then valores &= ", 0"
                     End If
@@ -392,10 +386,6 @@ Public Class FrmFichas
             'recojo la nueva IdDP
             Dim pathfoto As String = Dat.PathFoto
             NuIdDP = cogerUltimaId()
-            'Inserto en la tabla fotos
-            Dim idfoto As Integer = InsertarEnTablaFotos(pathfoto, NuIdDP)
-            If idfoto <= 0 Then Throw New miExcepcion("error en la insercion de la foto en tabla fotos")
-            Call MeterIdFotoEnDatosPersonales(idfoto, NuIdDP)
             MsgBox("Datos personales introducidos en la base de datos")
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
@@ -409,31 +399,7 @@ Public Class FrmFichas
 
 
     End Sub
-    Public Function InsertarEnTablaFotos(ByVal path As String, ByVal I As Integer) As Integer
-        Dim Id As Integer = -1
-        Try
-            Dim sql As String = String.Format("INSERT INTO Fotos (FotoPath,IdDP) VALUES ({'0'},{1})", path, I)
-            MsgBox(sql)
-            cn.Open()
-            Dim cmd As New SqlCommand(sql, cn)
-            Dim j As Integer = cmd.ExecuteNonQuery()
-            If j <> 1 Then Throw New miExcepcion("Error en IdFoto")
-            Dim cn2 As New SqlConnection(ConeStr)
-            cn2.Open()
-            Dim sql2 As String = String.Format("Select Id from Fotos where Fotos.idDP={0}", I)
-            Dim cmd2 As New SqlCommand(sql2, cn2)
-            Id = cmd2.ExecuteScalar
-            cn2.Close()
-            MsgBox(String.Format("La IdFoto es: {0}", Id))
-        Catch ex2 As miExcepcion
-            MsgBox(ex2.ToString)
-        Catch ex As Exception
-            MsgBox(ex.ToString)
-        Finally
-            cn.Close()
-        End Try
-        Return Id
-    End Function
+   
     Public Function cambiarFormatoFecha(ByVal f As Date) As String
         Dim vieja, dias, meses, años As String
         vieja = f.ToString
@@ -490,7 +456,6 @@ Public Class FrmFichas
             .Add(a.FecEntr)
             .Add(a.Valoracion)
             .Add(a.Apto)
-            .Add(a.IdFoto)
             .Add(a.PathFoto)
         End With
         Return lista
@@ -565,22 +530,10 @@ Public Class FrmFichas
         Call CambiarFoto()
     End Sub
 
-    'Private Sub guardarFotoDeLaFicha(ByVal str As String, ByVal I As Integer)
-    '    Try
-    '        Dim sql As String = ""
-    '        sql = String.Format("UPDATE Fotos SET FotoPath='{0}' WHERE Fotos.Id = (select fotos.id from Fotos where IdDP={1})", str, I)
-    '        MsgBox(sql)
-    '        'falta la insercion
-
-    '    Catch ex As Exception
-
-    '    End Try
-
-    'End Sub
     Private Sub cargarFotoEnFormulario(ByVal I As Integer)
         Try
             'Dim id As String = "22"
-            Dim sql As String = String.Format("select Fotos.FotoPath, Fotos.Id from fotos WHERE Fotos.Id = (select fotos.id from Fotos where IdDP={0})", I)
+            Dim sql As String = String.Format("select FotoPath from DatosPersonales WHERE Id={0})", I)
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
             Dim str As String = ""
@@ -601,22 +554,7 @@ Public Class FrmFichas
             cn.Close()
         End Try
     End Sub
-    Private Sub MeterIdFotoEnDatosPersonales(ByVal idf As Integer, ByVal Id As Integer)
-        Try
-            Dim sql As String = String.Format("UPDATE DatosPersonales SET IdFoto={0}  WHERE Id= {1}", idf, Id)
-            MsgBox(sql)
-            cn.Open()
-            Dim cmd As New SqlCommand(sql, cn)
-            Dim i As Integer = cmd.ExecuteNonQuery()
-            If i <> 1 Then Throw New miExcepcion("Error al insertar IdFoto en DatosPersonales")
-        Catch ex2 As miExcepcion
-            MsgBox(ex2.ToString)
-        Catch ex As Exception
-            MsgBox(ex.ToString)
-        Finally
-            cn.Close()
-        End Try
-    End Sub
+
     Private Sub PictureBox1_DoubleClick(sender As Object, e As EventArgs) Handles PicBx1.DoubleClick
         Call CambiarFoto()
     End Sub
@@ -631,18 +569,14 @@ Public Class FrmFichas
                 'por ahora es en GIT,pero lo más seguro es que sea en S:\
                 'Que es donde guardan las cosas en el servidor.
                 Path = (String.Format("C:\GIT\Fotos\Ficha{0}.bmp", DP.Id))
+                PicBx1.Image.Save(Path)
             Else
-                ' le cargo un IdProvisional
-                Path = (String.Format("C:\GIT\Fotos\Ficha{0}.bmp", NuIdDP))
+                Path = "C:\GIT\Fotos\FichaNew.bmp"
             End If
-            PicBx1.Image.Save(Path)
-            MsgBox(String.Format("Imagen guardada en {0}", Path))
+            ' PicBx1.Image.Save(Path)
+            ' MsgBox(String.Format("Imagen guardada en {0}", Path))
             'asi guardo la ubicacion de la foto en el picturebox
             PicBx1.Tag = Path
         End If
-    End Sub
-
-    Private Sub PicBx1_Click(sender As Object, e As EventArgs) Handles PicBx1.Click
-
     End Sub
 End Class

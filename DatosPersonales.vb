@@ -1,12 +1,7 @@
 ﻿Imports System.Collections.Generic
 
 Public Class DatosPersonales
-
-
-    '   Implements IComparable
-
-
-    Private mId, mEdad, mTallaZapato, mIdFoto As Integer
+    Private mId, mEdad, mTallaZapato As Integer
     Private mDNI, mNombre, mApellido1, mApellido2, mLugNac, mDomicilio, mCP, mPoblacion As String
     Private mTel1, mTel2, mNumSS, mNivelEstudios, mExpSector, mTallaCamiseta, mTallaPantalon As String
     Private mEntrevistador, mValoracion, mApto, mPathFoto As String
@@ -224,14 +219,7 @@ Public Class DatosPersonales
             End If
         End Set
     End Property
-    Public Property IdFoto As String
-        Get
-            Return CStr(mIdFoto)
-        End Get
-        Set(ByVal Value As String)
-            mIdFoto = CInt(Value)
-        End Set
-    End Property
+
     Public Property PathFoto As String
         Get
             Return CStr(mPathFoto)
@@ -240,55 +228,6 @@ Public Class DatosPersonales
             mPathFoto = Value
         End Set
     End Property
-
-
-
-    'Public Overloads Function CompareTo(ByVal obj As Object, ByVal s As String) As Integer Implements IComparable.CompareTo
-    '    Dim k As Integer
-    '    'sigo sin entender de que va esto
-    '    If obj Is Nothing Then Return -1
-    '    Dim otroAlumno As Alumno = TryCast(obj, Alumno)
-    '    If otroAlumno IsNot Nothing Then
-    '        k = (Me.ListadoDePropiedades(i).CompareTo(otroAlumno.ListadoDePropiedades(i)))
-    '    End If
-
-    '    Return k
-    'End Function
-
-    'Public Function ListadoDeValoresDeLasPropiedades() As ArrayList
-    '    'List(Of String)
-    '    Dim lista As New ArrayList
-    '    With lista
-    '        .Add(Me.mId)
-    '        .Add(Me.mDNI)
-    '        .Add(Me.mNombre)
-    '        .Add(Me.mApellido1)
-    '        .Add(Me.mApellido2)
-    '        .Add(Me.mFnac)
-    '        .Add(Me.mLugNac)
-    '        .Add(Me.mEdad)
-    '        .Add(Me.mDomicilio)
-    '        .Add(Me.mCP)
-    '        .Add(Me.mPoblacion)
-    '        .Add(Me.mTel1)
-    '        .Add(Me.mTel2)
-    '        .Add(Me.mNumSS)
-    '        .Add(Me.mInInaem)
-    '        .Add(Me.mInFecha)
-    '        .Add(Me.mNivelEstudios)
-    '        .Add(Me.mExpSector)
-    '        .Add(Me.mTallaCamiseta)
-    '        .Add(Me.mTallaPantalon)
-    '        .Add(Me.mTallaZapato)
-    '        .Add(Me.mEntrevistador)
-    '        .Add(Me.mFecEntr)
-    '        .Add(Me.mValoracion)
-    '        .Add(Me.mApto)
-    '        .Add(Me.mIdFoto)
-    '        .Add(Me.mPathFoto)
-    '    End With
-    '    Return lista
-    'End Function
     Public Function ListadoNombreDeLasPropiedades() As List(Of String)
         Dim lista As New List(Of String)
         With lista
@@ -317,7 +256,6 @@ Public Class DatosPersonales
             .Add("FecEntr")
             .Add("Valoracion")
             .Add("Apto")
-            .Add("IdFoto")
             .Add("PathFoto")
         End With
         Return lista
