@@ -232,7 +232,6 @@ Public Class FrmFichas
         End Try
         Return D1
     End Function
-
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
         Try
 
@@ -240,6 +239,24 @@ Public Class FrmFichas
             Dim fallos As List(Of String)
             If nuevo = True Then
                 fallos = camposvacios()
+                '#######
+                'ademas de campos vacios , quiero que compruebe el DNI y el NumSS
+                Dim comprobado As Boolean
+                If Me.txtDNI.Text <> "" Then
+                    comprobado = ValidaNif(Me.txtDNI.Text)
+                    If comprobado = False Then
+                        fallos.Add("El DNI introducido NO es válido.")
+                    End If
+                End If
+                Dim numSSSinBarras As String = Me.txtNumSS.Text.Replace("/", "")
+                If numSSSinBarras <> "" Then
+                    comprobado = ValidaNumSS(numSSSinBarras)
+                    If comprobado = False Then
+                        fallos.Add("El Numero de la Seguridad Social NO es válido")
+                    End If
+                End If
+                'Hasta aqui las validaciones del DNI y NumSS
+                '########
             Else
                 fallos = fallosEnCampos()
             End If
@@ -332,7 +349,6 @@ Public Class FrmFichas
         'añadir mas campos si queremos comprobarlos
         Return cambios
     End Function
-
     Public Sub cargarCambiosEnDPYaCreado(ByVal dat As DatosPersonales)
         'UPDATE
         Try
@@ -389,7 +405,6 @@ Public Class FrmFichas
 
             For j As Integer = 1 To listanombres.Count - 1
                 'solo meto los campos que tengan valores y empiezo en 1 para no meter la Id, que es Identity 
-
                 If Not IsNothing(listavalores(j)) Then
                     If TypeOf (listavalores(j)) Is String Then
                         tablas &= ", " & listanombres(j)
@@ -559,11 +574,9 @@ Public Class FrmFichas
         End Try
         Return i
     End Function
-
     Private Sub cmdCambiarFoto_Click(sender As Object, e As EventArgs) Handles cmdCambiarFoto.Click
         Call CambiarFoto()
     End Sub
-
     Private Sub cargarFotoEnFormulario(ByVal I As Integer)
         Try
             'Dim id As String = "22"
@@ -588,7 +601,6 @@ Public Class FrmFichas
             cn.Close()
         End Try
     End Sub
-
     Private Sub PictureBox1_DoubleClick(sender As Object, e As EventArgs) Handles PicBx1.DoubleClick
         Call CambiarFoto()
     End Sub
@@ -677,100 +689,4 @@ Public Class FrmFichas
         If s = dc Then Return True
         Return False
     End Function
-    'Public Function ValidateNumSegSocial(
-    '    ByRef numSegSocial As String, _
-    '    ByVal esNumEmpresa As Boolean) As Boolean
-
-    '    ' Si se ha pasado una cadena de longitud cero, o
-    '    ' la longitud es superior a 12 caracteres, la función
-    '    ' devolverá una excepción de argumentos no permitidos.
-    '    '
-    '    If (numSegSocial.Length > 12) OrElse (numSegSocial.Length = 0) Then
-    '        numSegSocial = String.Empty
-    '        Throw New System.ArgumentException()
-    '    End If
-
-    '    ' Si algún carácter no es un número, abandono la función.
-    '    '
-    '    Dim regex As New System.Text.RegularExpressions.Regex("[^0-9]")
-    '    If (regex.IsMatch(numSegSocial)) Then
-    '        numSegSocial = String.Empty
-    '        Throw New System.ArgumentException()
-    '    End If
-
-    '    Try
-    '        ' El número de Seguridad Social se compone de 11 ó 12
-    '        ' números, dependiendo que sea un Código de Cuenta de 
-    '        ' Cotización o un Número de Afiliación respectivamente.
-    '        '
-    '        ' A su vez, el número se divide en tres partes:
-    '        ' 1ª) Al Código Provincial corresponden las dos primeras cifras
-    '        '
-    '        Dim cp As String = numSegSocial.Substring(0, 2)
-
-    '        ' Formateo el código provincial. NOTA: Se asume que el
-    '        ' número empezará por 0, para aquellas provincias cuyo
-    '        ' código provincial se encuentre entre 1 y 9.
-    '        '
-    '        cp = String.Format("{0:00}", CInt(cp))
-
-    '        ' 2ª) Las dos últimas cifras se corresponden con el Dígito de Control
-    '        '
-    '        Dim dcTemp As String = numSegSocial.Substring(numSegSocial.Length - 2)
-    '        dcTemp = String.Format("{0:00}", CInt(dcTemp))
-
-    '        ' 3ª) Las cifras intermedias, entre el DP y el DC, se corresponden
-    '        ' con el número propiamente dicho.
-    '        '
-    '        Dim numero As String = numSegSocial.Substring(2, numSegSocial.Length - 4)
-
-    '        ' Formateamos el número, dependiendo de que sea
-    '        ' un número de afiliación o un número de empresa
-    '        '
-    '        If (esNumEmpresa) Then
-    '            ' 11 dígitos    --> Es el Código de Cuenta de Cotización
-    '            numero = String.Format("{0:0000000}", Convert.ToInt64(numero))
-
-    '        Else
-    '            ' 12 dígitos    --> Es el Número de Afiliación
-    '            numero = String.Format("{0:00000000}", Convert.ToInt64(numero))
-
-    '        End If
-
-    '        ' Obtenemos el número de Seguridad Social sin DC
-    '        '
-    '        numero = cp & numero
-
-    '        ' Calculo el dígito de control verdadero haciendo
-    '        ' una llamada a la función GetDCSegSocial.
-    '        '
-    '        Dim dc As String = GetDCNumSegSocial(numero, esNumEmpresa)
-    '        If (dc = String.Empty) Then
-    '            numSegSocial = String.Empty
-    '            Return False
-    '        End If
-
-    '        ' Número de Seguridad Social resultante.
-    '        '
-    '        numSegSocial = numero & dc
-
-    '        ' Comparo los dos dígitos de control
-    '        '
-    '        If (dc.Equals(dcTemp)) Then
-    '            ' Es correcto.
-    '            Return True
-    '        Else
-    '            ' No es correcto. 
-    '            Return False
-    '        End If
-
-    '    Catch
-    '        ' Cualquier excepción producida, devolverá False.
-    '        '
-    '        numSegSocial = String.Empty
-    '        Return False
-
-    '    End Try
-
-    'End Function
 End Class
