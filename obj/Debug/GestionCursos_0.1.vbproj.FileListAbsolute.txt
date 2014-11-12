@@ -67,3 +67,6 @@ C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.FrmListado.resources
 C:\GIT\GestionCursos1\bin\Debug\FrmFichas.resx
 C:\GIT\GestionCursos1\bin\Debug\FrmFichas.Designer.vb
 C:\GIT\GestionCursos1\bin\Debug\FrmFichas.vb
+C:\GIT\GestionCursos1\bin\Debug\Form2.resx
+C:\GIT\GestionCursos1\bin\Debug\Form2.Designer.vb
+C:\GIT\GestionCursos1\bin\Debug\Form2.vb

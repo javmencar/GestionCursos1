@@ -2,28 +2,27 @@
 Imports System.Data.SqlClient
 Public Class FrmFichas
     Dim nuevo, fotoCambiada As Boolean
-    'Public DP, D As DatosPersonales
     Public DP As DatosPersonales
     Public cat As String
     Public cn As SqlConnection
     Dim NuIdDP As Integer
-    Sub New()
+    'Sub New()
 
-        ' Llamada necesaria para el diseñador.
-        InitializeComponent()
+    '    ' Llamada necesaria para el diseñador.
+    '    InitializeComponent()
 
-        ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
+    '    ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
 
-    End Sub
-    Sub New(ByVal Da As DatosPersonales, ByVal Al As Boolean, ByVal nw As Boolean)
+    'End Sub
+    Sub New(ByVal Da As DatosPersonales, ByVal c As Integer, ByVal nw As Boolean)
         ' Llamada necesaria para el diseñador.
         InitializeComponent()
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
         nuevo = nw
         DP = Da
-        If Al = False Then
+        If c = 0 Then
             cat = "Profesores"
-        Else
+        ElseIf c = 1 Then
             cat = "Alumnos"
         End If
     End Sub
@@ -32,7 +31,6 @@ Public Class FrmFichas
         cn = New SqlConnection(ConeStr)
         Me.txtId.Enabled = False
         Me.LstExpSector.Items.Clear()
-        'hola
         Me.CboExpSector.SelectedIndex = -1
         NuIdDP = -1
         If nuevo = True Then
@@ -40,9 +38,10 @@ Public Class FrmFichas
             Me.cmdModificar.Text = "CREAR NUEVA FICHA"
             Me.cmdCancelar.Text = "Cancelar La Creación"
             Me.cmdCambiarFoto.Text = "Insertar Foto"
-            Me.PicBx1.Image = Image.FromFile("C:\GIT\Fotos\FichaNew.bmp")
-            Me.PicBx1.Tag = "C:\GIT\Fotos\FichaNew.bmp"
+            Me.PicBx1.Image = Image.FromFile("C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg")
+            Me.PicBx1.Tag = "C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg"
             NuIdDP = cogerUltimaId() + 1
+            ' MsgBox("UltimaID + 1=  " & NuIdDP)
             Me.OptAptoPendiente.Select()
         Else
             Me.cmdModificar.Text = "MODIFICAR FICHA"
@@ -50,9 +49,7 @@ Public Class FrmFichas
             Me.cmdCambiarFoto.Text = "Cambiar Foto"
             Call rellenarCamposDesdeObjeto(DP)
         End If
-
     End Sub
-
     Private Sub rellenarCamposDesdeObjeto(ByVal Datos As DatosPersonales)
         With Datos
             Me.txtId.Text = CStr(.Id)
@@ -61,9 +58,12 @@ Public Class FrmFichas
             Me.txtNombre.Text = .Nombre
             Me.txtDNI.Text = .DNI
             Me.txtNumSS.Text = .NumSS
-            ' MsgBox("Propiedad del objeto sin pasar a string" & al.Fnac)
-            ' MsgBox("Propiedad del objeto pasada a string" & al.Fnac.ToString)
-            Me.txtFNac.Text = CStr(.Fnac)
+            If .Fnac <> "1/1/1900" Then
+                Me.txtFNac.Text = .Fnac
+            Else
+                Me.txtFNac.Text = ""
+            End If
+            ' Me.txtFNac.Text = CStr(.FecEntr)
             Me.txtLugNac.Text = .LugNac
             Me.txtEdad.Text = CStr(.Edad)
             Me.txtTel1.Text = .Tel1
@@ -76,7 +76,12 @@ Public Class FrmFichas
             Else
                 Me.OptInaemNo.Select()
             End If
-            Me.txtInFecha.Text = CStr(.InFecha)
+            If .InFecha <> "1/1/1900" Then
+                Me.txtInFecha.Text = .InFecha
+            Else
+                Me.txtInFecha.Text = ""
+            End If
+            ' Me.txtInFecha.Text = CStr(.InFecha)
             Me.txtNivelEstudios.Text = .NivelEstudios
             'hago una matriz con la string de experiencia y la vuelco en el listbox
             'controlo si hay algo en el string
@@ -91,7 +96,12 @@ Public Class FrmFichas
             Me.CboTallaPantalon.SelectedItem = .TallaPantalon
             Me.txtTallaCalzado.Text = CStr(.TallaZapato)
             Me.txtEntrevistador.Text = .Entrevistador
-            Me.txtFecEntr.Text = CStr(.FecEntr)
+            If .FecEntr <> "1/1/1900" Then
+                Me.txtFecEntr.Text = .InFecha
+            Else
+                Me.txtFecEntr.Text = ""
+            End If
+            ' Me.txtFecEntr.Text = CStr(.FecEntr)
             Me.txtValoracion.Text = .Valoracion
             If Not IsNothing(.Apto) Then
                 Select Case .Apto
@@ -108,7 +118,6 @@ Public Class FrmFichas
             Me.PicBx1.ImageLocation = .PathFoto
             Me.PicBx1.Show()
             Me.PicBx1.Tag = .PathFoto
-         
         End With
     End Sub
     Private Function rellenarObjetoDesdeCampos() As DatosPersonales
@@ -235,7 +244,6 @@ Public Class FrmFichas
                 fallos = fallosEnCampos()
             End If
             If fallos.Count > 0 Then
-                'If Not IsNothing(fallos) Then
                 Dim respuesta As MsgBoxResult
                 Dim recogefallos As String = ""
                 For Each s As String In fallos
@@ -243,27 +251,35 @@ Public Class FrmFichas
                 Next
                 respuesta = MsgBox("Está creando una ficha con estas incidencias: " & vbCrLf & recogefallos &
                             vbCrLf & "¿Seguro que desea seguir?", MsgBoxStyle.YesNo)
-                If respuesta = MsgBoxResult.No Then Throw New miExcepcion("Operación cancelada a peticion del usuario")
+                If respuesta = MsgBoxResult.No Then
+                    Call rellenarCamposDesdeObjeto(DP)
+                    Throw New miExcepcion("Operación cancelada a peticion del usuario")
+                End If
+
             Else
-                ' MsgBox("No hay fallos")
             End If
-            'Primera llamada controlada
+
             DPConDatosDelFormulario = rellenarObjetoDesdeCampos()
             If Not IsNothing(DPConDatosDelFormulario) Then
-                'Primero inserto o modifico la foto
                 If nuevo = True Then
                     Call CrearNuevoDPEnBaseDeDatos(DPConDatosDelFormulario)
-                    'con el alumno en datos personales cargo de nuevo el formulario y asi tengo la ID
-                    Dim nuevaId As Integer = cogerUltimaId()
-                    If nuevaId = -1 Then Throw New miExcepcion("Error al calcular la ultima ID")
-                    Dim comp As Integer = insertarEnTablacategoria(nuevaId)
+                    ' Dim nuevaId As Integer = cogerUltimaId()
+                    NuIdDP = cogerUltimaId()
+                    If NuIdDP = -1 Then Throw New miExcepcion("Error al calcular la ultima ID")
+                    Dim comp As Integer = insertarEnTablacategoria(NuIdDP)
                     If comp = -1 Then Throw New miExcepcion(String.Format("Problema al insertar en {0}", cat))
                 Else
                     'estoy modificando
                     Call cargarCambiosEnDPYaCreado(DPConDatosDelFormulario)
                 End If
             Else
-                Throw New miExcepcion("Cambie los campos necesarios para poder continuar o salga de la pantalla")
+                If nuevo = True Then
+                    Throw New miExcepcion("Cambie los campos necesarios para poder Crear la ficha" & vbCrLf &
+                                          " o Pulse Salir")
+                Else
+                    Throw New miExcepcion("Cambie los campos necesarios para poder Modificar la ficha" & vbCrLf &
+                                          " o Pulse Salir")
+                End If
             End If
             Me.DialogResult = Windows.Forms.DialogResult.OK
         Catch ex2 As miExcepcion
@@ -287,13 +303,32 @@ Public Class FrmFichas
         Return vacios
     End Function
     Private Function fallosEnCampos() As List(Of String)
+        Dim comprobado As Boolean
         Dim cambios As New List(Of String)
         Dim numSSSinBarras As String = Me.txtNumSS.Text.Replace("/", "")
         If DP.Nombre <> Me.txtNombre.Text Then cambios.Add(String.Format("El campo 'Nombre' va a ser cambiado de '{0}' a '{1}", DP.Nombre, Me.txtNombre.Text))
         If DP.Apellido1 <> Me.txtApellido1.Text Then cambios.Add(String.Format("El campo 'Primer Apellido' va a ser cambiado de '{0}' a '{1}", DP.Apellido1, Me.txtApellido1.Text))
         If DP.Apellido2 <> Me.txtApellido2.Text Then cambios.Add(String.Format("El campo 'Segundo Apellido' va a ser cambiado de '{0}' a '{1}", DP.Apellido2, Me.txtApellido2.Text))
-        If DP.DNI <> Me.txtDNI.Text Then cambios.Add(String.Format("El campo 'DNI' va a ser cambiado de '{0}' a '{1}", DP.DNI, Me.txtDNI.Text))
-        If DP.NumSS <> numSSSinBarras Then cambios.Add(String.Format("El campo 'Numero de la Seguridad Social' va a ser cambiado de '{0}' a '{1}", DP.NumSS, Me.txtNumSS.Text))
+
+        '   If DP.DNI <> Me.txtDNI.Text Then cambios.Add(String.Format("El campo 'DNI' va a ser cambiado de '{0}' a '{1}", DP.DNI, Me.txtDNI.Text))
+        If DP.DNI <> Me.txtDNI.Text Then
+            comprobado = ValidaNif(Me.txtDNI.Text)
+            If comprobado = False Then
+                cambios.Add("El DNI introducido no es válido.")
+            Else
+                cambios.Add(String.Format("El campo 'DNI' va a ser cambiado de '{0}' a '{1}", DP.DNI, Me.txtDNI.Text))
+            End If
+        End If
+        '  If DP.NumSS <> numSSSinBarras Then cambios.Add(String.Format("El campo 'Numero de la Seguridad Social' va a ser cambiado de '{0}' a '{1}", DP.NumSS, Me.txtNumSS.Text))
+        If DP.NumSS <> numSSSinBarras Then
+            comprobado = ValidaNumSS(numSSSinBarras)
+            If comprobado = False Then
+                cambios.Add("El Numero de la Seguridad Social introducido no es válido.")
+            Else
+                cambios.Add(String.Format("El campo 'Numero de la Seguridad Social' va a ser cambiado de '{0}' a '{1}", DP.NumSS, Me.txtNumSS.Text))
+            End If
+        End If
+        'añadir mas campos si queremos comprobarlos
         Return cambios
     End Function
 
@@ -577,4 +612,68 @@ Public Class FrmFichas
             PicBx1.Tag = Path
         End If
     End Sub
+    Function ValidaNif(ByVal nif As String) As Boolean
+        Dim n As Long
+        Dim letras() As String = {"T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E"}
+        If (Len(nif) = 9 AndAlso IsNumeric(nif.Substring(0, 8))) Then
+            n = CLng(nif.Substring(0, 8))
+            n = n Mod 23
+            If (UCase(nif.Substring(8)) = letras(CInt(n))) Then
+                Return True
+            End If
+        End If
+        Return False
+    End Function
+    Public Function GetDCNumSegSocial(ByVal numSegSocial As String, _
+                                  ByVal esNumEmpresa As Boolean) As String
+        If (numSegSocial.Length > 10) OrElse (numSegSocial.Length = 0) Then _
+            Throw New System.ArgumentException()
+        Dim regex As New System.Text.RegularExpressions.Regex("[^0-9]")
+        If (regex.IsMatch(numSegSocial)) Then _
+            Throw New System.ArgumentException()
+        Try
+            Dim dcProv As String = numSegSocial.Substring(0, 2)
+            Dim numero As String = numSegSocial.Substring(2, numSegSocial.Length - 2)
+            Select Case numero.Length
+                Case 8
+                    If (esNumEmpresa) Then
+                        Return String.Empty
+                    Else
+                        If (numero.Chars(0) = "0"c) Then
+                            numero = numero.Remove(0, 1)
+                        End If
+                    End If
+                Case 7
+                    If (esNumEmpresa) Then
+                        If (numero.Chars(0) = "0"c) Then
+                            numero = numero.Remove(0, 1)
+                        End If
+                    End If
+                Case 6
+                    If (Not (esNumEmpresa)) Then
+                        numero = numero.PadLeft(7, "0"c)
+                    End If
+                Case Else
+                    If (esNumEmpresa) Then
+                        numero = numero.PadLeft(6, "0"c)
+                    Else
+                        numero = numero.PadLeft(7, "0"c)
+                    End If
+            End Select
+            Dim naf As Int64 = Convert.ToInt64(dcProv & numero)
+            naf = naf - (naf \ 97) * 97
+            Return String.Format("{0:00}", naf)
+        Catch
+            Return String.Empty
+        End Try
+    End Function
+    Public Function ValidaNumSS(ByVal NSS As String) As Boolean
+        Dim CP As String = NSS.Substring(0, 2)
+        If Not IsNumeric(CP) AndAlso (CInt(CP) < 1 Or CInt(CP) > 50) Then Return False
+        Dim NssSCC As String = NSS.Substring(0, NSS.Length - 2)
+        Dim dc As String = GetDCNumSegSocial(NssSCC, False)
+        Dim s As String = NSS.Substring(NSS.Length - 2, 2)
+        If s = dc Then Return True
+        Return False
+    End Function
 End Class

@@ -102,9 +102,11 @@
     </Compile>
     <Compile Include="Form2.Designer.vb">
       <DependentUpon>Form2.vb</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Form2.vb">
       <SubType>Form</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="FrmAlumnos.Designer.vb">
       <DependentUpon>FrmAlumnos.vb</DependentUpon>
@@ -193,6 +195,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form2.resx">
       <DependentUpon>Form2.vb</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmAlumnos.resx">
       <DependentUpon>FrmAlumnos.vb</DependentUpon>
