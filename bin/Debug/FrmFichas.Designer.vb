@@ -87,6 +87,7 @@ Partial Class FrmFichas
         Me.OFGSelectImage = New System.Windows.Forms.OpenFileDialog()
         Me.cmdCambiarFoto = New System.Windows.Forms.Button()
         Me.LblFoto = New System.Windows.Forms.Label()
+        Me.cmdBorrar = New System.Windows.Forms.Button()
         CType(Me.PicBx1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GbInaem.SuspendLayout()
         Me.GbExperiencia.SuspendLayout()
@@ -571,7 +572,7 @@ Partial Class FrmFichas
         '
         'cmdCancelar
         '
-        Me.cmdCancelar.Location = New System.Drawing.Point(897, 275)
+        Me.cmdCancelar.Location = New System.Drawing.Point(897, 347)
         Me.cmdCancelar.Name = "cmdCancelar"
         Me.cmdCancelar.Size = New System.Drawing.Size(104, 52)
         Me.cmdCancelar.TabIndex = 20
@@ -664,7 +665,7 @@ Partial Class FrmFichas
         '
         'cmdSalir
         '
-        Me.cmdSalir.Location = New System.Drawing.Point(897, 366)
+        Me.cmdSalir.Location = New System.Drawing.Point(897, 438)
         Me.cmdSalir.Name = "cmdSalir"
         Me.cmdSalir.Size = New System.Drawing.Size(104, 52)
         Me.cmdSalir.TabIndex = 21
@@ -707,11 +708,21 @@ Partial Class FrmFichas
         Me.LblFoto.Text = "Foto"
         Me.LblFoto.Visible = False
         '
+        'cmdBorrar
+        '
+        Me.cmdBorrar.Location = New System.Drawing.Point(897, 250)
+        Me.cmdBorrar.Name = "cmdBorrar"
+        Me.cmdBorrar.Size = New System.Drawing.Size(104, 52)
+        Me.cmdBorrar.TabIndex = 47
+        Me.cmdBorrar.Text = "Borrar La Ficha Completa"
+        Me.cmdBorrar.UseVisualStyleBackColor = True
+        '
         'FrmFichas
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1013, 636)
+        Me.Controls.Add(Me.cmdBorrar)
         Me.Controls.Add(Me.LblFoto)
         Me.Controls.Add(Me.cmdCambiarFoto)
         Me.Controls.Add(Me.txtEdad)
@@ -832,4 +843,5 @@ Partial Class FrmFichas
     Friend WithEvents OFGSelectImage As System.Windows.Forms.OpenFileDialog
     Friend WithEvents cmdCambiarFoto As System.Windows.Forms.Button
     Friend WithEvents LblFoto As System.Windows.Forms.Label
+    Friend WithEvents cmdBorrar As System.Windows.Forms.Button
 End Class

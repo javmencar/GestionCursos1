@@ -26,7 +26,8 @@ Public Class Form1
     End Sub
 
     Private Sub CmdGestionar_Click(sender As Object, e As EventArgs) Handles CmdGestionar.Click
-
+        Dim frm As New FrmGestionar
+        frm.ShowDialog()
     End Sub
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click

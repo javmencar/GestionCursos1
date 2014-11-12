@@ -47,6 +47,8 @@ Public Class FrmFichas
             Me.cmdModificar.Text = "MODIFICAR FICHA"
             Me.cmdCancelar.Text = "Cancelar La Modificación"
             Me.cmdCambiarFoto.Text = "Cambiar Foto"
+            Me.cmdBorrar.Enabled = True
+            Me.cmdBorrar.Visible = True
             Call rellenarCamposDesdeObjeto(DP)
         End If
     End Sub
@@ -688,5 +690,60 @@ Public Class FrmFichas
         Dim s As String = NSS.Substring(NSS.Length - 2, 2)
         If s = dc Then Return True
         Return False
+    End Function
+
+    Private Sub cmdBorrar_Click(sender As Object, e As EventArgs) Handles cmdBorrar.Click
+        Dim respuesta1, respuesta2 As MsgBoxResult
+        Dim nombre As String = DP.Nombre & DP.Apellido1 & DP.Apellido2
+        respuesta1 = MsgBox(String.Format("Ha seleccionado el elemento: ' {0} ' para ser borrado" & vbCrLf & "¿Está seguro?", nombre), MsgBoxStyle.YesNo)
+        If respuesta1 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
+        respuesta2 = MsgBox("¿Seguro que desea continuar?" & vbCrLf & "Una vez borrado no se puede recuperar", MsgBoxStyle.YesNo)
+        If respuesta2 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
+
+        Dim resultadoBorrar As Integer = borrarDatosPersonales(DP.Id)
+        Me.DialogResult = Windows.Forms.DialogResult.None
+        If resultadoBorrar = -1 Then Throw New miExcepcion("Error al borrar")
+        MsgBox("Alumno y sus datos borrados con éxito")
+        Me.DialogResult = Windows.Forms.DialogResult.OK
+    End Sub
+    Public Function borrarDatosPersonales(ByVal i As Integer) As Integer
+        Dim num, idDP As Integer
+        Dim sqlIdDP As String = String.Format("Select DatosPersonales.Id from DatosPersonales, {0} where DatosPersonales.Id={0}.IdDP and {0}.id={1}", cat, CStr(i))
+        '  MsgBox(sqlIdDP)
+        Dim sqlalumnos As String = String.Format("delete from {0} where {0}.id={1}", cat, CStr(i))
+        ' MsgBox(sqlalumnos)
+        Dim sqlDatosPersonales As String = "DELETE FROM DatosPersonales WHERE DatosPersonales.Id="
+        ' MsgBox(sqlDatosPersonales)
+        Dim cn2 As New SqlConnection(ConeStr)
+        Try
+            cn.Open()
+            'hago la consulta para obtener la ID de DatosPersonales
+            Dim cmd1, cmd2, cmd3 As SqlCommand
+            cmd1 = New SqlCommand(sqlIdDP, cn)
+            idDP = cmd1.ExecuteScalar
+            cn.Close()
+            cn.Open()
+            cmd2 = New SqlCommand(sqlalumnos, cn)
+            num = cmd2.ExecuteNonQuery
+            If num < 0 Then
+                If cat = "Alumnos" Then Throw New miExcepcion("Error al borrar Alumno")
+                If cat = "Profesores" Then Throw New miExcepcion("Error al borrar Profesor")
+            End If
+            cn2.Open()
+            sqlDatosPersonales &= CStr(idDP)
+            ' MsgBox("Ahora con el Id: " & vbCrLf & sqlDatosPersonales)
+            cmd3 = New SqlCommand(sqlDatosPersonales, cn2)
+            num = cmd2.ExecuteNonQuery
+            If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))
+        Catch ex2 As miExcepcion
+            num = -1
+            'MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        Finally
+            cn.Close()
+            cn2.Close()
+        End Try
+        Return num
     End Function
 End Class
