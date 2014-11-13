@@ -694,25 +694,32 @@ Public Class FrmFichas
 
     Private Sub cmdBorrar_Click(sender As Object, e As EventArgs) Handles cmdBorrar.Click
         Dim respuesta1, respuesta2 As MsgBoxResult
-        Dim nombre As String = DP.Nombre & DP.Apellido1 & DP.Apellido2
-        respuesta1 = MsgBox(String.Format("Ha seleccionado el elemento: ' {0} ' para ser borrado" & vbCrLf & "¿Está seguro?", nombre), MsgBoxStyle.YesNo)
+        'Dim nombre As String = DP.Nombre & DP.Apellido1 & DP.Apellido2
+
+        respuesta1 = MsgBox(String.Format("Ha seleccionado el elemento:" & vbCrLf &
+                                          " ' {0} {1} {2} '" & vbCrLf &
+                                          " para ser borrado" & vbCrLf &
+                                          "¿Está seguro?", DP.Nombre, DP.Apellido1, DP.Apellido2), MsgBoxStyle.YesNo)
         If respuesta1 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
         respuesta2 = MsgBox("¿Seguro que desea continuar?" & vbCrLf & "Una vez borrado no se puede recuperar", MsgBoxStyle.YesNo)
         If respuesta2 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
-
-        Dim resultadoBorrar As Integer = borrarDatosPersonales(DP.Id)
-        Me.DialogResult = Windows.Forms.DialogResult.None
-        If resultadoBorrar = -1 Then Throw New miExcepcion("Error al borrar")
-        MsgBox("Alumno y sus datos borrados con éxito")
-        Me.DialogResult = Windows.Forms.DialogResult.OK
+        Dim borrado As Boolean = False
+        borrado = borrarDatosPersonales(DP.Id)
+        If borrado = True Then
+            MsgBox("Alumno y sus datos borrados con éxito")
+            Me.DialogResult = Windows.Forms.DialogResult.OK
+        Else
+            Me.DialogResult = Windows.Forms.DialogResult.None
+            Throw New miExcepcion("Error al borrar")
+        End If
     End Sub
-    Public Function borrarDatosPersonales(ByVal i As String) As Integer
+    Public Function borrarDatosPersonales(ByVal i As String) As Boolean
         Dim num, idAl_Pr As Integer
         Dim sqlIdAl, sqlalumnos, sqlDatosPersonales As String
         sqlIdAl = String.Format("Select Alumnos.Id from DatosPersonales, {0} where DatosPersonales.Id={0}.IdDP and DatosPersonales.Id={1}", cat, i)
-        MsgBox(sqlIdAl)
+        ' MsgBox(sqlIdAl)
         sqlDatosPersonales = String.Format("DELETE FROM DatosPersonales WHERE DatosPersonales.Id={0}", DP.Id)
-        MsgBox(sqlDatosPersonales)
+        ' MsgBox(sqlDatosPersonales)
         Dim cn2 As New SqlConnection(ConeStr)
         Try
             Dim cmdIdAl, cmdDelTablaAl_PR, cmdDelDP As SqlCommand
@@ -722,9 +729,9 @@ Public Class FrmFichas
             idAl_Pr = cmdIdAl.ExecuteScalar
             If idAl_Pr < 0 Then Throw New miExcepcion(String.Format("Error al obtener la Id de {0}", cat))
             cn.Close()
-            'con el Id correcto, lo cargo en lasql de borrado
+            'con el Id correcto, lo cargo en la sql de borrado
             sqlalumnos = String.Format("delete from {0} where {0}.id={1}", cat, idAl_Pr)
-            MsgBox(sqlalumnos)
+            'MsgBox(sqlalumnos)
             'Abro otra vez para borrar en tabla Alumnos o profesores
             cn.Open()
             cmdDelTablaAl_PR = New SqlCommand(sqlalumnos, cn)
@@ -735,15 +742,15 @@ Public Class FrmFichas
             num = cmdDelDP.ExecuteNonQuery
             If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))
         Catch ex2 As miExcepcion
-            num = -1
-            'MsgBox(ex2.ToString)
+            Return False
+            MsgBox(ex2.ToString)
         Catch ex As Exception
-            num = -1
+            Return False
             MsgBox(ex.ToString)
         Finally
             cn2.Close()
             cn.Close()
         End Try
-        Return num
+        Return True
     End Function
 End Class

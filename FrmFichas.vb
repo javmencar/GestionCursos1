@@ -694,8 +694,12 @@ Public Class FrmFichas
 
     Private Sub cmdBorrar_Click(sender As Object, e As EventArgs) Handles cmdBorrar.Click
         Dim respuesta1, respuesta2 As MsgBoxResult
-        Dim nombre As String = DP.Nombre & DP.Apellido1 & DP.Apellido2
-        respuesta1 = MsgBox(String.Format("Ha seleccionado el elemento: ' {0} ' para ser borrado" & vbCrLf & "¿Está seguro?", nombre), MsgBoxStyle.YesNo)
+        'Dim nombre As String = DP.Nombre & DP.Apellido1 & DP.Apellido2
+
+        respuesta1 = MsgBox(String.Format("Ha seleccionado la ficha:" & vbCrLf &
+                                          " ' {0} {1} {2} '" & vbCrLf &
+                                          " para ser borrada" & vbCrLf &
+                                          "¿Está seguro?", DP.Nombre, DP.Apellido1, DP.Apellido2), MsgBoxStyle.YesNo)
         If respuesta1 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
         respuesta2 = MsgBox("¿Seguro que desea continuar?" & vbCrLf & "Una vez borrado no se puede recuperar", MsgBoxStyle.YesNo)
         If respuesta2 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
@@ -725,7 +729,7 @@ Public Class FrmFichas
             idAl_Pr = cmdIdAl.ExecuteScalar
             If idAl_Pr < 0 Then Throw New miExcepcion(String.Format("Error al obtener la Id de {0}", cat))
             cn.Close()
-            'con el Id correcto, lo cargo en lasql de borrado
+            'con el Id correcto, lo cargo en la sql de borrado
             sqlalumnos = String.Format("delete from {0} where {0}.id={1}", cat, idAl_Pr)
             'MsgBox(sqlalumnos)
             'Abro otra vez para borrar en tabla Alumnos o profesores
@@ -741,7 +745,7 @@ Public Class FrmFichas
             Return False
             MsgBox(ex2.ToString)
         Catch ex As Exception
-          false
+            Return False
             MsgBox(ex.ToString)
         Finally
             cn2.Close()
