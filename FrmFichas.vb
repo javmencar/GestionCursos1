@@ -699,16 +699,17 @@ Public Class FrmFichas
         If respuesta1 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
         respuesta2 = MsgBox("¿Seguro que desea continuar?" & vbCrLf & "Una vez borrado no se puede recuperar", MsgBoxStyle.YesNo)
         If respuesta2 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
-        Dim resultadoBorrar As Integer = borrarDatosPersonales(DP.Id)
-        If resultadoBorrar = -1 Then
-            Me.DialogResult = Windows.Forms.DialogResult.None
-            Throw New miExcepcion("Error al borrar")
-        Else
+        Dim borrado As Boolean = False
+        borrado = borrarDatosPersonales(DP.Id)
+        If borrado = True Then
             MsgBox("Alumno y sus datos borrados con éxito")
             Me.DialogResult = Windows.Forms.DialogResult.OK
+        Else
+            Me.DialogResult = Windows.Forms.DialogResult.None
+            Throw New miExcepcion("Error al borrar")
         End If
     End Sub
-    Public Function borrarDatosPersonales(ByVal i As String) As Integer
+    Public Function borrarDatosPersonales(ByVal i As String) As Boolean
         Dim num, idAl_Pr As Integer
         Dim sqlIdAl, sqlalumnos, sqlDatosPersonales As String
         sqlIdAl = String.Format("Select Alumnos.Id from DatosPersonales, {0} where DatosPersonales.Id={0}.IdDP and DatosPersonales.Id={1}", cat, i)
@@ -737,15 +738,15 @@ Public Class FrmFichas
             num = cmdDelDP.ExecuteNonQuery
             If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))
         Catch ex2 As miExcepcion
-            num = -1
+            Return False
             MsgBox(ex2.ToString)
         Catch ex As Exception
-            num = -1
+          false
             MsgBox(ex.ToString)
         Finally
             cn2.Close()
             cn.Close()
         End Try
-        Return num
+        Return True
     End Function
 End Class
