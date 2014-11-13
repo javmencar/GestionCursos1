@@ -699,50 +699,52 @@ Public Class FrmFichas
         If respuesta1 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
         respuesta2 = MsgBox("¿Seguro que desea continuar?" & vbCrLf & "Una vez borrado no se puede recuperar", MsgBoxStyle.YesNo)
         If respuesta2 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
-
         Dim resultadoBorrar As Integer = borrarDatosPersonales(DP.Id)
-        Me.DialogResult = Windows.Forms.DialogResult.None
-        If resultadoBorrar = -1 Then Throw New miExcepcion("Error al borrar")
-        MsgBox("Alumno y sus datos borrados con éxito")
-        Me.DialogResult = Windows.Forms.DialogResult.OK
+        If resultadoBorrar = -1 Then
+            Me.DialogResult = Windows.Forms.DialogResult.None
+            Throw New miExcepcion("Error al borrar")
+        Else
+            MsgBox("Alumno y sus datos borrados con éxito")
+            Me.DialogResult = Windows.Forms.DialogResult.OK
+        End If
     End Sub
-    Public Function borrarDatosPersonales(ByVal i As Integer) As Integer
-        Dim num, idDP As Integer
-        Dim sqlIdDP As String = String.Format("Select DatosPersonales.Id from DatosPersonales, {0} where DatosPersonales.Id={0}.IdDP and {0}.id={1}", cat, CStr(i))
-        '  MsgBox(sqlIdDP)
-        Dim sqlalumnos As String = String.Format("delete from {0} where {0}.id={1}", cat, CStr(i))
-        ' MsgBox(sqlalumnos)
-        Dim sqlDatosPersonales As String = "DELETE FROM DatosPersonales WHERE DatosPersonales.Id="
+    Public Function borrarDatosPersonales(ByVal i As String) As Integer
+        Dim num, idAl_Pr As Integer
+        Dim sqlIdAl, sqlalumnos, sqlDatosPersonales As String
+        sqlIdAl = String.Format("Select Alumnos.Id from DatosPersonales, {0} where DatosPersonales.Id={0}.IdDP and DatosPersonales.Id={1}", cat, i)
+        ' MsgBox(sqlIdAl)
+        sqlDatosPersonales = String.Format("DELETE FROM DatosPersonales WHERE DatosPersonales.Id={0}", DP.Id)
         ' MsgBox(sqlDatosPersonales)
         Dim cn2 As New SqlConnection(ConeStr)
         Try
+            Dim cmdIdAl, cmdDelTablaAl_PR, cmdDelDP As SqlCommand
             cn.Open()
-            'hago la consulta para obtener la ID de DatosPersonales
-            Dim cmd1, cmd2, cmd3 As SqlCommand
-            cmd1 = New SqlCommand(sqlIdDP, cn)
-            idDP = cmd1.ExecuteScalar
+            'hago la consulta para obtener la ID del Alumno
+            cmdIdAl = New SqlCommand(sqlIdAl, cn)
+            idAl_Pr = cmdIdAl.ExecuteScalar
+            If idAl_Pr < 0 Then Throw New miExcepcion(String.Format("Error al obtener la Id de {0}", cat))
             cn.Close()
+            'con el Id correcto, lo cargo en lasql de borrado
+            sqlalumnos = String.Format("delete from {0} where {0}.id={1}", cat, idAl_Pr)
+            'MsgBox(sqlalumnos)
+            'Abro otra vez para borrar en tabla Alumnos o profesores
             cn.Open()
-            cmd2 = New SqlCommand(sqlalumnos, cn)
-            num = cmd2.ExecuteNonQuery
-            If num < 0 Then
-                If cat = "Alumnos" Then Throw New miExcepcion("Error al borrar Alumno")
-                If cat = "Profesores" Then Throw New miExcepcion("Error al borrar Profesor")
-            End If
+            cmdDelTablaAl_PR = New SqlCommand(sqlalumnos, cn)
+            num = cmdDelTablaAl_PR.ExecuteNonQuery
+            If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar de {0}", cat))
             cn2.Open()
-            sqlDatosPersonales &= CStr(idDP)
-            ' MsgBox("Ahora con el Id: " & vbCrLf & sqlDatosPersonales)
-            cmd3 = New SqlCommand(sqlDatosPersonales, cn2)
-            num = cmd2.ExecuteNonQuery
+            cmdDelDP = New SqlCommand(sqlDatosPersonales, cn2)
+            num = cmdDelDP.ExecuteNonQuery
             If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))
         Catch ex2 As miExcepcion
             num = -1
-            'MsgBox(ex2.ToString)
+            MsgBox(ex2.ToString)
         Catch ex As Exception
+            num = -1
             MsgBox(ex.ToString)
         Finally
-            cn.Close()
             cn2.Close()
+            cn.Close()
         End Try
         Return num
     End Function
