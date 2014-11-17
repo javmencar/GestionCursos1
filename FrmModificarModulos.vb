@@ -1,6 +1,9 @@
 ﻿Imports System.Data.SqlClient
 
 Public Class FrmModificarModulos
+    Dim pos As Integer
+    Dim modu As Modulo
+    Dim cn As SqlConnection
     Sub New()
 
         ' Llamada necesaria para el diseñador.
@@ -15,10 +18,13 @@ Public Class FrmModificarModulos
         pos = id
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
     End Sub
-    Dim pos As Integer
-    Dim modu As Modulo
-    Dim cn As SqlConnection
-
+    Sub New(ByVal m As Modulo)
+        ' Llamada necesaria para el diseñador.
+        InitializeComponent()
+        modu = m
+        ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
+    End Sub
+   
     Private Sub FrmModificarModulos_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         cn = New SqlConnection(ConeStr)
         Try
@@ -32,9 +38,9 @@ Public Class FrmModificarModulos
                 Me.CmdModificar.Text = "modificar este Modulo"
                 Me.cmdCancelar.Text = "cancelar la modificacion"
 
-                Call cargarformulario(pos)
+                Call cargarformulario(modu)
                 modu = New Modulo
-                modu.Id = CInt(Me.txtlblModulos.Text)
+                modu.Id = CInt(Me.txtIdModulos.Text)
                 modu.Nombre = Me.txtNombreCurso.Text
                 modu.horas = CInt(Me.txtHorasCurso.Text)
             End If
@@ -44,33 +50,38 @@ Public Class FrmModificarModulos
             MsgBox(ex2.ToString)
         End Try
     End Sub
-    Friend Sub cargarformulario(ByVal i As Integer)
-        cn = New SqlConnection(ConeStr)
-        Try
-            cn.Open()
-            ' MsgBox(cn.ToString)
-            
-            Dim sql As String = "select modulos.Id, modulos.Nombre, Modulos.Horas from modulos where modulos.id=" & i
-            ' MsgBox(sql)
-            Dim cmd As New SqlCommand(sql, cn)
-            Dim dr As SqlDataReader
+    'Friend Sub cargarformulario(ByVal i As Integer)
+    '    cn = New SqlConnection(ConeStr)
+    '    Try
+    '        cn.Open()
+    '        ' MsgBox(cn.ToString)
 
-            dr = cmd.ExecuteReader
+    '        Dim sql As String = "select modulos.Id, modulos.Nombre, Modulos.Horas from modulos where modulos.id=" & i
+    '        ' MsgBox(sql)
+    '        Dim cmd As New SqlCommand(sql, cn)
+    '        Dim dr As SqlDataReader
 
-            If Not (dr.Read()) Then
-                Throw New miExcepcion("No hay modulos con esa id", 49, Me.Name.ToString)
-            Else
-               
-                Me.txtlblModulos.Text = CStr(dr(0))
-                Me.txtNombreCurso.Text = dr(1)
-                Me.txtHorasCurso.Text = CStr(dr(2))
-            End If
-            cn.Close()
-        Catch ex2 As miExcepcion
-            MsgBox(ex2.ToString)
-        Catch ex As Exception
-            MsgBox(ex.ToString)
-        End Try
+    '        dr = cmd.ExecuteReader
+
+    '        If Not (dr.Read()) Then
+    '            Throw New miExcepcion("No hay modulos con esa id", 49, Me.Name.ToString)
+    '        Else
+
+    '            Me.txtldModulos.Text = CStr(dr(0))
+    '            Me.txtNombreCurso.Text = dr(1)
+    '            Me.txtHorasCurso.Text = CStr(dr(2))
+    '        End If
+    '        cn.Close()
+    '    Catch ex2 As miExcepcion
+    '        MsgBox(ex2.ToString)
+    '    Catch ex As Exception
+    '        MsgBox(ex.ToString)
+    '    End Try
+    'End Sub
+    Private Sub cargarformulario(ByVal m As Modulo)
+        Me.txtIdModulos.Text = m.Id
+        Me.txtNombreCurso.Text = m.Nombre
+        Me.txtHorasCurso.Text = CStr(m.horas)
     End Sub
 
     Private Sub CmdModificar_Click(sender As Object, e As EventArgs) Handles CmdModificar.Click

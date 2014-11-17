@@ -84,7 +84,6 @@ Public Class FrmModificarCursos
         Me.txtNombreCurso.Text = c1.Nombre.ToString
         Me.txtHorasCurso.Text = c1.horas.ToString
         If Not IsNothing(c1.modulos) Then
-            c1.ordenarModulos()
             For Each m As Modulo In c1.modulos
                 If m.Id > 0 AndAlso m.Id < 10 Then
                     Me.LstModulos.Items.Add("0" & m.Id.ToString & "_" & m.Nombre.ToString)

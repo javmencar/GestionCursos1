@@ -26,7 +26,7 @@ Partial Class FrmModificarModulos
         Me.lblNumHoras = New System.Windows.Forms.Label()
         Me.txtNombreCurso = New System.Windows.Forms.TextBox()
         Me.lblNombreModulo = New System.Windows.Forms.Label()
-        Me.txtlblModulos = New System.Windows.Forms.TextBox()
+        Me.txtIdModulos = New System.Windows.Forms.TextBox()
         Me.lblIdModulo = New System.Windows.Forms.Label()
         Me.CmdModificar = New System.Windows.Forms.Button()
         Me.cmdCancelar = New System.Windows.Forms.Button()
@@ -64,13 +64,13 @@ Partial Class FrmModificarModulos
         Me.lblNombreModulo.TabIndex = 8
         Me.lblNombreModulo.Text = "Nombre completo del Modulo"
         '
-        'txtlblModulos
+        'txtIdModulos
         '
-        Me.txtlblModulos.Enabled = False
-        Me.txtlblModulos.Location = New System.Drawing.Point(34, 25)
-        Me.txtlblModulos.Name = "txtlblModulos"
-        Me.txtlblModulos.Size = New System.Drawing.Size(35, 20)
-        Me.txtlblModulos.TabIndex = 7
+        Me.txtIdModulos.Enabled = False
+        Me.txtIdModulos.Location = New System.Drawing.Point(34, 25)
+        Me.txtIdModulos.Name = "txtIdModulos"
+        Me.txtIdModulos.Size = New System.Drawing.Size(35, 20)
+        Me.txtIdModulos.TabIndex = 7
         '
         'lblIdModulo
         '
@@ -110,7 +110,7 @@ Partial Class FrmModificarModulos
         Me.Controls.Add(Me.lblNumHoras)
         Me.Controls.Add(Me.txtNombreCurso)
         Me.Controls.Add(Me.lblNombreModulo)
-        Me.Controls.Add(Me.txtlblModulos)
+        Me.Controls.Add(Me.txtIdModulos)
         Me.Controls.Add(Me.lblIdModulo)
         Me.Name = "FrmModificarModulos"
         Me.Text = "FrmModificarModulos"
@@ -122,7 +122,7 @@ Partial Class FrmModificarModulos
     Friend WithEvents lblNumHoras As System.Windows.Forms.Label
     Friend WithEvents txtNombreCurso As System.Windows.Forms.TextBox
     Friend WithEvents lblNombreModulo As System.Windows.Forms.Label
-    Friend WithEvents txtlblModulos As System.Windows.Forms.TextBox
+    Friend WithEvents txtIdModulos As System.Windows.Forms.TextBox
     Friend WithEvents lblIdModulo As System.Windows.Forms.Label
     Friend WithEvents CmdModificar As System.Windows.Forms.Button
     Friend WithEvents cmdCancelar As System.Windows.Forms.Button
