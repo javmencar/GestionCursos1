@@ -3,7 +3,7 @@ Public Class FrmModificarCursos
     Dim pos As Integer
     Dim sqlcn, cn As SqlConnection
     Dim c1 As Curso
-
+    Dim nuevo As Boolean
     Sub New()
 
         ' Llamada necesaria para el diseñador.
@@ -16,6 +16,13 @@ Public Class FrmModificarCursos
         ' Llamada necesaria para el diseñador.
         InitializeComponent()
         pos = id
+        ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
+    End Sub
+    Sub New(ByVal nue As Boolean, Optional ByVal cu As Curso = Nothing)
+        ' Llamada necesaria para el diseñador.
+        InitializeComponent()
+        nuevo = nue
+        c1 = cu
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
     End Sub
     Sub New(ByVal cu As Curso)
@@ -185,6 +192,7 @@ Public Class FrmModificarCursos
                     ' si hay modulos, metemos los modulos
                     If Me.LstModulos.Items.Count > 0 Then
                         Dim ultcur As Integer = averiguarUltimoIndice("Cursos")
+                        If ultcur = -1 Then Throw New miExcepcion("Error al buscar Cursos.Id")
                         Dim ListaDeModuloEnListbox As New List(Of Integer)
                         '   y vuelco en el array los id modulos, que saco con una funcion 
                         ListaDeModuloEnListbox = localizarIdModulosEnListbox()
@@ -259,14 +267,11 @@ Public Class FrmModificarCursos
         Try
             ' abro la conexion y hago la consulta de ejecucion
             cn.Open()
-            ' me guardo los valores en una string para facilitar la insercion
-            ' no pongo el id, porque ahora es autoincremental
-            Dim valores As String = "('" & Me.txtCodcur.Text & "', '" &
-                Me.txtNombreCurso.Text & "', " & CInt(Me.txtHorasCurso.Text) & ")"
-            ' MsgBox(valores)
             Dim sql2 As String
-            sql2 = "INSERT INTO cursos (cursos.codcur, cursos.nombre, cursos.horas) VALUES " & valores
-            'MsgBox(sql2)
+            sql2 = String.Format("INSERT INTO Cursos (Cursos.CodCur,Cursos.Nombre, Cursos.Horas) VALUES ('{0}', '{1}', {2})",
+                                Me.txtCodcur.Text, Me.txtNombreCurso.Text, CInt(Me.txtHorasCurso.Text))
+
+            MsgBox(sql2)
             Dim cmd2 As New SqlCommand(sql2, cn)
             Dim i2 As Integer = cmd2.ExecuteNonQuery
             If i2 < 0 Then Throw New miExcepcion("el cmd.ExecuteNonQuery devuelve menos de 0 lineas afectadas", 219, Me.Name.ToString)
@@ -430,14 +435,17 @@ Public Class FrmModificarCursos
         Dim i As Integer = 0
         Try
             ' Dim sql As String = "select count(*) from " & t
-            Dim sql As String = "select top 1 id from " & t & " order by id desc"
+            Dim sql As String
+            sql = String.Format("SELECT TOP 1 {0}.Id FROM {0} ORDER BY {0}.Id DESC", t)
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
             i = cmd.ExecuteScalar
             cn.Close()
         Catch ex2 As miExcepcion
+            i = -1
             MsgBox(ex2.ToString)
         Catch ex As Exception
+            i = -1
             MsgBox(ex.ToString)
         End Try
         Return i

@@ -696,9 +696,9 @@ Public Class FrmFichas
         Dim respuesta1, respuesta2 As MsgBoxResult
         'Dim nombre As String = DP.Nombre & DP.Apellido1 & DP.Apellido2
 
-        respuesta1 = MsgBox(String.Format("Ha seleccionado el elemento:" & vbCrLf &
+        respuesta1 = MsgBox(String.Format("Ha seleccionado la ficha:" & vbCrLf &
                                           " ' {0} {1} {2} '" & vbCrLf &
-                                          " para ser borrado" & vbCrLf &
+                                          " para ser borrada" & vbCrLf &
                                           "¿Está seguro?", DP.Nombre, DP.Apellido1, DP.Apellido2), MsgBoxStyle.YesNo)
         If respuesta1 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
         respuesta2 = MsgBox("¿Seguro que desea continuar?" & vbCrLf & "Una vez borrado no se puede recuperar", MsgBoxStyle.YesNo)

@@ -33,6 +33,7 @@ Public Class FrmModificarModulos
                 'curso nuevo, textos: "crear el curso" , "cancelar la creacion"
                 Me.CmdModificar.Text = "crear el Modulo"
                 Me.cmdCancelar.Text = "cancelar la creacion"
+                Me.txtIdModulos.Enabled = False
             Else
                 'modificar: "modificar este curso" , "cancelar la modificacion"
                 Me.CmdModificar.Text = "modificar este Modulo"
@@ -88,15 +89,17 @@ Public Class FrmModificarModulos
         Try
             If Me.txtNombreCurso.Text = "" Or Me.txtHorasCurso.Text = "" Then Throw New miExcepcion("Faltan datos por rellenar")
                 Dim Sql As String = ""
-                If pos = -1 Then
+            If pos = -1 Then
+                If Me.txtNombreCurso.Text = "" Or Me.txtHorasCurso.Text = "" Then Throw New miExcepcion("No puede crear un modulo con campos vacíos" & vbCrLf &
+                    "Si es necesario los puede cambiar luego")
                 Sql = String.Format("INSERT INTO Modulos (Modulos.Nombre,Modulos.Horas) VALUES ('{0}',{1})",
                                     Me.txtNombreCurso.Text, Me.txtHorasCurso.Text)
-                Else
+            Else
                 Dim cambiosvalidos As Boolean = ValidarCambios()
                 If cambiosvalidos = False Then Throw New miExcepcion("Modificacion cancelada a instancia del ususario")
                 Sql = String.Format("UPDATE Modulos SET MODULOS.Nombre='{0}', Modulos.Horas={1} WHERE Modulos.Id={2}",
                                    Me.txtNombreCurso.Text, Me.txtHorasCurso.Text, modu.Id)
-                End If
+            End If
                 ' MsgBox(sql)
                 cn.Open()
                 Dim cmd As New SqlCommand(Sql, cn)

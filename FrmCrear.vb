@@ -7,13 +7,15 @@ Public Class FrmCrear
     End Sub
 
     Private Sub cmdCurso_Click(sender As Object, e As EventArgs) Handles cmdCurso.Click
-        Dim frm As New FrmCursos
+        'le paso true porque es curso
+        Dim frm As New FrmCursos(True)
         frm.ShowDialog()
 
     End Sub
 
     Private Sub cmdModulos_Click(sender As Object, e As EventArgs) Handles cmdModulos.Click
-        Dim frm As New FrmModulos
+        'le paso false porque es modulo
+        Dim frm As New FrmModulos(False)
         frm.ShowDialog()
     End Sub
 
