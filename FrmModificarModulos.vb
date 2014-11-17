@@ -86,23 +86,29 @@ Public Class FrmModificarModulos
 
     Private Sub CmdModificar_Click(sender As Object, e As EventArgs) Handles CmdModificar.Click
         Try
+            Dim m As Modulo = rellenarUnModulo()
+            If m.Id = -1 Then Throw New miExcepcion("Faltan datos por rellenar")
+
             Dim id As Integer = 0
             If pos = -1 Then
                 'si es nuevo inserto nuevo registro
-               
-                Dim valores As String = "('" & Me.txtNombreCurso.Text & "', " & (CInt(Me.txtHorasCurso.Text)) & ")"
-                ' INSERT INTO Modulos (Modulos.id, Modulos.Nombre, Modulos.Horas) VALUES (14,'PRUEBA_INSERCION',100)
-
-                Dim sql As String = "INSERT INTO Modulos (Modulos.Nombre, Modulos.Horas) VALUES " & valores & ""
+                Dim Sql As String = ""
+                If pos = -1 Then
+                    Sql = String.Format("INSERT INTO Modulos (Modulos.Nombre,Modulos.Horas) VALUES ('{0}',{1})",
+                                        m.Nombre, m.horas)
+                Else
+                    Sql = String.Format("UPDATE Modulos SET MODULOS.Nombre='{0}', Modulos.Horas={1} WHERE Modulos.Id={2}",
+                                        m.Nombre, m.horas, m.Id)
+                End If
                 ' MsgBox(sql)
                 cn.Open()
-                Dim cmd As New SqlCommand(sql, cn)
+                Dim cmd As New SqlCommand(Sql, cn)
                 Dim val As Integer = 0
                 val = cmd.ExecuteNonQuery()
                 If val > 0 Then
                     MsgBox("Modulo añadido")
                 Else
-                    Throw New miExcepcion("al introducir el registro. cmd.ExecuteNonQuery da <= 0", 72, Me.Name.ToString)
+                    Throw New miExcepcion("al introducir el registro. cmd.ExecuteNonQuery da <= 0", 111, Me.Name.ToString)
                 End If
                 cn.Close()
                 Me.DialogResult = Windows.Forms.DialogResult.OK
@@ -136,6 +142,14 @@ Public Class FrmModificarModulos
             cn.Close()
         End Try
     End Sub
+    Private Function rellenarUnModulo() As Modulo
+        Dim m As New Modulo
+        If Me.txtNombreCurso.Text = "" Or Me.txtHorasCurso.Text = "" Then m.Id = -1
+        m.Nombre = Me.txtNombreCurso.Text
+        m.horas = CInt(Me.txtHorasCurso.Text)
+        Return m
+    End Function
+
     Friend Function QuieroCambiosEnCampos(ByVal t1 As String, ByVal t2 As String, ByVal t3 As String) As Boolean
         Dim respuesta As MsgBoxResult
         '   t1 es nombre viejo, t3 es nombre nuevo, t2 es el campo a cambiar
