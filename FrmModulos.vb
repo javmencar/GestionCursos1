@@ -24,6 +24,7 @@ Public Class FrmModulos
 
     Public Sub cargarlistbox()
         Me.lstModulos.Items.Clear()
+
         Dim sql As String = "select modulos.id, modulos.Nombre from modulos order by modulos.id asc"
         cn.Open()
         Dim dr As SqlDataReader

@@ -22,7 +22,7 @@ Partial Class FrmCursos
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.lstcursos = New System.Windows.Forms.ListBox()
+        Me.LstCursosOModulos = New System.Windows.Forms.ListBox()
         Me.lblLstCursos = New System.Windows.Forms.Label()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.cmdModificar = New System.Windows.Forms.Button()
@@ -32,13 +32,13 @@ Partial Class FrmCursos
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
-        'lstcursos
+        'LstCursosOModulos
         '
-        Me.lstcursos.FormattingEnabled = True
-        Me.lstcursos.Location = New System.Drawing.Point(20, 47)
-        Me.lstcursos.Name = "lstcursos"
-        Me.lstcursos.Size = New System.Drawing.Size(361, 95)
-        Me.lstcursos.TabIndex = 0
+        Me.LstCursosOModulos.FormattingEnabled = True
+        Me.LstCursosOModulos.Location = New System.Drawing.Point(20, 47)
+        Me.LstCursosOModulos.Name = "LstCursosOModulos"
+        Me.LstCursosOModulos.Size = New System.Drawing.Size(361, 95)
+        Me.LstCursosOModulos.TabIndex = 0
         '
         'lblLstCursos
         '
@@ -51,7 +51,7 @@ Partial Class FrmCursos
         '
         'GroupBox1
         '
-        Me.GroupBox1.Controls.Add(Me.lstcursos)
+        Me.GroupBox1.Controls.Add(Me.LstCursosOModulos)
         Me.GroupBox1.Controls.Add(Me.lblLstCursos)
         Me.GroupBox1.Location = New System.Drawing.Point(12, 24)
         Me.GroupBox1.Name = "GroupBox1"
@@ -113,7 +113,7 @@ Partial Class FrmCursos
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents lstcursos As System.Windows.Forms.ListBox
+    Friend WithEvents LstCursosOModulos As System.Windows.Forms.ListBox
     Friend WithEvents lblLstCursos As System.Windows.Forms.Label
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents cmdModificar As System.Windows.Forms.Button
