@@ -86,19 +86,16 @@ Public Class FrmModificarModulos
 
     Private Sub CmdModificar_Click(sender As Object, e As EventArgs) Handles CmdModificar.Click
         Try
-            Dim m As Modulo = rellenarUnModulo()
-            If m.Id = -1 Then Throw New miExcepcion("Faltan datos por rellenar")
-
-            Dim id As Integer = 0
-            If pos = -1 Then
-                'si es nuevo inserto nuevo registro
+            If Me.txtNombreCurso.Text = "" Or Me.txtHorasCurso.Text = "" Then Throw New miExcepcion("Faltan datos por rellenar")
                 Dim Sql As String = ""
                 If pos = -1 Then
-                    Sql = String.Format("INSERT INTO Modulos (Modulos.Nombre,Modulos.Horas) VALUES ('{0}',{1})",
-                                        m.Nombre, m.horas)
+                Sql = String.Format("INSERT INTO Modulos (Modulos.Nombre,Modulos.Horas) VALUES ('{0}',{1})",
+                                    Me.txtNombreCurso.Text, Me.txtHorasCurso.Text)
                 Else
-                    Sql = String.Format("UPDATE Modulos SET MODULOS.Nombre='{0}', Modulos.Horas={1} WHERE Modulos.Id={2}",
-                                        m.Nombre, m.horas, m.Id)
+                Dim cambiosvalidos As Boolean = ValidarCambios()
+                If cambiosvalidos = False Then Throw New miExcepcion("Modificacion cancelada a instancia del ususario")
+                Sql = String.Format("UPDATE Modulos SET MODULOS.Nombre='{0}', Modulos.Horas={1} WHERE Modulos.Id={2}",
+                                   Me.txtNombreCurso.Text, Me.txtHorasCurso.Text, modu.Id)
                 End If
                 ' MsgBox(sql)
                 cn.Open()
@@ -108,55 +105,33 @@ Public Class FrmModificarModulos
                 If val > 0 Then
                     MsgBox("Modulo añadido")
                 Else
-                    Throw New miExcepcion("al introducir el registro. cmd.ExecuteNonQuery da <= 0", 111, Me.Name.ToString)
+                Throw New miExcepcion("al introducir el registro. cmd.ExecuteNonQuery da <= 0", 109, Me.Name.ToString)
                 End If
                 cn.Close()
                 Me.DialogResult = Windows.Forms.DialogResult.OK
-            Else
-                'si viene con modulo selecionado, hay que alterar
-
-                cn.Open()
-                Dim cambio As Boolean = QuieroCambiosEnCampos(modu.Nombre.ToString, " como nombre de modulo ", Me.txtNombreCurso.Text)
-                If cambio = False Then Throw New miExcepcion("modificacion cancelada a instancia del usuario")
-                cambio = QuieroCambiosEnCampos(modu.horas.ToString, " horas en el modulo ", Me.txtHorasCurso.Text)
-                If cambio = False Then Throw New miExcepcion("modificacion cancelada a instancia del usuario")
-                'UPDATE Modulos SET  Modulos.Nombre='novisimo modulo' , Modulos.Horas=10 where Modulos.id=15
-
-                Dim sql As String = "UPDATE Modulos SET Modulos.Nombre='" _
-                                    & Me.txtNombreCurso.Text & "' , Modulos.Horas=" _
-                                    & CInt(Me.txtHorasCurso.Text) & " where Modulos.id=" _
-                                    & modu.Id
-                MsgBox(sql)
-                Dim cmd As New SqlCommand(sql, cn)
-                Dim val As Integer = 0
-                val = cmd.ExecuteNonQuery()
-                If val <= 0 Then Throw New miExcepcion("al modificar el registro", 91, Me.ToString)
-                MsgBox("Modulo añadido")
-                Me.DialogResult = Windows.Forms.DialogResult.OK
-            End If
-        Catch ex As miExcepcion
-            MsgBox(ex.ToString)
-        Catch ex2 As Exception
+              
+        Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
         Finally
             cn.Close()
         End Try
     End Sub
-    Private Function rellenarUnModulo() As Modulo
-        Dim m As New Modulo
-        If Me.txtNombreCurso.Text = "" Or Me.txtHorasCurso.Text = "" Then m.Id = -1
-        m.Nombre = Me.txtNombreCurso.Text
-        m.horas = CInt(Me.txtHorasCurso.Text)
-        Return m
-    End Function
-
-    Friend Function QuieroCambiosEnCampos(ByVal t1 As String, ByVal t2 As String, ByVal t3 As String) As Boolean
+    Private Function ValidarCambios() As Boolean
+        Dim vale As Boolean = True
         Dim respuesta As MsgBoxResult
-        '   t1 es nombre viejo, t3 es nombre nuevo, t2 es el campo a cambiar
-        respuesta = MsgBox("Esta cambiando de:" & vbCrLf & "'" & t1 & "' " & vbCrLf & t2 &
-                           " a " & vbCrLf & "'" & t3 & "' " & vbCrLf & t2 & vbCrLf & "¿Es correcto?", MsgBoxStyle.YesNo)
-        If respuesta = MsgBoxResult.Yes Then Return True
-        Return False
+        If Me.txtNombreCurso.Text <> modu.Nombre Then
+            respuesta = MsgBox(String.Format("Está cambiando el nombre del Modulo de'{0}' a '{1}'" & vbCrLf &
+                                                 "¿Quiere continuar con este cambio?", modu.Nombre, Me.txtNombreCurso.Text), MsgBoxStyle.YesNo)
+            If respuesta = MsgBoxResult.No Then Return False
+        End If
+        If Me.txtHorasCurso.Text <> CStr(modu.horas) Then
+            respuesta = MsgBox(String.Format("Está cambiando el numero de horas del curso de del Modulo de'{0}' a '{1}'" & vbCrLf &
+                                                "¿Quiere continuar con este cambio?", CStr(modu.horas), Me.txtHorasCurso.Text), MsgBoxStyle.YesNo)
+            If respuesta = MsgBoxResult.No Then Return False
+        End If
+        Return True
     End Function
     Private Sub cmdCancelar_Click(sender As Object, e As EventArgs) Handles cmdCancelar.Click
         Me.DialogResult = Windows.Forms.DialogResult.Cancel

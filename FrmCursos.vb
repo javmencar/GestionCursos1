@@ -64,7 +64,7 @@ Public Class FrmCursos
                             Call cargarlistbox()
                         Else
                             Dim errorEnModif As String = "error al intentar modificar el curso al volver de FrmModificarCursos(" & cont & ")"
-                            Throw New miExcepcion(errorEnModif, 41, Me.Name.ToString)
+                            Throw New miExcepcion(errorEnModif, 65, Me.Name.ToString)
                         End If
                     Else
                         Throw New miExcepcion("Error al intentar modificar un curso")
@@ -77,6 +77,9 @@ Public Class FrmCursos
                         If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
                             MsgBox("Modulo insertado" & vbCrLf & Me.Name.ToString)
                             Call cargarlistbox()
+                        Else
+                            Dim errorEnModif As String = "error al intentar modificar el modulo al volver de FrmModificarModulos(" & cont & ")"
+                            Throw New miExcepcion(errorEnModif, 81, Me.Name.ToString)
                         End If
                     End If
                 End If
@@ -152,17 +155,17 @@ Public Class FrmCursos
     Private Sub cmdBorrarCurso_Click(sender As Object, e As EventArgs) Handles cmdBorrarCurso.Click
         Try
             cont = Me.LstCursosOModulos.SelectedIndex
-            Dim tabla As String = ""
+            Dim categoria As String = ""
             If EsCurso = True Then
-                tabla = "Curso"
+                categoria = "Curso"
             Else
-                tabla = "Modulo"
+                categoria = "Modulo"
             End If
-            If cont = -1 Then Throw New miExcepcion(String.Format("No se ha seleccionado ningun {0}", tabla), 32, Me.Name.ToString)
+            If cont = -1 Then Throw New miExcepcion(String.Format("No se ha seleccionado ningun {0}", categoria), 32, Me.Name.ToString)
             Dim aux() As String = Split(Me.LstCursosOModulos.SelectedItem.ToString, "_")
             Dim respuesta1 As MsgBoxResult
             respuesta1 = MsgBox(String.Format("Ha seleccionado el {0} '{1}'" & vbCrLf &
-                                              "¿Está seguro de querer borrar el {0} con todos sus datos?", tabla, aux(1)), MsgBoxStyle.YesNo)
+                                              "¿Está seguro de querer borrar el {0} con todos sus datos?", categoria, aux(1)), MsgBoxStyle.YesNo)
             If respuesta1 = MsgBoxResult.No Then
                 Me.DialogResult = Windows.Forms.DialogResult.None
             Else
@@ -179,8 +182,8 @@ Public Class FrmCursos
                         Call borrarModulo(cont)
                         Call cargarlistbox()
                     End If
+                End If
             End If
-
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
         Catch ex As Exception

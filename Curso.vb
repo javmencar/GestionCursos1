@@ -1,8 +1,5 @@
 ﻿Imports System.Collections.Generic
 Public Class Curso
-    Implements IComparable
-
-
     Private mid, mhoras As Integer
     Private mCodCur, mNombre As String
     Private mModulos As List(Of Modulo)
@@ -51,32 +48,27 @@ Public Class Curso
             Me.mModulos = New List(Of Modulo)
         End If
         Me.mModulos.Add(m)
-
+        Call ordenarModulos()
     End Sub
     Public Sub ordenarModulos()
         If Not IsNothing(Me.mModulos) Then
-            'Dim m1, m2 As Modulo
-            Dim k As Integer = mModulos.Count
-            For i As Integer = 0 To Me.mModulos.Count - 2
-                If mModulos(i).Id > mModulos(i + 1).Id Then
-
-                End If
-
+            Dim m1 As Modulo
+            For i As Integer = 0 To mModulos.Count - 1
+                For k As Integer = 1 To Me.mModulos.Count - 2
+                    If mModulos(i).Id > mModulos(k).Id Then
+                        m1 = mModulos(i)
+                        mModulos(i) = mModulos(i + 1)
+                        mModulos(i + 1) = m1
+                    End If
+                Next
             Next
         End If
 
     End Sub
 
     Public Function ValoresAString() As String
-        Dim s, comilla, e, coma As String
-        comilla = "'"
-        e = " "
-        coma = ","
-        s = comilla & Me.CodCur & comilla & coma & e & comilla & Me.Nombre & comilla & coma & e & Me.horas
+        Dim s As String
+        s = String.Format("'{0}', '{1}', '{2}'", Me.CodCur, Me.Nombre, CStr(Me.horas))
         Return s
-    End Function
-
-    Public Function CompareTo(obj As Object) As Integer Implements IComparable.CompareTo
-        Return ""
     End Function
 End Class
