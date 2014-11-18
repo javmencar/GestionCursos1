@@ -22,16 +22,22 @@ Partial Class FrmListado
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.ListView1 = New System.Windows.Forms.ListView()
         Me.cmdNuevo = New System.Windows.Forms.Button()
         Me.cmdModificar = New System.Windows.Forms.Button()
         Me.cmdBorrar = New System.Windows.Forms.Button()
         Me.cmdSalir = New System.Windows.Forms.Button()
         Me.GbBuscar = New System.Windows.Forms.GroupBox()
-        Me.ComboBox1 = New System.Windows.Forms.ComboBox()
+        Me.TxtCampo = New System.Windows.Forms.TextBox()
         Me.LblCampo = New System.Windows.Forms.Label()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.CboFiltro = New System.Windows.Forms.ComboBox()
+        Me.cmdBuscar = New System.Windows.Forms.Button()
+        Me.GestionCursosDataSet = New GestionCursos_0._1.GestionCursosDataSet()
+        Me.GestionCursosDataSetBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.GbBuscar.SuspendLayout()
+        CType(Me.GestionCursosDataSet, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.GestionCursosDataSetBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'ListView1
@@ -80,39 +86,60 @@ Partial Class FrmListado
         '
         'GbBuscar
         '
-        Me.GbBuscar.Controls.Add(Me.TextBox1)
+        Me.GbBuscar.Controls.Add(Me.cmdBuscar)
+        Me.GbBuscar.Controls.Add(Me.TxtCampo)
         Me.GbBuscar.Controls.Add(Me.LblCampo)
-        Me.GbBuscar.Controls.Add(Me.ComboBox1)
+        Me.GbBuscar.Controls.Add(Me.CboFiltro)
         Me.GbBuscar.Location = New System.Drawing.Point(37, 386)
         Me.GbBuscar.Name = "GbBuscar"
-        Me.GbBuscar.Size = New System.Drawing.Size(511, 100)
+        Me.GbBuscar.Size = New System.Drawing.Size(627, 100)
         Me.GbBuscar.TabIndex = 5
         Me.GbBuscar.TabStop = False
         Me.GbBuscar.Text = "BUSCAR POR"
         '
-        'ComboBox1
+        'TxtCampo
         '
-        Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Location = New System.Drawing.Point(16, 20)
-        Me.ComboBox1.Name = "ComboBox1"
-        Me.ComboBox1.Size = New System.Drawing.Size(180, 21)
-        Me.ComboBox1.TabIndex = 0
+        Me.TxtCampo.Location = New System.Drawing.Point(307, 22)
+        Me.TxtCampo.Name = "TxtCampo"
+        Me.TxtCampo.Size = New System.Drawing.Size(227, 20)
+        Me.TxtCampo.TabIndex = 2
         '
         'LblCampo
         '
         Me.LblCampo.AutoSize = True
         Me.LblCampo.Location = New System.Drawing.Point(217, 25)
         Me.LblCampo.Name = "LblCampo"
-        Me.LblCampo.Size = New System.Drawing.Size(39, 13)
+        Me.LblCampo.Size = New System.Drawing.Size(84, 13)
         Me.LblCampo.TabIndex = 1
-        Me.LblCampo.Text = "Label1"
+        Me.LblCampo.Text = "Campo a buscar"
         '
-        'TextBox1
+        'CboFiltro
         '
-        Me.TextBox1.Location = New System.Drawing.Point(262, 22)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(272, 20)
-        Me.TextBox1.TabIndex = 2
+        Me.CboFiltro.DataBindings.Add(New System.Windows.Forms.Binding("SelectedValue", Me.GestionCursosDataSet, "DatosPersonales.Id", True))
+        Me.CboFiltro.FormattingEnabled = True
+        Me.CboFiltro.Location = New System.Drawing.Point(16, 20)
+        Me.CboFiltro.Name = "CboFiltro"
+        Me.CboFiltro.Size = New System.Drawing.Size(180, 21)
+        Me.CboFiltro.TabIndex = 0
+        '
+        'cmdBuscar
+        '
+        Me.cmdBuscar.Location = New System.Drawing.Point(555, 11)
+        Me.cmdBuscar.Name = "cmdBuscar"
+        Me.cmdBuscar.Size = New System.Drawing.Size(66, 41)
+        Me.cmdBuscar.TabIndex = 5
+        Me.cmdBuscar.Text = "Buscar"
+        Me.cmdBuscar.UseVisualStyleBackColor = True
+        '
+        'GestionCursosDataSet
+        '
+        Me.GestionCursosDataSet.DataSetName = "GestionCursosDataSet"
+        Me.GestionCursosDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema
+        '
+        'GestionCursosDataSetBindingSource
+        '
+        Me.GestionCursosDataSetBindingSource.DataSource = Me.GestionCursosDataSet
+        Me.GestionCursosDataSetBindingSource.Position = 0
         '
         'FrmListado
         '
@@ -129,6 +156,8 @@ Partial Class FrmListado
         Me.Text = "FrmListado"
         Me.GbBuscar.ResumeLayout(False)
         Me.GbBuscar.PerformLayout()
+        CType(Me.GestionCursosDataSet, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.GestionCursosDataSetBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -138,7 +167,10 @@ Partial Class FrmListado
     Friend WithEvents cmdBorrar As System.Windows.Forms.Button
     Friend WithEvents cmdSalir As System.Windows.Forms.Button
     Friend WithEvents GbBuscar As System.Windows.Forms.GroupBox
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents TxtCampo As System.Windows.Forms.TextBox
     Friend WithEvents LblCampo As System.Windows.Forms.Label
-    Friend WithEvents ComboBox1 As System.Windows.Forms.ComboBox
+    Friend WithEvents CboFiltro As System.Windows.Forms.ComboBox
+    Friend WithEvents cmdBuscar As System.Windows.Forms.Button
+    Friend WithEvents GestionCursosDataSetBindingSource As System.Windows.Forms.BindingSource
+    Friend WithEvents GestionCursosDataSet As GestionCursos_0._1.GestionCursosDataSet
 End Class

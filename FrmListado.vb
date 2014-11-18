@@ -28,6 +28,7 @@ Public Class FrmListado
         'cargo los nombres de las columnas
         Me.ListView1.Items.Clear()
         Call cargarSoloColumnasPrincipalesListview()
+        cargarcomboFiltro()
         Call cargarDatosEnListview()
     End Sub
     Private Sub cargarSoloColumnasPrincipalesListview()
@@ -37,13 +38,18 @@ Public Class FrmListado
         Me.ListView1.Columns.Add("Apellido1", 180, HorizontalAlignment.Center)
         Me.ListView1.Columns.Add("Apellido2", 180, HorizontalAlignment.Center)
     End Sub
-
+    Private Sub cargarcomboFiltro()
+        Me.CboFiltro.Items.Add("DNI")
+        Me.CboFiltro.Items.Add("Nombre")
+        Me.CboFiltro.Items.Add("Apellido1")
+        Me.CboFiltro.Items.Add("Apellido2")
+    End Sub
     Private Sub cargarDatosEnListview()
         Try
             Me.ListView1.Items.Clear()
             cn.Open()
             Dim sql As String = String.Format("SELECT {0}.id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2" &
-                   " FROM {0}, DatosPersonales WHERE DatosPersonales.Id={0}.IdDP ORDER BY{0}.IdDP ASC ", cat)
+                   " FROM {0}, DatosPersonales WHERE DatosPersonales.Id={0}.IdDP ORDER BY {0}.IdDP ASC ", cat)
             Dim cmd As New SqlCommand(sql, cn)
             Dim dr As SqlDataReader
             dr = cmd.ExecuteReader
@@ -313,4 +319,61 @@ Public Class FrmListado
             MsgBox(ex.ToString)
         End Try
     End Sub
+
+  
+
+    Private Sub cmdBuscar_Click(sender As Object, e As EventArgs) Handles cmdBuscar.Click
+
+        If Me.CboFiltro.SelectedIndex = -1 Then
+            MsgBox(" Seleccione un criterio de busqueda del combo")
+        Else
+            Dim crit As String = Me.CboFiltro.SelectedItem.ToString
+            Dim sb As Integer
+            Select Case crit
+                Case "DNI"
+                    sb = 1
+                Case "Nombre"
+                    sb = 2
+                Case "Apellido1"
+                    sb = 3
+                Case "Apellido2"
+                    sb = 4
+            End Select
+            Dim pos As Integer = encontrarItemEnLIstView(sb)
+            If pos = -1 Then
+                MsgBox(String.Format("El {0} a buscar no se encuentra en el listado", crit))
+            Else
+                Me.ListView1.Items.Item(pos).Selected = True
+                ' Me.ListView1.CheckedItems.Item(pos).Selected = True
+                Me.ListView1.SelectedItems.Item(0).BackColor = Color.Red
+                Me.ListView1.SelectedItems.Item(0).Checked = True
+                Me.ListView1.SelectedItems.Item(0).Focused = True
+
+            End If
+        End If
+    End Sub
+    Private Function encontrarItemEnLIstView(ByVal subit As Integer) As Integer
+        Dim encontrado As Boolean = False
+        Dim ind As Integer = -1
+        For i As Integer = 0 To Me.ListView1.Items.Count - 1
+            ' MsgBox(Me.ListView1.Items(i).SubItems(subit).Text)
+            If Me.ListView1.Items(i).SubItems(subit).Text = Me.TxtCampo.Text Then
+                encontrado = True
+                ind = i
+                Exit For
+            End If
+        Next
+        Return ind
+    End Function
+    ' While dr.Read
+    ''aqui añado un dato nuevo
+    '            Me.ListView1.Items.Add(dr(0))
+    ''aqui añado los subitems al recien añadido. El contador 'i' me llevará el item alque añadirlo
+    '            Me.ListView1.Items(i).SubItems.Add(dr(1).ToString)
+    '            Me.ListView1.Items(i).SubItems.Add(dr(2).ToString)
+    '            Me.ListView1.Items(i).SubItems.Add(dr(3).ToString)
+    '            Me.ListView1.Items(i).SubItems.Add(dr(4).ToString)
+    ''aumentamos 'i' para la siguiente vuelta
+    '            i += 1
+    '        End While
 End Class
