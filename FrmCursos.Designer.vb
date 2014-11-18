@@ -58,7 +58,6 @@ Partial Class FrmCursos
         Me.GroupBox1.Size = New System.Drawing.Size(387, 172)
         Me.GroupBox1.TabIndex = 2
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "GroupBox1"
         '
         'cmdModificar
         '

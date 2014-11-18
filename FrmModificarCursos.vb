@@ -12,12 +12,12 @@ Public Class FrmModificarCursos
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
 
     End Sub
-    Sub New(ByVal id As Integer)
-        ' Llamada necesaria para el diseñador.
-        InitializeComponent()
-        pos = id
-        ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
-    End Sub
+    'Sub New(ByVal id As Integer)
+    '    ' Llamada necesaria para el diseñador.
+    '    InitializeComponent()
+    '    pos = id
+    '    ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
+    'End Sub
     Sub New(ByVal nue As Boolean, Optional ByVal cu As Curso = Nothing)
         ' Llamada necesaria para el diseñador.
         InitializeComponent()
@@ -25,66 +25,36 @@ Public Class FrmModificarCursos
         c1 = cu
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
     End Sub
-    Sub New(ByVal cu As Curso)
-        ' Llamada necesaria para el diseñador.
-        InitializeComponent()
-        c1 = cu
-        ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
-    End Sub
-   
+    'Sub New(ByVal cu As Curso)
+    '    ' Llamada necesaria para el diseñador.
+    '    InitializeComponent()
+    '    c1 = cu
+    '    ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
+    'End Sub
+
     Private Sub FrmModificarCursos_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         '#ESTE LOAD ES PARA CUANDO ME PASAN EL OBJETO CURSO COMPLETO
         sqlcn = New SqlConnection(ConeStr)
         Try
             'hay que modificar textos de los botones segun de donde venga
-
-            'el curso es nuevo
-            If pos = -1 Then
+            If nuevo = True Then  'el curso es nuevo
                 Me.cmdModificar.Text = "crear el curso"
                 Me.cmdCancelar.Text = "cancelar la creacion"
-                Call cargarComboModulos()
-
-                'el curso ya existe
-            Else
+            Else  'el curso ya existe
                 Me.cmdModificar.Text = "modificar este curso"
                 Me.cmdCancelar.Text = "cancelar la modificacion"
-                Call cargarComboModulos()
+                If IsNothing(c1) Then Throw New miExcepcion("Error al cargar formulario. Por favor vuelva al formulario anterior")
                 Call cargarformulario()
-                'además al ser modificacion, bloqueo el código para que no se pueda tocar
+                ' al ser modificacion, bloqueo el código para que no se pueda tocar
                 Me.txtCodcur.Enabled = False
             End If
+            Call cargarComboModulos()
         Catch ex As miExcepcion
             MsgBox(ex.ToString)
         Catch ex2 As Exception
             MsgBox(ex2.ToString)
         End Try
-    End Sub
-    'Sub cargarformulario(ByVal idCur As Integer)
-    '    cn = New SqlConnection(ConeStr)
-    '    Try
-    '        cn.Open()
-    '        Dim sql As String = "select cursos.codcur, cursos.nombre, cursos.horas " &
-    '                           " from cursos where cursos.id=" & idCur
-
-    '        ' MsgBox(sql)
-    '        Dim cmd As New SqlCommand(sql, cn)
-    '        Dim dr As SqlDataReader
-    '        dr = cmd.ExecuteReader
-    '        dr.Read()
-
-    '        If Not (dr.HasRows) Then Throw New miExcepcion("No hay registros con ese id", 56, Me.Name.ToString)
-    '        Me.txtCodcur.Text = dr(0).ToString
-    '        Me.txtNombreCurso.Text = dr(1).ToString
-    '        Me.txtHorasCurso.Text = dr(2).ToString
-    '        cn.Close()
-
-    '        Call cargarListBox(idCur)
-    '    Catch ex As miExcepcion
-    '        MsgBox(ex.ToString)
-    '    Catch ex2 As Exception
-    '        MsgBox(ex2.ToString)
-    '    End Try
-    'End Sub
+    End Sub  
     Sub cargarformulario()
         Me.LstModulos.Items.Clear()
         Me.txtCodcur.Text = c1.CodCur.ToString
@@ -93,75 +63,37 @@ Public Class FrmModificarCursos
         If Not IsNothing(c1.modulos) Then
             For Each m As Modulo In c1.modulos
                 If m.Id > 0 AndAlso m.Id < 10 Then
-                    Me.LstModulos.Items.Add("0" & m.Id.ToString & "_" & m.Nombre.ToString)
+                    Me.LstModulos.Items.Add(String.Format("0{0}_{1}", m.Id.ToString, m.Nombre))
                 Else
-                    Me.LstModulos.Items.Add(m.Id.ToString & "_" & m.Nombre.ToString)
+                    Me.LstModulos.Items.Add(String.Format("{0}_{1}", m.Id.ToString, m.Nombre))
                 End If
-
             Next
+            Me.LstModulos.Sorted = True
         End If
-    End Sub
-    Public Sub cargarListBox(ByVal i As Integer)
-        'hay que comprobar si se puede cargar aqui dede objeto
-        cn = New SqlConnection(ConeStr)
-        Try
-            Me.LstModulos.Items.Clear()
-            cn.Open()
-            Dim sql As String = "SELECT Modulos.Id, Modulos.Nombre" &
-                " FROM modulos, Cursos_Modulos" &
-                " WHERE Cursos_Modulos.IdMod = modulos.Id And Cursos_Modulos.Idcur =" & i &
-                " ORDER BY Modulos.id ASC"
-            '   MsgBox(sql)
-            Dim cmd As New SqlCommand(sql, cn)
-            Dim dr As SqlDataReader
-            dr = cmd.ExecuteReader
-            ' If Not (dr.HasRows) Then Throw New miExcepcion("No hay modulos a mostrar", 83, Me.Name.ToString)
-            Do While dr.Read
-                If dr(0) > 0 AndAlso dr(0) < 10 Then
-                    Me.LstModulos.Items.Add("0" & dr(0) & "_" & dr(1))
-                End If
-                Me.LstModulos.Items.Add(dr(0) & "_" & dr(1))
-            Loop
-        Catch ex As miExcepcion
-            MsgBox(ex.ToString)
-        Catch ex2 As Exception
-            MsgBox(ex2.ToString)
-        Finally
-            cn.Close()
-        End Try
     End Sub
     Sub cargarComboModulos()
         cn = New SqlConnection(ConeStr)
         Try
             Me.CboModulos.Items.Clear()
             cn.Open()
-            Dim sql As String = "select modulos.id, modulos.nombre from  modulos order by modulos.id asc"
+            Dim sql As String = "SELECT Modulos.Id, Modulos.Nombre FROM  Modulos ORDER BY Modulos.Id ASC"
             Dim cmd As New SqlCommand(sql, cn)
             Dim dr As SqlDataReader
             Dim i As Integer = 0
             dr = cmd.ExecuteReader
             Do While dr.Read
                 i += 1
-                Me.CboModulos.Items.Add(dr(0) & "_" & dr(1))
+                Me.CboModulos.Items.Add((String.Format("{0}_{1}", dr(0), dr(1))))
             Loop
+            ''asi se ordenan
+            'Me.CboModulos.Sorted = True
         Catch ex As Exception
             MsgBox(ex)
         Finally
             cn.Close()
         End Try
     End Sub
-  
-    Private Sub ordenarelListbox(ByVal lst As ListBox)
-        Dim arr As New ArrayList
-        For Each ite As String In lst.Items
-            arr.Add(ite)
-        Next
-        Me.LstModulos.Items.Clear()
-        arr.Sort()
-        For Each ite As String In arr
-            lst.Items.Add(ite.ToString)
-        Next
-    End Sub
+
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
         '# VALE IGUAL PARA MODIFICAR QUE PARA CREAR
 
@@ -188,17 +120,17 @@ Public Class FrmModificarCursos
                     Dim NumReg As Integer = crearCurso()
                     If NumReg = -1 Then Throw New miExcepcion("Error al crear el curso", 146, Me.Name.ToString)
                     'antes de meter los modulos, ordenamos el listbox
-                    Call ordenarelListbox(Me.LstModulos)
+                    Me.LstModulos.Sorted = True
                     ' si hay modulos, metemos los modulos
                     If Me.LstModulos.Items.Count > 0 Then
-                        Dim ultcur As Integer = averiguarUltimoIndice("Cursos")
-                        If ultcur = -1 Then Throw New miExcepcion("Error al buscar Cursos.Id")
-                        Dim ListaDeModuloEnListbox As New List(Of Integer)
+                        'Dim ultcur As Integer = averiguarUltimoIndice("Cursos")
+
+                        Dim ListaDeModuloEnListbox As New List(Of String)
                         '   y vuelco en el array los id modulos, que saco con una funcion 
                         ListaDeModuloEnListbox = localizarIdModulosEnListbox()
                         '   recorro el array de idmodulos
-                        For Each indMod As Integer In ListaDeModuloEnListbox
-                            Call añadirModulosAlCurso(ultcur, indMod)
+                        For Each indMod As String In ListaDeModuloEnListbox
+                            Call añadirModulosAlCurso(CStr(NumReg), indMod)
                         Next
                     End If
                     MsgBox("Curso creado con exito" & vbCrLf & "aviso1")
@@ -213,10 +145,10 @@ Public Class FrmModificarCursos
                 cambioNombre = QuieroCambiosEnCampos(c1.Nombre, " como nombre de curso ", Me.txtNombreCurso.Text)
                 'comprobamos si queremos seguro las nuevas horas
                 cambioHoras = QuieroCambiosEnCampos(c1.horas.ToString, " horas en el curso ", Me.txtHorasCurso.Text)
-                nomrep = valorRepetido(Me.txtNombreCurso.Text, "SELECT Cursos.nombre from Cursos")
+                nomrep = valorRepetido(Me.txtNombreCurso.Text, "SELECT Cursos.Nombre FROM Cursos")
                 If nomrep = True AndAlso Me.txtNombreCurso.Text <> c1.Nombre Then Throw New miExcepcion("El nombre ya está en uso en otro Curso")
                 'ordenamos el listbox
-                Call ordenarelListbox(Me.LstModulos)
+                Me.LstModulos.Sorted = True
                 Call ModificarCurso()
                 'MsgBox("Curso Modificado con exito" & vbCrLf & "aviso1")
                 Me.DialogResult = Windows.Forms.DialogResult.OK
@@ -231,15 +163,14 @@ Public Class FrmModificarCursos
     End Sub
     Friend Function QuieroCambiosEnCampos(ByVal t1 As String, ByVal t2 As String, ByVal t3 As String) As Boolean
         Dim respuesta As MsgBoxResult
-        '   t1 es nombre viejo, t3 es nombre nuevo, t2 es el campo a cambiar
-        respuesta = MsgBox("Esta cambiando de:" & vbCrLf & "'" & t1 & "' " & vbCrLf & t2 &
-                           " a " & vbCrLf & "'" & t3 & "' " & vbCrLf & t2 & vbCrLf & "¿Es correcto?", MsgBoxStyle.YesNo)
-
+        '   t1 es nombre viejo, t2 es el campo a cambiar y t3 es nombre nuevo
+        respuesta = String.Format("Está cambiando de '{0}' {1} a '{2}'" & vbCrLf &
+                                "¿Es correcto?", t1, t2, t3, MsgBoxStyle.YesNo)
         If respuesta = MsgBoxResult.Yes Then Return True
         Return False
     End Function
-    Friend Function valorRepetido(ByVal val As String, consulta As String) As Boolean
-        ' por ahora solo string
+    Private Function valorRepetido(ByVal val As String, consulta As String) As Boolean
+
         cn = New SqlConnection(ConeStr)
         Try
             cn.Open()
@@ -247,9 +178,7 @@ Public Class FrmModificarCursos
             Dim cmd As New SqlCommand(sql, cn)
             Dim dr As SqlDataReader
             dr = cmd.ExecuteReader
-            'If Not (dr.HasRows) Then Throw New miExcepcion("no hay valores para comparar")
             Do While dr.Read
-                'si el nombre es el mismo, pero la id es distinta, el nombre ya está en uso
                 If dr(0) = val Then Return True
             Loop
         Catch ex2 As miExcepcion
@@ -270,7 +199,6 @@ Public Class FrmModificarCursos
             Dim sql2 As String
             sql2 = String.Format("INSERT INTO Cursos (Cursos.CodCur,Cursos.Nombre, Cursos.Horas) VALUES ('{0}', '{1}', {2})",
                                 Me.txtCodcur.Text, Me.txtNombreCurso.Text, CInt(Me.txtHorasCurso.Text))
-
             MsgBox(sql2)
             Dim cmd2 As New SqlCommand(sql2, cn)
             Dim i2 As Integer = cmd2.ExecuteNonQuery
@@ -305,7 +233,7 @@ Public Class FrmModificarCursos
                 'si hay algo en el listbox, comprobar
                 Dim aux(2) As String
                 aux = Split(Me.CboModulos.SelectedItem.ToString, "_")
-                Dim listaModulos As List(Of Integer)
+                Dim listaModulos As List(Of String)
                 listaModulos = localizarIdModulosEnListbox()
                 Dim repe As Boolean = repetidos(aux(0), listaModulos)
                 If repe = True Then Throw New miExcepcion("ese modulo ya está en la lista")
@@ -322,54 +250,18 @@ Public Class FrmModificarCursos
         End Try
 
     End Sub
-    Private Function repetidos(ByVal p1 As Integer, ByVal ls1 As List(Of Integer)) As Boolean
-        For Each it As Integer In ls1
-            If it = p1 Then Return True
+    Private Function repetidos(ByVal s As String, ByVal lst As List(Of String)) As Boolean
+        For Each it As String In lst
+            If it = s Then Return True
         Next
         Return False
     End Function
-    Private Sub ModificarCurso(id)
-        cn = New SqlConnection(ConeStr)
-        Try
-            Dim sql2 As String
-            sql2 = "UPDATE Cursos SET cursos.codcur='" & Me.txtCodcur.Text &
-                "', cursos.nombre='" & Me.txtNombreCurso.Text &
-                "', cursos.horas=" & CInt(Me.txtHorasCurso.Text) &
-                " where cursos.id=" & id
-            ' MsgBox(sql2)
-            cn.Open()
-            Dim cmd As New SqlCommand(sql2, cn)
-            Dim i As Integer = cmd.ExecuteNonQuery
-            cn.Close()
-            'una vez modificado el curso, le añado los posibles modulos
-            '   Primero me cepillo los que hay
-            Call CepillarmeLosModulos(id)
-            '   luego los vuelco otra vez
-            Dim ModulosEnElListbox As List(Of Integer)
-            '   y vuelco en el array los id modulos, que saco con una funcion 
-            ModulosEnElListbox = localizarIdModulosEnListbox()
-            '   recorro el array de idmodulos
-            For Each indMod As Integer In ModulosEnElListbox
-                '   y los añado uno por uno
-                Call añadirModulosAlCurso(pos, indMod)
-            Next
-        Catch ex As miExcepcion
-            MsgBox(ex.ToString)
-        Catch ex2 As Exception
-            MsgBox(ex2.ToString)
-        Finally
-
-        End Try
-
-    End Sub
     Private Sub ModificarCurso()
         cn = New SqlConnection(ConeStr)
         Try
             Dim sql2 As String
-            sql2 = "UPDATE Cursos SET cursos.codcur='" & Me.txtCodcur.Text &
-                "', cursos.nombre='" & Me.txtNombreCurso.Text &
-                "', cursos.horas=" & CInt(Me.txtHorasCurso.Text) &
-                " where cursos.id=" & c1.Id
+            sql2 = String.Format("UPDATE Cursos SET Cursos.CodCur='{0}', Cursos.Nombre='{1}',Cursos.Horas={2} WHERE Cursos.Id={3}",
+                                 Me.txtCodcur.Text, Me.txtNombreCurso.Text, Me.txtHorasCurso.Text)
             ' MsgBox(sql2)
             cn.Open()
             Dim cmd As New SqlCommand(sql2, cn)
@@ -384,13 +276,13 @@ Public Class FrmModificarCursos
             Call CepillarmeLosModulos(c1.Id)
             c1.modulos.Clear()
             '   luego los vuelco otra vez
-            Dim ModulosEnElListbox As List(Of Integer)
+            Dim ModulosEnElListbox As List(Of String)
             '   y vuelco en el array los id modulos, que saco con una funcion 
             ModulosEnElListbox = localizarIdModulosEnListbox()
             '   recorro el array de idmodulos
-            For Each indMod As Integer In ModulosEnElListbox
+            For Each indMod As String In ModulosEnElListbox
                 '   y los añado uno por uno, primero a la base de datos
-                Call añadirModulosAlCurso(c1.Id, indMod)
+                Call añadirModulosAlCurso(CStr(c1.Id), indMod)
                 'y luego al objeto
                 c1.añadirModulos(CargarModulo(indMod))
             Next
@@ -402,11 +294,10 @@ Public Class FrmModificarCursos
 
         End Try
     End Sub
-    
 
     Private Sub cmdNuevoModulo_Click(sender As Object, e As EventArgs) Handles cmdNuevoModulo.Click
-        Dim i As Integer = -1
-        Dim frm As New FrmModificarModulos(i)
+        'true es nuevo
+        Dim frm As New FrmModificarModulos(True)
         If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
             'si se ha creado correctamente el modulo, vuelvo a cargar el combo
             Call cargarComboModulos()
@@ -419,18 +310,18 @@ Public Class FrmModificarCursos
         End If
         pos = 0
     End Sub
-    Friend Function localizarIdModulosEnListbox() As List(Of Integer)
-        Dim list As New List(Of Integer)
+    Private Function localizarIdModulosEnListbox() As List(Of String)
+        Dim list As New List(Of String)
         Dim aux(2) As String
         'recorro todo el listbox
         For Each item As String In Me.LstModulos.Items
             'divido las filas para sacar el id de los modulos(la primera parte del string del listbox)
             aux = Split(item.ToString, "_")
-            list.Add(CInt(aux(0)))
+            list.Add(aux(0))
         Next
         Return list
     End Function
-    Friend Function averiguarUltimoIndice(ByVal t As String) As Integer
+    Private Function averiguarUltimoIndice(ByVal t As String) As Integer
         cn = New SqlConnection(ConeStr)
         Dim i As Integer = 0
         Try
@@ -462,12 +353,12 @@ Public Class FrmModificarCursos
         End If
 
     End Sub
-    Friend Sub añadirModulosAlCurso(ByVal ic As Integer, im As Integer)
+    Private Sub añadirModulosAlCurso(ByVal ic As String, im As String)
         cn = New SqlConnection(ConeStr)
         Try
             Dim sql As String
-            sql = "INSERT INTO Cursos_Modulos(Cursos_Modulos.Idcur, Cursos_Modulos.IdMod)" & _
-                "VALUES(" & ic & ", " & im & ")"
+            sql = String.Format("INSERT INTO Cursos_Modulos(Cursos_Modulos.Idcur, Cursos_Modulos.IdMod) VALUES ({0}, {1})", ic, im)
+
             'MsgBox(sql)
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
@@ -482,12 +373,13 @@ Public Class FrmModificarCursos
             cn.Close()
         End Try
     End Sub
-    Friend Function CargarModulo(im As Integer) As Modulo
+    Private Function CargarModulo(im As String) As Modulo
         Dim m As New Modulo
         cn = New SqlConnection(ConeStr)
         Try
             cn.Open()
-            Dim sql As String = "select modulos.Id, modulos.Nombre, Modulos.Horas from Modulos where modulos.Id=" & im
+            Dim sql As String '
+            sql = String.Format("SELECT Modulos.ID, Modulos.Nombre,Modulos.Horas FROM Modulos WHERE Modulos.Id={0}", im)
             Dim dr As SqlDataReader
             Dim cmd As New SqlCommand(sql, cn)
             dr = cmd.ExecuteReader

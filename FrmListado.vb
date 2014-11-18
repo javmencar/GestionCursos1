@@ -1,7 +1,7 @@
 ﻿
 Imports System.Data.SqlClient
 Public Class FrmListado
-    Public pos As Integer
+    '  Public pos As Integer
     Public cn As SqlConnection
     Public cat As String
     'Public Sub New()
@@ -12,10 +12,14 @@ Public Class FrmListado
     '    ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
 
     'End Sub
-    Public Sub New(ByVal i As Integer)
+    Public Sub New(ByVal al As Boolean)
         ' Llamada necesaria para el diseñador.
         InitializeComponent()
-        pos = i
+        If al = True Then
+            cat = "Alumnos"
+        Else
+            cat = "Profesores"
+        End If
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
     End Sub
     Private Sub FrmListado_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -24,16 +28,7 @@ Public Class FrmListado
         'cargo los nombres de las columnas
         Me.ListView1.Items.Clear()
         Call cargarSoloColumnasPrincipalesListview()
-        Select Case pos
-            Case 0
-                cat = "Profesores"
-                Call cargarDatosEnListview()
-            Case 1
-                cat = "Alumnos"
-                Call cargarDatosEnListview()
-            Case Else
-                MsgBox("Por ahora esto no debería salir")
-        End Select
+        Call cargarDatosEnListview()
     End Sub
     Private Sub cargarSoloColumnasPrincipalesListview()
         Me.ListView1.Columns.Add("Id", 25, HorizontalAlignment.Center)
@@ -48,7 +43,7 @@ Public Class FrmListado
             Me.ListView1.Items.Clear()
             cn.Open()
             Dim sql As String = String.Format("SELECT {0}.id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2" &
-                   " FROM {0}, DatosPersonales WHERE DatosPersonales.Id={0}.IdDP", cat)
+                   " FROM {0}, DatosPersonales WHERE DatosPersonales.Id={0}.IdDP ORDER BY{0}.IdDP ASC ", cat)
             Dim cmd As New SqlCommand(sql, cn)
             Dim dr As SqlDataReader
             dr = cmd.ExecuteReader
@@ -75,12 +70,11 @@ Public Class FrmListado
     End Sub
 
     Private Sub cmdNuevo_Click(sender As Object, e As EventArgs) Handles cmdNuevo.Click
-
-        Select Case pos
-            Case 0
-                Dim pro As New DatosPersonales
-                'el objeto, si el profesor o alumno, si es nuevo o no
-                Dim frm As New FrmFichas(pro, 0, True)
+        Dim dpers As New DatosPersonales
+        Select Case cat
+            Case "Profesores"
+                'el objeto, si es alumno, si es nuevo
+                Dim frm As New FrmFichas(dpers, False, True)
                 If frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
                     MsgBox("Proceso cancelado")
                 ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
@@ -91,10 +85,9 @@ Public Class FrmListado
                     MsgBox("Se ha insertado correctamente el Profesor en la base de datos")
                     Call cargarDatosEnListview()
                 End If
-            Case 1
-                'el objeto, si el profesor o alumno, si es nuevo o no
-                Dim alu As New DatosPersonales
-                Dim frm As New FrmFichas(alu, 1, True)
+            Case "Alumnos"
+                'el objeto, si es alumno, si es nuevo 
+                Dim frm As New FrmFichas(dpers, True, True)
                 If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
 
                     MsgBox("Se ha insertado correctamente el alumno en la base de datos")
@@ -116,26 +109,28 @@ Public Class FrmListado
                    "Para ello pinche en el número de ID del elemento que quiera")
         Else
             Dim DP As DatosPersonales = RellenarDatosPersonales()
-            Select Case pos
-                Case 0
-                    'el objeto, si el profesor o alumno, si es nuevo o no
-                    Dim frm As New FrmFichas(DP, 0, False)
-                    If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
-                        MsgBox("Operacion Realizada con éxito")
-                        Call cargarDatosEnListview()
-                    Else
-                        MsgBox("Salida sin crear nada")
-                    End If
-                Case 1
-                    'el objeto, si el profesor o alumno, si es nuevo o no
-                    Dim frm As New FrmFichas(DP, 1, False)
-                    If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
-                        MsgBox("Operacion Realizada con éxito")
-                        Call cargarDatosEnListview()
-                    Else
-                        MsgBox("Salida sin modificar nada")
-                    End If
-            End Select
+            If Not IsNothing(DP) Then
+                Select Case cat
+                    Case "Profesores"
+                        'el objeto, si es alumno, si es nuevo 
+                        Dim frm As New FrmFichas(DP, False, False)
+                        If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                            MsgBox("Operacion Realizada con éxito")
+                            Call cargarDatosEnListview()
+                        Else
+                            MsgBox("Salida sin crear nada")
+                        End If
+                    Case "Alumnos"
+                        'el objeto, si es alumno, si es nuevo
+                        Dim frm As New FrmFichas(DP, True, False)
+                        If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                            MsgBox("Operacion Realizada con éxito")
+                            Call cargarDatosEnListview()
+                        Else
+                            MsgBox("Salida sin modificar nada")
+                        End If
+                End Select
+            End If
         End If
     End Sub
     Private Function RellenarDatosPersonales() As DatosPersonales

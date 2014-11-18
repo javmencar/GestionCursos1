@@ -23,6 +23,15 @@ Public Class FrmCursos
     Dim cur As Curso
     Private Sub FrmCursos_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         cn = New SqlConnection(ConeStr)
+        If EsCurso = True Then
+            Me.cmdNuevoCurso.Text = "Crear un Nuevo Curso"
+            Me.cmdBorrarCurso.Text = "Modificar el Curso Seleccionado"
+            Me.lblLstCursos.Text = "Listado de Cursos Existentes"
+        Else
+            Me.cmdNuevoCurso.Text = "Crear un Nuevo Modulo"
+            Me.cmdBorrarCurso.Text = "Modificar el Modulo Seleccionado"
+            Me.lblLstCursos.Text = "Listado de Modulos Existentes"
+        End If
         Call cargarlistbox()
     End Sub
     Private Sub cargarlistbox()
@@ -30,17 +39,18 @@ Public Class FrmCursos
         Me.LstCursosOModulos.Items.Clear()
         Dim Sql As String = ""
         If EsCurso = True Then
-            Sql = "SELECT cursos.codcur, cursos.nombre FROM cursos ORDER BY cursos.Id ASC"
+            Sql = "SELECT Cursos.Codcur, Cursos.Nombre FROM Cursos ORDER BY Cursos.Id ASC"
         Else
-            Sql = "SELECT modulos.id, modulos.Nombre FROM modulos ORDER BY modulos.id ASC"
+            Sql = "SELECT Modulos.Id, Modulos.Nombre FROM Modulos ORDER BY Modulos.Id ASC"
         End If
         cn.Open()
         Dim dr As SqlDataReader
         Dim cmd As New SqlCommand(Sql, cn)
         dr = cmd.ExecuteReader
         Do While dr.Read
-            Me.LstCursosOModulos.Items.Add(dr(0) & "_" & dr(1))
+            Me.LstCursosOModulos.Items.Add(String.Format("{0}_{1}", dr(0), dr(1)))
         Loop
+        Me.LstCursosOModulos.Sorted = True
         cn.Close()
     End Sub
 
@@ -58,7 +68,7 @@ Public Class FrmCursos
                     c = cargarElCurso(cont)
                     If Not IsNothing(c) Then
                         ' le paso el objeto curso cargado con todos los datos
-                        Dim frm As New FrmModificarCursos(c)
+                        Dim frm As New FrmModificarCursos(False, c)
                         If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
                             MsgBox("Curso insertado" & vbCrLf & Me.Name.ToString)
                             Call cargarlistbox()
@@ -73,7 +83,7 @@ Public Class FrmCursos
                     Dim m As Modulo
                     m = cargarElModulo(cont)
                     If Not IsNothing(m) Then
-                        Dim frm As New FrmModificarModulos(m)
+                        Dim frm As New FrmModificarModulos(False, m)
                         If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
                             MsgBox("Modulo insertado" & vbCrLf & Me.Name.ToString)
                             Call cargarlistbox()
@@ -100,7 +110,7 @@ Public Class FrmCursos
             'como no hay nada seleccionado le paso -1 para que sepa que será nuevo
             cont = -1
             If EsCurso = True Then
-                Dim frm As New FrmModificarCursos(cont)
+                Dim frm As New FrmModificarCursos(True)
                 If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
                     MsgBox("Nuevo Curso insertado")
                     Call cargarlistbox()
@@ -109,7 +119,7 @@ Public Class FrmCursos
                     'Throw New miExcepcion("error al insertar el Curso")
                 End If
             Else
-                Dim frm As New FrmModificarModulos(cont)
+                Dim frm As New FrmModificarModulos(True)
                 If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
                     MsgBox("Nuevo Modulo insertado")
                     Call cargarlistbox()
@@ -195,9 +205,7 @@ Public Class FrmCursos
         'ojo, borrar primero las tablas secundarias, si no, da error
         If borrar("Cursos_Modulos", True, id) = True AndAlso borrar("Cursos", False, id) = True Then
             MsgBox("Curso Borrado con exito")
-
         End If
-
     End Sub
     Private Sub borrarModulo(ByVal id As Integer)
         'una llamada por cada tabla afectada. Como la funcion  es booleana, la puedo usar en una comparacion
@@ -212,17 +220,14 @@ Public Class FrmCursos
             Dim sql As String
             If EsTablaSecundaria = False Then
                 sql = String.Format("DELETE FROM {0} WHERE {0}.Id={1}", tabla, ident)
-                ' sql = "DELETE FROM " & tabla & " WHERE " & tabla & ".Id=" & ident
             Else
                 sql = String.Format("DELETE FROM {0} WHERE {0}.IdCur={1}", tabla, ident)
-                ' sql = "DELETE FROM " & tabla & " WHERE " & tabla & ".IdCur=" & ident
             End If
             ' MsgBox(sql)
             cn.Open()
             Dim cmd2 As New SqlCommand(sql, cn)
             Dim i As Integer = cmd2.ExecuteNonQuery
             If i <= 0 AndAlso EsTablaSecundaria = False Then Throw New miExcepcion("error al borrar elemento de " & tabla, 155, Me.Name.ToString)
-            '  MsgBox("elemento de " & tabla & " eliminado correctamente")
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
         Catch ex As Exception
@@ -235,7 +240,7 @@ Public Class FrmCursos
         Dim cu As New Curso
 
         Try
-            Dim sql As String = "select * from cursos where cursos.Id=" & i
+            Dim sql As String = "SELECT * FROM Cursos WHERE Cursos.Id=" & i
             cn.Open()
             Dim dr As SqlDataReader
             Dim cmd As New SqlCommand(sql, cn)
@@ -248,8 +253,8 @@ Public Class FrmCursos
             End If
             Dim cn2 As New SqlConnection(ConeStr)
             cn2.Open()
-            Dim sql2 As String = "select modulos.Id, modulos.Nombre, Modulos.Horas from Modulos," &
-                "Cursos_Modulos where modulos.Id=Cursos_Modulos.IdMod and Cursos_Modulos.Idcur=" & i
+            Dim sql2 As String = "SELECT Modulos.Id, Modulos.Nombre, Modulos.Horas FROM Modulos," &
+                "Cursos_Modulos WHERE Modulos.Id=Cursos_Modulos.IdMod and Cursos_Modulos.Idcur=" & i
             Dim dr2 As SqlDataReader
             Dim cmd2 As New SqlCommand(sql2, cn2)
             dr2 = cmd2.ExecuteReader

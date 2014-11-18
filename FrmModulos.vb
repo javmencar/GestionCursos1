@@ -38,39 +38,65 @@ Public Class FrmModulos
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
         Try
+            If Me.lstModulos.SelectedIndex = -1 Then Throw New miExcepcion("Debe seleccionar un Modulo a modificar")
             Dim aux(2) As String
             aux = Split(Me.lstModulos.SelectedItem.ToString, "_")
             cont = CInt(aux(0))
-            If cont = -1 Then
-            ' Throw New miExcepcion("No se ha seleccionado nada")
-            Throw New miExcepcion("No se ha seleccionado nada", 43, Me.Name.ToString)
-            Else
-            Dim frm As New FrmModificarModulos(cont)
+            Dim mo As Modulo = rellenarModulo(cont)
+            If Not IsNothing(mo) Then
+                Dim frm As New FrmModificarModulos(False, mo)
 
-            If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
-                MsgBox("Modulo insertado")
+                If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                    MsgBox("Modulo insertado")
 
-                Call cargarlistbox()
+                    Call cargarlistbox()
+                End If
             Else
                 ' Throw New miExcepcion("error al insertar el Modulo")
                 Throw New miExcepcion("error al insertar el Modulo", 53, Me.Name.ToString)
             End If
-            End If
-        Catch ex As miExcepcion
-            MsgBox(ex.ToString)
-        Catch ex2 As Exception
+
+        Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
         Finally
             'reseteo el contador
             cont = 0
         End Try
     End Sub
-
+    Private Function rellenarModulo(ByVal id As String) As Modulo
+        Dim m As New Modulo
+        Try
+            Dim cn As New SqlConnection(ConeStr)
+            cn.Open()
+            Dim sql As String = String.Format("SELECT * FROM Modulos WHERE Modulos.Id={0}", id)
+            Dim cmd As New SqlCommand(sql, cn)
+            Dim dr As SqlDataReader
+            dr = cmd.ExecuteReader
+            If dr.Read Then
+                m.Id = dr(0)
+                m.Nombre = dr(1)
+                m.horas = dr(2)
+            Else
+                Throw New miExcepcion("Error al cargar el modulo")
+            End If
+        Catch ex2 As miExcepcion
+            m = Nothing
+            MsgBox(ex2.ToString)
+        Catch ex As Exception
+            m = Nothing
+            MsgBox(ex.ToString)
+        Finally
+            cn.Close()
+        End Try
+        Return m
+    End Function
     Private Sub cmdNuevoModulo_Click(sender As Object, e As EventArgs) Handles cmdNuevoModulo.Click
         Try
             'si no hay nada seleccionado le paso -1 para que sepa que será nuevo
             cont = -1
-            Dim frm As New FrmModificarModulos(cont)
+            Dim frm As New FrmModificarModulos(True)
             If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
                 MsgBox("Modulo insertado")
                 Call cargarlistbox()

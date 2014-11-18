@@ -24,7 +24,7 @@ Partial Class FrmCrear
     Private Sub InitializeComponent()
         Me.cmdCurso = New System.Windows.Forms.Button()
         Me.cmdModulos = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.cmdAlumnos = New System.Windows.Forms.Button()
         Me.CmdProfesores = New System.Windows.Forms.Button()
         Me.lblCrear = New System.Windows.Forms.Label()
         Me.SuspendLayout()
@@ -47,15 +47,15 @@ Partial Class FrmCrear
         Me.cmdModulos.Text = "Modulos"
         Me.cmdModulos.UseVisualStyleBackColor = True
         '
-        'Button1
+        'cmdAlumnos
         '
-        Me.Button1.AccessibleDescription = "cmdAlumnos"
-        Me.Button1.Location = New System.Drawing.Point(247, 69)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(105, 60)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Fichas de Alumnos"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.cmdAlumnos.AccessibleDescription = "cmdAlumnos"
+        Me.cmdAlumnos.Location = New System.Drawing.Point(247, 69)
+        Me.cmdAlumnos.Name = "cmdAlumnos"
+        Me.cmdAlumnos.Size = New System.Drawing.Size(105, 60)
+        Me.cmdAlumnos.TabIndex = 2
+        Me.cmdAlumnos.Text = "Fichas de Alumnos"
+        Me.cmdAlumnos.UseVisualStyleBackColor = True
         '
         'CmdProfesores
         '
@@ -83,7 +83,7 @@ Partial Class FrmCrear
         Me.ClientSize = New System.Drawing.Size(509, 233)
         Me.Controls.Add(Me.lblCrear)
         Me.Controls.Add(Me.CmdProfesores)
-        Me.Controls.Add(Me.Button1)
+        Me.Controls.Add(Me.cmdAlumnos)
         Me.Controls.Add(Me.cmdModulos)
         Me.Controls.Add(Me.cmdCurso)
         Me.Name = "FrmCrear"
@@ -94,7 +94,7 @@ Partial Class FrmCrear
     End Sub
     Friend WithEvents cmdCurso As System.Windows.Forms.Button
     Friend WithEvents cmdModulos As System.Windows.Forms.Button
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents cmdAlumnos As System.Windows.Forms.Button
     Friend WithEvents CmdProfesores As System.Windows.Forms.Button
     Friend WithEvents lblCrear As System.Windows.Forms.Label
 End Class

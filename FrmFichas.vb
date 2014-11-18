@@ -14,16 +14,16 @@ Public Class FrmFichas
     '    ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
 
     'End Sub
-    Sub New(ByVal Da As DatosPersonales, ByVal c As Integer, ByVal nw As Boolean)
+    Sub New(ByVal Da As DatosPersonales, ByVal al As Boolean, ByVal nw As Boolean)
         ' Llamada necesaria para el diseñador.
         InitializeComponent()
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
         nuevo = nw
         DP = Da
-        If c = 0 Then
-            cat = "Profesores"
-        ElseIf c = 1 Then
+        If al = True Then
             cat = "Alumnos"
+        Else
+            cat = "Profesores"
         End If
     End Sub
 
