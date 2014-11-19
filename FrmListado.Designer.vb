@@ -35,6 +35,7 @@ Partial Class FrmListado
         Me.CboFiltro = New System.Windows.Forms.ComboBox()
         Me.GestionCursosDataSet = New GestionCursos_0._1.GestionCursosDataSet()
         Me.GestionCursosDataSetBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.GbBuscar.SuspendLayout()
         CType(Me.GestionCursosDataSet, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.GestionCursosDataSetBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -42,9 +43,9 @@ Partial Class FrmListado
         '
         'ListView1
         '
-        Me.ListView1.Location = New System.Drawing.Point(13, 13)
+        Me.ListView1.Location = New System.Drawing.Point(13, 35)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(668, 320)
+        Me.ListView1.Size = New System.Drawing.Size(668, 298)
         Me.ListView1.TabIndex = 0
         Me.ListView1.UseCompatibleStateImageBehavior = False
         '
@@ -141,11 +142,21 @@ Partial Class FrmListado
         Me.GestionCursosDataSetBindingSource.DataSource = Me.GestionCursosDataSet
         Me.GestionCursosDataSetBindingSource.Position = 0
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(296, 13)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(39, 13)
+        Me.Label1.TabIndex = 6
+        Me.Label1.Text = "Label1"
+        '
         'FrmListado
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(836, 492)
+        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.GbBuscar)
         Me.Controls.Add(Me.cmdSalir)
         Me.Controls.Add(Me.cmdBorrar)
@@ -159,6 +170,7 @@ Partial Class FrmListado
         CType(Me.GestionCursosDataSet, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.GestionCursosDataSetBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
     Friend WithEvents ListView1 As System.Windows.Forms.ListView
@@ -173,4 +185,5 @@ Partial Class FrmListado
     Friend WithEvents cmdBuscar As System.Windows.Forms.Button
     Friend WithEvents GestionCursosDataSetBindingSource As System.Windows.Forms.BindingSource
     Friend WithEvents GestionCursosDataSet As GestionCursos_0._1.GestionCursosDataSet
+    Friend WithEvents Label1 As System.Windows.Forms.Label
 End Class

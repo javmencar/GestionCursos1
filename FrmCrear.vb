@@ -18,13 +18,19 @@ Public Class FrmCrear
         frm.ShowDialog()
     End Sub
     Private Sub cmdAlumnos_Click(sender As Object, e As EventArgs) Handles cmdAlumnos.Click
-        'alumnos, le paso true como valor
-        Dim frm As New FrmListado(True)
+        'alumnos, le paso 1 como valor
+        Dim frm As New FrmListado(1)
         frm.ShowDialog()
     End Sub
     Private Sub CmdProfesores_Click(sender As Object, e As EventArgs) Handles CmdProfesores.Click
-        'profesor, le mando false como valor
-        Dim frm As New FrmListado(False)
+        'profesor, le mando 2 como valor
+        Dim frm As New FrmListado(2)
+        frm.ShowDialog()
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        'candidato, le mando 3 como valor
+        Dim frm As New FrmListado(3)
         frm.ShowDialog()
     End Sub
 End Class

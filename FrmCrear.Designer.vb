@@ -27,6 +27,7 @@ Partial Class FrmCrear
         Me.cmdAlumnos = New System.Windows.Forms.Button()
         Me.CmdProfesores = New System.Windows.Forms.Button()
         Me.lblCrear = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'cmdCurso
@@ -50,7 +51,7 @@ Partial Class FrmCrear
         'cmdAlumnos
         '
         Me.cmdAlumnos.AccessibleDescription = "cmdAlumnos"
-        Me.cmdAlumnos.Location = New System.Drawing.Point(247, 69)
+        Me.cmdAlumnos.Location = New System.Drawing.Point(230, 69)
         Me.cmdAlumnos.Name = "cmdAlumnos"
         Me.cmdAlumnos.Size = New System.Drawing.Size(105, 60)
         Me.cmdAlumnos.TabIndex = 2
@@ -59,7 +60,7 @@ Partial Class FrmCrear
         '
         'CmdProfesores
         '
-        Me.CmdProfesores.Location = New System.Drawing.Point(369, 69)
+        Me.CmdProfesores.Location = New System.Drawing.Point(352, 69)
         Me.CmdProfesores.Name = "CmdProfesores"
         Me.CmdProfesores.Size = New System.Drawing.Size(112, 60)
         Me.CmdProfesores.TabIndex = 3
@@ -76,11 +77,21 @@ Partial Class FrmCrear
         Me.lblCrear.TabIndex = 4
         Me.lblCrear.Text = "¿Que es lo que desea crear o modificar?"
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(174, 152)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(112, 60)
+        Me.Button1.TabIndex = 5
+        Me.Button1.Text = "Ficha de Candidato a cursos"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
         'FrmCrear
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(509, 233)
+        Me.ClientSize = New System.Drawing.Size(484, 239)
+        Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.lblCrear)
         Me.Controls.Add(Me.CmdProfesores)
         Me.Controls.Add(Me.cmdAlumnos)
@@ -97,4 +108,5 @@ Partial Class FrmCrear
     Friend WithEvents cmdAlumnos As System.Windows.Forms.Button
     Friend WithEvents CmdProfesores As System.Windows.Forms.Button
     Friend WithEvents lblCrear As System.Windows.Forms.Label
+    Friend WithEvents Button1 As System.Windows.Forms.Button
 End Class

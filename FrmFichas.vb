@@ -14,17 +14,20 @@ Public Class FrmFichas
     '    ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
 
     'End Sub
-    Sub New(ByVal Da As DatosPersonales, ByVal al As Boolean, ByVal nw As Boolean)
+    Sub New(ByVal Da As DatosPersonales, ByVal tipo As Integer, ByVal nw As Boolean)
         ' Llamada necesaria para el diseñador.
         InitializeComponent()
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
         nuevo = nw
         DP = Da
-        If al = True Then
-            cat = "Alumnos"
-        Else
-            cat = "Profesores"
-        End If
+        Select Case tipo
+            Case 1
+                cat = "Alumnos"
+            Case 2
+                cat = "Profesores"
+            Case 3
+                cat = "Candidatos"
+        End Select
     End Sub
 
     Private Sub FrmFichas_Load(sender As Object, e As EventArgs) Handles MyBase.Load
