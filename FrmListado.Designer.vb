@@ -29,10 +29,10 @@ Partial Class FrmListado
         Me.cmdBorrar = New System.Windows.Forms.Button()
         Me.cmdSalir = New System.Windows.Forms.Button()
         Me.GbBuscar = New System.Windows.Forms.GroupBox()
+        Me.cmdBuscar = New System.Windows.Forms.Button()
         Me.TxtCampo = New System.Windows.Forms.TextBox()
         Me.LblCampo = New System.Windows.Forms.Label()
         Me.CboFiltro = New System.Windows.Forms.ComboBox()
-        Me.cmdBuscar = New System.Windows.Forms.Button()
         Me.GestionCursosDataSet = New GestionCursos_0._1.GestionCursosDataSet()
         Me.GestionCursosDataSetBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.GbBuscar.SuspendLayout()
@@ -44,7 +44,7 @@ Partial Class FrmListado
         '
         Me.ListView1.Location = New System.Drawing.Point(13, 13)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(651, 367)
+        Me.ListView1.Size = New System.Drawing.Size(668, 320)
         Me.ListView1.TabIndex = 0
         Me.ListView1.UseCompatibleStateImageBehavior = False
         '
@@ -97,6 +97,15 @@ Partial Class FrmListado
         Me.GbBuscar.TabStop = False
         Me.GbBuscar.Text = "BUSCAR POR"
         '
+        'cmdBuscar
+        '
+        Me.cmdBuscar.Location = New System.Drawing.Point(555, 11)
+        Me.cmdBuscar.Name = "cmdBuscar"
+        Me.cmdBuscar.Size = New System.Drawing.Size(66, 41)
+        Me.cmdBuscar.TabIndex = 5
+        Me.cmdBuscar.Text = "Buscar"
+        Me.cmdBuscar.UseVisualStyleBackColor = True
+        '
         'TxtCampo
         '
         Me.TxtCampo.Location = New System.Drawing.Point(307, 22)
@@ -121,15 +130,6 @@ Partial Class FrmListado
         Me.CboFiltro.Name = "CboFiltro"
         Me.CboFiltro.Size = New System.Drawing.Size(180, 21)
         Me.CboFiltro.TabIndex = 0
-        '
-        'cmdBuscar
-        '
-        Me.cmdBuscar.Location = New System.Drawing.Point(555, 11)
-        Me.cmdBuscar.Name = "cmdBuscar"
-        Me.cmdBuscar.Size = New System.Drawing.Size(66, 41)
-        Me.cmdBuscar.TabIndex = 5
-        Me.cmdBuscar.Text = "Buscar"
-        Me.cmdBuscar.UseVisualStyleBackColor = True
         '
         'GestionCursosDataSet
         '

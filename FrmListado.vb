@@ -4,6 +4,7 @@ Public Class FrmListado
     '  Public pos As Integer
     Public cn As SqlConnection
     Public cat As String
+    Dim LstClk(4) As Integer
     'Public Sub New()
 
     '    ' Llamada necesaria para el diseñador.
@@ -24,25 +25,33 @@ Public Class FrmListado
     End Sub
     Private Sub FrmListado_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         cn = New SqlConnection(ConeStr)
-        Me.ListView1.View = View.Details
-        'cargo los nombres de las columnas
-        Me.ListView1.Items.Clear()
-        Call cargarSoloColumnasPrincipalesListview()
-        cargarcomboFiltro()
+      limpiarListView()
+        With Me.CboFiltro
+            .Items.Add("DNI")
+            .Items.Add("Nombre")
+            .Items.Add("Apellido1")
+            .Items.Add("Apellido2")
+        End With
+
+    End Sub
+    Private Sub limpiarListView()
+        Me.ListView1.Refresh()
+        With Me.ListView1
+            .View = View.Details
+            .FullRowSelect = True
+            .GridLines = True
+            .Sorting = SortOrder.Ascending
+            '.FocusedItem.EnsureVisible()
+            .Items.Clear()
+            With .Columns
+                .Add("Id", 25, HorizontalAlignment.Center)
+                .Add("DNI", 75, HorizontalAlignment.Center)
+                .Add("Nombre", 180, HorizontalAlignment.Center)
+                .Add("Apellido1", 180, HorizontalAlignment.Center)
+                .Add("Apellido2", 180, HorizontalAlignment.Center)
+            End With
+        End With
         Call cargarDatosEnListview()
-    End Sub
-    Private Sub cargarSoloColumnasPrincipalesListview()
-        Me.ListView1.Columns.Add("Id", 25, HorizontalAlignment.Center)
-        Me.ListView1.Columns.Add("DNI", 75, HorizontalAlignment.Center)
-        Me.ListView1.Columns.Add("Nombre", 180, HorizontalAlignment.Center)
-        Me.ListView1.Columns.Add("Apellido1", 180, HorizontalAlignment.Center)
-        Me.ListView1.Columns.Add("Apellido2", 180, HorizontalAlignment.Center)
-    End Sub
-    Private Sub cargarcomboFiltro()
-        Me.CboFiltro.Items.Add("DNI")
-        Me.CboFiltro.Items.Add("Nombre")
-        Me.CboFiltro.Items.Add("Apellido1")
-        Me.CboFiltro.Items.Add("Apellido2")
     End Sub
     Private Sub cargarDatosEnListview()
         Try
@@ -122,7 +131,6 @@ Public Class FrmListado
                         Dim frm As New FrmFichas(DP, False, False)
                         If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
                             MsgBox("Operacion Realizada con éxito")
-                            Call cargarDatosEnListview()
                         Else
                             MsgBox("Salida sin crear nada")
                         End If
@@ -131,13 +139,13 @@ Public Class FrmListado
                         Dim frm As New FrmFichas(DP, True, False)
                         If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
                             MsgBox("Operacion Realizada con éxito")
-                            Call cargarDatosEnListview()
                         Else
                             MsgBox("Salida sin modificar nada")
                         End If
                 End Select
             End If
-        End If
+            Call limpiarListView()
+            End If
     End Sub
     Private Function RellenarDatosPersonales() As DatosPersonales
         Dim DP As New DatosPersonales
@@ -343,12 +351,15 @@ Public Class FrmListado
             If pos = -1 Then
                 MsgBox(String.Format("El {0} a buscar no se encuentra en el listado", crit))
             Else
+                Me.ListView1.Focus()
                 Me.ListView1.Items.Item(pos).Selected = True
-                ' Me.ListView1.CheckedItems.Item(pos).Selected = True
-                Me.ListView1.SelectedItems.Item(0).BackColor = Color.Red
-                Me.ListView1.SelectedItems.Item(0).Checked = True
+                ' If Me.ListView1.SelectedIndices.Count = 1 Then
                 Me.ListView1.SelectedItems.Item(0).Focused = True
-
+                If Not IsNothing(Me.ListView1.FocusedItem) Then
+                    Me.ListView1.FocusedItem.EnsureVisible()
+                    Me.ListView1.SelectedItems.Item(0).Checked = True
+                End If
+                'End If
             End If
         End If
     End Sub
@@ -365,15 +376,5 @@ Public Class FrmListado
         Next
         Return ind
     End Function
-    ' While dr.Read
-    ''aqui añado un dato nuevo
-    '            Me.ListView1.Items.Add(dr(0))
-    ''aqui añado los subitems al recien añadido. El contador 'i' me llevará el item alque añadirlo
-    '            Me.ListView1.Items(i).SubItems.Add(dr(1).ToString)
-    '            Me.ListView1.Items(i).SubItems.Add(dr(2).ToString)
-    '            Me.ListView1.Items(i).SubItems.Add(dr(3).ToString)
-    '            Me.ListView1.Items(i).SubItems.Add(dr(4).ToString)
-    ''aumentamos 'i' para la siguiente vuelta
-    '            i += 1
-    '        End While
+
 End Class
