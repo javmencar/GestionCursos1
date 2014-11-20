@@ -289,8 +289,10 @@ Public Class FrmFichas
                     ' Dim nuevaId As Integer = cogerUltimaId()
                     NuIdDP = cogerUltimaId()
                     If NuIdDP = -1 Then Throw New miExcepcion("Error al calcular la ultima ID")
-                    Dim comp As Integer = insertarEnTablacategoria(NuIdDP)
-                    If comp = -1 Then Throw New miExcepcion(String.Format("Problema al insertar en {0}", cat))
+                    If cat = "alumnos" Or cat = "Profesores then" Then
+                        Dim comp As Integer = insertarEnTablacategoria(NuIdDP)
+                        If comp = -1 Then Throw New miExcepcion(String.Format("Problema al insertar en {0}", cat))
+                    End If
                 Else
                     'estoy modificando
                     Call cargarCambiosEnDPYaCreado(DPConDatosDelFormulario)
@@ -452,8 +454,7 @@ Public Class FrmFichas
         End Try
 
 
-    End Sub
-   
+    End Sub 
     Public Function cambiarFormatoFecha(ByVal f As Date) As String
         Dim vieja, dias, meses, años As String
         vieja = f.ToString
@@ -686,7 +687,9 @@ Public Class FrmFichas
         End Try
     End Function
     Public Function ValidaNumSS(ByVal NSS As String) As Boolean
+
         Dim CP As String = NSS.Substring(0, 2)
+        If CP = "  " Then Return False
         If Not IsNumeric(CP) AndAlso (CInt(CP) < 1 Or CInt(CP) > 50) Then Return False
         Dim NssSCC As String = NSS.Substring(0, NSS.Length - 2)
         Dim dc As String = GetDCNumSegSocial(NssSCC, False)
@@ -719,31 +722,39 @@ Public Class FrmFichas
     Public Function borrarDatosPersonales(ByVal i As String) As Boolean
         Dim num, idAl_Pr As Integer
         Dim sqlIdAl, sqlalumnos, sqlDatosPersonales As String
-        sqlIdAl = String.Format("Select Alumnos.Id from DatosPersonales, {0} where DatosPersonales.Id={0}.IdDP and DatosPersonales.Id={1}", cat, i)
+        sqlIdAl = String.Format("Select {0}.Id from DatosPersonales, {0} where DatosPersonales.Id={0}.IdDP and DatosPersonales.Id={1}", cat, i)
         ' MsgBox(sqlIdAl)
         sqlDatosPersonales = String.Format("DELETE FROM DatosPersonales WHERE DatosPersonales.Id={0}", DP.Id)
         ' MsgBox(sqlDatosPersonales)
         Dim cn2 As New SqlConnection(ConeStr)
         Try
-            Dim cmdIdAl, cmdDelTablaAl_PR, cmdDelDP As SqlCommand
-            cn.Open()
-            'hago la consulta para obtener la ID del Alumno
-            cmdIdAl = New SqlCommand(sqlIdAl, cn)
-            idAl_Pr = cmdIdAl.ExecuteScalar
-            If idAl_Pr < 0 Then Throw New miExcepcion(String.Format("Error al obtener la Id de {0}", cat))
-            cn.Close()
-            'con el Id correcto, lo cargo en la sql de borrado
-            sqlalumnos = String.Format("delete from {0} where {0}.id={1}", cat, idAl_Pr)
-            'MsgBox(sqlalumnos)
-            'Abro otra vez para borrar en tabla Alumnos o profesores
-            cn.Open()
-            cmdDelTablaAl_PR = New SqlCommand(sqlalumnos, cn)
-            num = cmdDelTablaAl_PR.ExecuteNonQuery
-            If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar de {0}", cat))
-            cn2.Open()
-            cmdDelDP = New SqlCommand(sqlDatosPersonales, cn2)
-            num = cmdDelDP.ExecuteNonQuery
-            If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))
+            Dim cmdDelDP As SqlCommand
+            If cat = "Candidatos" Then
+                cn.Open()
+                cmdDelDP = New SqlCommand(sqlDatosPersonales, cn)
+                num = cmdDelDP.ExecuteNonQuery
+                If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))
+            Else
+                Dim cmdIdAl, cmdDelTablaAl_PR As SqlCommand
+                cn.Open()
+                'hago la consulta para obtener la ID del Alumno
+                cmdIdAl = New SqlCommand(sqlIdAl, cn)
+                idAl_Pr = cmdIdAl.ExecuteScalar
+                If idAl_Pr < 0 Then Throw New miExcepcion(String.Format("Error al obtener la Id de {0}", cat))
+                cn.Close()
+                'con el Id correcto, lo cargo en la sql de borrado
+                sqlalumnos = String.Format("delete from {0} where {0}.id={1}", cat, idAl_Pr)
+                'MsgBox(sqlalumnos)
+                'Abro otra vez para borrar en tabla Alumnos o profesores
+                cn.Open()
+                cmdDelTablaAl_PR = New SqlCommand(sqlalumnos, cn)
+                num = cmdDelTablaAl_PR.ExecuteNonQuery
+                If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar de {0}", cat))
+                cn2.Open()
+                cmdDelDP = New SqlCommand(sqlDatosPersonales, cn2)
+                num = cmdDelDP.ExecuteNonQuery
+                If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))
+            End If
         Catch ex2 As miExcepcion
             Return False
             MsgBox(ex2.ToString)

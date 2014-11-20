@@ -314,25 +314,33 @@ Public Class FrmListado
         ' MsgBox(sqlDatosPersonales)
         Dim cn2 As New SqlConnection(ConeStr)
         Try
-            cn.Open()
-            'hago la consulta para obtener la ID de DatosPersonales
-            Dim cmd1, cmd2, cmd3 As SqlCommand
-            cmd1 = New SqlCommand(sqlIdDP, cn)
-            idDP = cmd1.ExecuteScalar
-            cn.Close()
-            cn.Open()
-            cmd2 = New SqlCommand(sqlalumnos, cn)
-            num = cmd2.ExecuteNonQuery
-            If num < 0 Then
-                If cat = "Alumnos" Then Throw New miExcepcion("Error al borrar Alumno")
-                If cat = "Profesores" Then Throw New miExcepcion("Error al borrar Profesor")
+            If cat = "Candidatos" Then
+                cn.Open()
+                Dim cmd1 As SqlCommand
+                sqlDatosPersonales &= CStr(i)
+                cmd1 = New SqlCommand(sqlDatosPersonales, cn)
+                num = cmd1.ExecuteNonQuery
+                If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))
+            Else
+                cn.Open()
+                'hago la consulta para obtener la ID de DatosPersonales
+                Dim cmd1, cmd2, cmd3 As SqlCommand
+                cmd1 = New SqlCommand(sqlIdDP, cn)
+                idDP = cmd1.ExecuteScalar
+                cn.Close()
+                cn.Open()
+                cmd2 = New SqlCommand(sqlalumnos, cn)
+                num = cmd2.ExecuteNonQuery
+                If num < 0 Then
+                    Throw New miExcepcion(String.Format("error al borrar  {0}", cat))
+                End If
+                cn2.Open()
+                sqlDatosPersonales &= CStr(idDP)
+                ' MsgBox("Ahora con el Id: " & vbCrLf & sqlDatosPersonales)
+                cmd3 = New SqlCommand(sqlDatosPersonales, cn2)
+                num = cmd3.ExecuteNonQuery
+                If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))
             End If
-            cn2.Open()
-            sqlDatosPersonales &= CStr(idDP)
-            ' MsgBox("Ahora con el Id: " & vbCrLf & sqlDatosPersonales)
-            cmd3 = New SqlCommand(sqlDatosPersonales, cn2)
-            num = cmd2.ExecuteNonQuery
-            If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))
         Catch ex2 As miExcepcion
             num = -1
             'MsgBox(ex2.ToString)
