@@ -36,6 +36,7 @@ Public Class FrmFichas
         Me.LstExpSector.Items.Clear()
         Me.CboExpSector.SelectedIndex = -1
         NuIdDP = -1
+        Me.cmdAñadirAAlumnos.Visible = False
         If nuevo = True Then
             DP = New DatosPersonales
             Me.cmdModificar.Text = "CREAR NUEVA FICHA"
@@ -109,13 +110,27 @@ Public Class FrmFichas
             ' Me.txtFecEntr.Text = CStr(.FecEntr)
             Me.txtValoracion.Text = .Valoracion
             If Not IsNothing(.Apto) Then
+                Dim esta As Boolean
                 Select Case .Apto
                     Case "Apto"
                         Me.optAptoSi.Select()
+                        Me.cmdAñadirAAlumnos.Visible = True
+                        If nuevo = True Then
+
+                            Me.cmdAñadirAAlumnos.Enabled = True
+                        Else
+                            If cat = "Alumnos" Or cat = "Profesores" Then
+                                esta = EstaEnTablas(.Id)
+                                If esta = False Then Me.cmdAñadirAAlumnos.Enabled = True
+                            End If
+                        End If
+
                     Case "No Apto"
                         Me.OptAptoNo.Select()
                     Case "Pendiente"
                         Me.OptAptoPendiente.Select()
+                        Me.cmdAñadirAAlumnos.Visible = True
+                        Me.cmdAñadirAAlumnos.Enabled = False
                 End Select
             Else
                 Me.OptAptoPendiente.Select()
@@ -125,6 +140,20 @@ Public Class FrmFichas
             Me.PicBx1.Tag = .PathFoto
         End With
     End Sub
+    Private Function EstaEnTablas(ByVal i As String) As Boolean
+        Try
+            Dim sql As String = String.Format("SELECT {0}.Id FROM DatosPersonales, {0} " &
+                                              "WHERE DatosPersonales.Id={0}.IdDP AND DatosPersonales.Id={1}", cat, i)
+            Dim cmd As SqlCommand
+            cn.Open()
+            cmd = New SqlCommand(sql, cn)
+            Dim j As Integer = cmd.ExecuteScalar
+            If j > 0 Then Return True
+        Catch ex As Exception
+            Return False
+        End Try
+        Return False
+    End Function
     Private Function rellenarObjetoDesdeCampos() As DatosPersonales
         Dim D1 As New DatosPersonales
         Try
@@ -238,8 +267,11 @@ Public Class FrmFichas
         Return D1
     End Function
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
+        Call ModificarOCrear()
+    End Sub
+    Private Sub ModificarOCrear()
+        'Lo he metido en un sub  porque se repite todo en añadir a alumnos
         Try
-
             Dim DPConDatosDelFormulario As DatosPersonales
             Dim fallos As List(Of String)
             If nuevo = True Then
@@ -274,7 +306,7 @@ Public Class FrmFichas
                 respuesta = MsgBox("Está creando una ficha con estas incidencias: " & vbCrLf & recogefallos &
                             vbCrLf & "¿Seguro que desea seguir?", MsgBoxStyle.YesNo)
                 If respuesta = MsgBoxResult.No Then
-                    'vuelvo a cargar los datos originales(excepto la foto)
+                    'vuelvo a cargar los datos originales
                     Call rellenarCamposDesdeObjeto(DP)
                     Throw New miExcepcion("Operación cancelada a peticion del usuario")
                 End If
@@ -767,4 +799,28 @@ Public Class FrmFichas
         End Try
         Return True
     End Function
+
+    Private Sub cmdAñadirAAlumnos_Click(sender As Object, e As EventArgs) Handles cmdAñadirAAlumnos.Click
+        If Me.optAptoSi.Checked = False Then
+            MsgBox("El candidato no está calificado como Apto")
+        Else
+            cat = "Alumnos"
+            Call ModificarOCrear()
+        End If
+    End Sub
+
+    Private Sub optAptoSi_Click(sender As Object, e As EventArgs) Handles optAptoSi.Click
+        Me.cmdAñadirAAlumnos.Visible = True
+        Me.cmdAñadirAAlumnos.Enabled = True
+    End Sub
+
+    Private Sub OptAptoNo_Click(sender As Object, e As EventArgs) Handles OptAptoNo.Click
+        Me.cmdAñadirAAlumnos.Visible = False
+        Me.cmdAñadirAAlumnos.Enabled = False
+    End Sub
+
+    Private Sub OptAptoPendiente_Click(sender As Object, e As EventArgs) Handles OptAptoPendiente.Click
+        Me.cmdAñadirAAlumnos.Visible = True
+        Me.cmdAñadirAAlumnos.Enabled = False
+    End Sub
 End Class

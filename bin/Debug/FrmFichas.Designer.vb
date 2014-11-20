@@ -88,6 +88,7 @@ Partial Class FrmFichas
         Me.cmdCambiarFoto = New System.Windows.Forms.Button()
         Me.LblFoto = New System.Windows.Forms.Label()
         Me.cmdBorrar = New System.Windows.Forms.Button()
+        Me.cmdAñadirAAlumnos = New System.Windows.Forms.Button()
         CType(Me.PicBx1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GbInaem.SuspendLayout()
         Me.GbExperiencia.SuspendLayout()
@@ -665,7 +666,7 @@ Partial Class FrmFichas
         '
         'cmdSalir
         '
-        Me.cmdSalir.Location = New System.Drawing.Point(897, 438)
+        Me.cmdSalir.Location = New System.Drawing.Point(897, 522)
         Me.cmdSalir.Name = "cmdSalir"
         Me.cmdSalir.Size = New System.Drawing.Size(104, 52)
         Me.cmdSalir.TabIndex = 21
@@ -717,11 +718,21 @@ Partial Class FrmFichas
         Me.cmdBorrar.Text = "Borrar La Ficha Completa"
         Me.cmdBorrar.UseVisualStyleBackColor = True
         '
+        'cmdAñadirAAlumnos
+        '
+        Me.cmdAñadirAAlumnos.Location = New System.Drawing.Point(897, 436)
+        Me.cmdAñadirAAlumnos.Name = "cmdAñadirAAlumnos"
+        Me.cmdAñadirAAlumnos.Size = New System.Drawing.Size(104, 52)
+        Me.cmdAñadirAAlumnos.TabIndex = 48
+        Me.cmdAñadirAAlumnos.Text = "Añadir  Como Alumno"
+        Me.cmdAñadirAAlumnos.UseVisualStyleBackColor = True
+        '
         'FrmFichas
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1013, 636)
+        Me.Controls.Add(Me.cmdAñadirAAlumnos)
         Me.Controls.Add(Me.cmdBorrar)
         Me.Controls.Add(Me.LblFoto)
         Me.Controls.Add(Me.cmdCambiarFoto)
@@ -844,4 +855,5 @@ Partial Class FrmFichas
     Friend WithEvents cmdCambiarFoto As System.Windows.Forms.Button
     Friend WithEvents LblFoto As System.Windows.Forms.Label
     Friend WithEvents cmdBorrar As System.Windows.Forms.Button
+    Friend WithEvents cmdAñadirAAlumnos As System.Windows.Forms.Button
 End Class
