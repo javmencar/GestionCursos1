@@ -81,11 +81,12 @@ Public Class FrmListado
                              "  WHERE DatosPersonales.Id=Profesores.IdDP ORDER BY Profesores.IdDP ASC "
                 Case "Candidatos"
                     sql = "SELECT DatosPersonales.Id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2" &
-                            " FROM DatosPersonales WHERE " &
-                             " NOT EXISTS (SELECT 1 FROM Alumnos WHERE Alumnos.IdDP=DatosPersonales.Id) AND " &
-                             " NOT EXISTS (SELECT 1 FROM Profesores WHERE Profesores.IdDP=DatosPersonales.Id)"
+                            " FROM DatosPersonales " &
+                             " WHERE NOT EXISTS (SELECT 1 FROM Alumnos WHERE Alumnos.IdDP=DatosPersonales.Id) " &
+                             " AND NOT EXISTS (SELECT 1 FROM Profesores WHERE Profesores.IdDP=DatosPersonales.Id)" &
+                             " ORDER BY DatosPersonales.Id ASC"
                 Case Else
-                    MsgBox("Algo va mal")
+                    Throw New miExcepcion("error al cargar los datos en el listview")
             End Select
             'Dim sql As String = String.Format("SELECT {0}.id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2" &
             '       " FROM {0}, DatosPersonales WHERE DatosPersonales.Id={0}.IdDP ORDER BY {0}.IdDP ASC ", cat)
@@ -332,7 +333,8 @@ Public Class FrmListado
                 cmd2 = New SqlCommand(sqlalumnos, cn)
                 num = cmd2.ExecuteNonQuery
                 If num < 0 Then
-                    Throw New miExcepcion(String.Format("error al borrar  {0}", cat))
+                    Dim aviso As String = (String.Format("error al borrar  {0}", cat))
+                    Throw New miExcepcion(aviso.Substring(0, aviso.Length - 1))
                 End If
                 cn2.Open()
                 sqlDatosPersonales &= CStr(idDP)
