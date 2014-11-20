@@ -70,3 +70,6 @@ C:\GIT\GestionCursos1\bin\Debug\FrmFichas.vb
 C:\GIT\GestionCursos1\bin\Debug\Form2.resx
 C:\GIT\GestionCursos1\bin\Debug\Form2.Designer.vb
 C:\GIT\GestionCursos1\bin\Debug\Form2.vb
+C:\GIT\GestionCursos1\bin\Debug\FrmCursos.resx
+C:\GIT\GestionCursos1\bin\Debug\FrmCursos.Designer.vb
+C:\GIT\GestionCursos1\bin\Debug\FrmCursos.vb

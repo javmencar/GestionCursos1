@@ -17,7 +17,9 @@ Public Class Form1
     'End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        Me.Button1.Visible = False
+        Me.Label1.Visible = False
+        Me.CmdGestionar.Enabled = False
     End Sub
 
     Private Sub cmdCrear_Click(sender As Object, e As EventArgs) Handles cmdCrear.Click
