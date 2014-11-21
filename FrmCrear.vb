@@ -27,8 +27,7 @@ Public Class FrmCrear
         Dim frm As New FrmListado(2)
         frm.ShowDialog()
     End Sub
-
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub cmdCandidatos_Click(sender As Object, e As EventArgs) Handles cmdCandidatos.Click
         'candidato, le mando 3 como valor
         Dim frm As New FrmListado(3)
         frm.ShowDialog()

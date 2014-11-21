@@ -260,4 +260,37 @@ Public Class DatosPersonales
         End With
         Return lista
     End Function
+
+    Public Function colec() As Collection
+        Dim c As New Collection
+        With c
+            .Add(Id)
+            .Add(DNI)
+            .Add(Nombre)
+            .Add(Apellido1)
+            .Add(Apellido2)
+            .Add(Fnac)
+            .Add(LugNac)
+            .Add(Edad)
+            .Add(Domicilio)
+            .Add(CP)
+            .Add(Poblacion)
+            .Add(Tel1)
+            .Add(Tel2)
+            .Add(NumSS)
+            .Add(InInaem)
+            .Add(InFecha)
+            .Add(NivelEstudios)
+            .Add(ExpSector)
+            .Add(TallaCamiseta)
+            .Add(TallaPantalon)
+            .Add(TallaZapato)
+            .Add(Entrevistador)
+            .Add(FecEntr)
+            .Add(Valoracion)
+            .Add(Apto)
+            .Add(PathFoto)
+        End With
+        Return c
+    End Function
 End Class

@@ -1,13 +1,11 @@
 ﻿
 Imports System.Data.SqlClient
 Public Class FrmListado
-    '  Public pos As Integer
+
     Public cn As SqlConnection
     Public cat As String
     Dim tipo As Integer
-    'Dim LstClk(4) As Integer
     'Public Sub New()
-
     '    ' Llamada necesaria para el diseñador.
     '    InitializeComponent()
 
@@ -18,7 +16,6 @@ Public Class FrmListado
         ' Llamada necesaria para el diseñador.
         InitializeComponent()
         tipo = ti
-       
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
     End Sub
     Private Sub FrmListado_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -80,6 +77,7 @@ Public Class FrmListado
                              " WHERE NOT EXISTS (SELECT 1 FROM Alumnos WHERE Alumnos.IdDP=DatosPersonales.Id) " &
                              " AND NOT EXISTS (SELECT 1 FROM Profesores WHERE Profesores.IdDP=DatosPersonales.Id)" &
                              " ORDER BY DatosPersonales.Id ASC"
+                    'ojo a los WHERE NOT EXISTS, es para descartar alumnos y profesores 
                 Case Else
                     Throw New miExcepcion("error al cargar los datos en el listview")
             End Select
@@ -117,9 +115,9 @@ Public Class FrmListado
             MsgBox(String.Format("Se ha insertado correctamente el {0} en la base de datos", aviso))
             Call cargarDatosEnListview()
         ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
-            Throw New miExcepcion("cancelado a piticion del usuario")
+            Throw New miExcepcion("cancelado a peticion del usuario")
         ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
-            Throw New miExcepcion("cancelado a piticion del usuario")
+            Throw New miExcepcion("cancelado a peticion del usuario")
         End If
     End Sub
 
@@ -151,13 +149,13 @@ Public Class FrmListado
         Dim DP As New DatosPersonales
         Try
             cn = New SqlConnection(ConeStr)
-            'recupero el id del alumno que quiero modificar a traves del listview
+            'recupero el id del elemento que quiero modificar a traves del listview
             Dim id As Integer = CInt(Me.ListView1.SelectedItems(0).Text)
-            Dim sql As String
-            If cat = "Candidatos" Then
-                sql = "SELECT * FROM DatosPersonales WHERE DatosPersonales.Id=" & id
+            Dim Sql As String
+            If tipo = 3 Then '3 es candidato
+                sql = String.Format("SELECT * FROM DatosPersonales WHERE DatosPersonales.Id={0}", id)
             Else
-                sql = String.Format("select * from DatosPersonales, {0} where DatosPersonales.Id={0}.IdDP and {0}.id={1}", cat, id)
+                Sql = String.Format("SELECT * FROM DatosPersonales, {0} WHERE DatosPersonales.Id={0}.IdDP and {0}.Id={1}", cat, id)
             End If
             ' MsgBox(sql)
             cn.Open()

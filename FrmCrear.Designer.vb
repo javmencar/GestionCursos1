@@ -27,12 +27,12 @@ Partial Class FrmCrear
         Me.cmdAlumnos = New System.Windows.Forms.Button()
         Me.CmdProfesores = New System.Windows.Forms.Button()
         Me.lblCrear = New System.Windows.Forms.Label()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.cmdCandidatos = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'cmdCurso
         '
-        Me.cmdCurso.Location = New System.Drawing.Point(12, 69)
+        Me.cmdCurso.Location = New System.Drawing.Point(12, 96)
         Me.cmdCurso.Name = "cmdCurso"
         Me.cmdCurso.Size = New System.Drawing.Size(94, 60)
         Me.cmdCurso.TabIndex = 0
@@ -41,7 +41,7 @@ Partial Class FrmCrear
         '
         'cmdModulos
         '
-        Me.cmdModulos.Location = New System.Drawing.Point(121, 69)
+        Me.cmdModulos.Location = New System.Drawing.Point(125, 96)
         Me.cmdModulos.Name = "cmdModulos"
         Me.cmdModulos.Size = New System.Drawing.Size(100, 60)
         Me.cmdModulos.TabIndex = 1
@@ -51,7 +51,7 @@ Partial Class FrmCrear
         'cmdAlumnos
         '
         Me.cmdAlumnos.AccessibleDescription = "cmdAlumnos"
-        Me.cmdAlumnos.Location = New System.Drawing.Point(230, 69)
+        Me.cmdAlumnos.Location = New System.Drawing.Point(242, 96)
         Me.cmdAlumnos.Name = "cmdAlumnos"
         Me.cmdAlumnos.Size = New System.Drawing.Size(105, 60)
         Me.cmdAlumnos.TabIndex = 2
@@ -60,7 +60,7 @@ Partial Class FrmCrear
         '
         'CmdProfesores
         '
-        Me.CmdProfesores.Location = New System.Drawing.Point(352, 69)
+        Me.CmdProfesores.Location = New System.Drawing.Point(364, 96)
         Me.CmdProfesores.Name = "CmdProfesores"
         Me.CmdProfesores.Size = New System.Drawing.Size(112, 60)
         Me.CmdProfesores.TabIndex = 3
@@ -71,27 +71,27 @@ Partial Class FrmCrear
         '
         Me.lblCrear.AutoSize = True
         Me.lblCrear.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCrear.Location = New System.Drawing.Point(24, 13)
+        Me.lblCrear.Location = New System.Drawing.Point(89, 25)
         Me.lblCrear.Name = "lblCrear"
         Me.lblCrear.Size = New System.Drawing.Size(440, 25)
         Me.lblCrear.TabIndex = 4
         Me.lblCrear.Text = "¿Que es lo que desea crear o modificar?"
         '
-        'Button1
+        'cmdCandidatos
         '
-        Me.Button1.Location = New System.Drawing.Point(174, 152)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(112, 60)
-        Me.Button1.TabIndex = 5
-        Me.Button1.Text = "Ficha de Candidato a cursos"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.cmdCandidatos.Location = New System.Drawing.Point(492, 96)
+        Me.cmdCandidatos.Name = "cmdCandidatos"
+        Me.cmdCandidatos.Size = New System.Drawing.Size(112, 60)
+        Me.cmdCandidatos.TabIndex = 5
+        Me.cmdCandidatos.Text = "Fichas de Candidatos a Ser Alumnos"
+        Me.cmdCandidatos.UseVisualStyleBackColor = True
         '
         'FrmCrear
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(484, 239)
-        Me.Controls.Add(Me.Button1)
+        Me.ClientSize = New System.Drawing.Size(616, 237)
+        Me.Controls.Add(Me.cmdCandidatos)
         Me.Controls.Add(Me.lblCrear)
         Me.Controls.Add(Me.CmdProfesores)
         Me.Controls.Add(Me.cmdAlumnos)
@@ -108,5 +108,5 @@ Partial Class FrmCrear
     Friend WithEvents cmdAlumnos As System.Windows.Forms.Button
     Friend WithEvents CmdProfesores As System.Windows.Forms.Button
     Friend WithEvents lblCrear As System.Windows.Forms.Label
-    Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents cmdCandidatos As System.Windows.Forms.Button
 End Class

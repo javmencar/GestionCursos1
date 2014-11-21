@@ -160,4 +160,45 @@ Public Class Form2
         If s = dc Then Return True
         Return False
     End Function
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Dim d As DatosPersonales = RellenarDatosPersonales()
+        MsgBox(d.Id & vbCrLf & d.Nombre & vbCrLf & d.Apellido1)
+    End Sub
+    Private Function RellenarDatosPersonales() As DatosPersonales
+        Dim DP As New DatosPersonales
+        Try
+            cn = New SqlConnection(ConeStr)
+            'recupero el id del elemento que quiero modificar a traves del listview
+
+            Dim Sql As String
+
+            Sql = String.Format("SELECT * FROM DatosPersonales WHERE DatosPersonales.Id={0}", 4)
+   
+            cn.Open()
+            Dim cmd As New SqlCommand(Sql, cn)
+            Dim dr As SqlDataReader
+            dr = cmd.ExecuteReader
+            Dim s As String
+            If dr.Read Then
+                For i As Integer = 0 To dr.FieldCount - 1
+                    If Not IsNothing(dr(i)) Then
+                        s = DP.colec.Item(i).ToString
+                        DP.s = dr(i)
+                    End If
+                Next
+                'If Not IsNothing(dr(0)) Then
+                '    .Id = dr(0)
+                'End If
+            End If
+        Catch ex2 As miExcepcion
+            MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        Finally
+            cn.Close()
+        End Try
+
+        Return DP
+    End Function
 End Class
