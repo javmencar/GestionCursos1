@@ -80,9 +80,11 @@ Public Class FrmCursos
                         If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
                             MsgBox("Curso insertado" & vbCrLf & Me.Name.ToString)
                             Call cargarlistbox()
+                        ElseIf Windows.Forms.DialogResult.Cancel Then
+                            Throw New miExcepcion("Modificacion cancelada")
                         Else
                             Dim errorEnModif As String = "error al intentar modificar el curso al volver de FrmModificarCursos(" & cont & ")"
-                            Throw New miExcepcion(errorEnModif, 65, Me.Name.ToString)
+                            Throw New miExcepcion(errorEnModif)
                         End If
                     Else
                         Throw New miExcepcion("Error al intentar modificar un curso")
@@ -110,6 +112,7 @@ Public Class FrmCursos
         Finally
             'reseteo el contador
             cont = 0
+            Me.LstCursosOModulos.SelectedIndex = -1
         End Try
     End Sub
 

@@ -152,41 +152,51 @@ Public Class FrmListado
 
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
-        If Me.ListView1.SelectedIndices.Count = 0 Then
-            MsgBox("Debe seleccionar un elemento del listado")
-        Else
-            Dim DP As DatosPersonales = RellenarDatosPersonales()
-            If Not IsNothing(DP) Then
-                Select Case cat
-                    Case "Alumnos"
-                        'el objeto, si es alumno, si es nuevo 
-                        Dim frm As New FrmFichas(DP, 1, False)
-                        If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                            MsgBox("Se ha insertado correctamente el alumno en la base de datos")
-                            Call cargarDatosEnListview()
-                        End If
-                    Case "Profesores"
-                        'el objeto, si es alumno, si es nuevo
-                        Dim frm As New FrmFichas(DP, 2, False)
-                        If frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
-                            MsgBox("Proceso cancelado")
-                        ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
-                            MsgBox("Proceso cancelado a peticicion del usuario")
-                        ElseIf frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                            MsgBox("Se ha insertado correctamente el Profesor en la base de datos")
-                            Call cargarDatosEnListview()
-                        End If
-                    Case "Candidatos"
-                        Dim frm As New FrmFichas(DP, 3, False)
-                        If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                            MsgBox("Se ha insertado correctamente el candidato en la base de datos")
-                            Call cargarDatosEnListview()
-                        End If
-                    Case Else
-                End Select
+        Try
+            If Me.ListView1.SelectedIndices.Count = 0 Then
+                MsgBox("Debe seleccionar un elemento del listado")
+            Else
+                Dim DP As DatosPersonales = RellenarDatosPersonales()
+                If Not IsNothing(DP) Then
+                    Select Case cat
+                        Case "Alumnos"
+                            'el objeto, si es alumno, si es nuevo 
+                            Dim frm As New FrmFichas(DP, 1, False)
+                            If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
+                                MsgBox("Se ha insertado correctamente el alumno en la base de datos")
+                                Call cargarDatosEnListview()
+                            ElseIf Windows.Forms.DialogResult.Cancel Then
+                                Throw New miExcepcion("modificacion cancelada")
+                            End If
+                        Case "Profesores"
+                            'el objeto, si es alumno, si es nuevo
+                            Dim frm As New FrmFichas(DP, 2, False)
+                            If frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
+                                MsgBox("Proceso cancelado")
+                            ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
+                                MsgBox("Proceso cancelado a peticicion del usuario")
+                            ElseIf frm.ShowDialog = Windows.Forms.DialogResult.OK Then
+                                MsgBox("Se ha insertado correctamente el Profesor en la base de datos")
+                                Call cargarDatosEnListview()
+                            ElseIf Windows.Forms.DialogResult.Cancel Then
+                                Throw New miExcepcion("modificacion cancelada")
+                            End If
+                        Case "Candidatos"
+                            Dim frm As New FrmFichas(DP, 3, False)
+                            If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
+                                MsgBox("Se ha insertado correctamente el candidato en la base de datos")
+                                Call cargarDatosEnListview()
+                            End If
+                        Case Else
+                    End Select
+                End If
+                Call limpiarListView()
             End If
-            Call limpiarListView()
-            End If
+        Catch ex2 As miExcepcion
+            MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        End Try
     End Sub
     Private Function RellenarDatosPersonales() As DatosPersonales
         Dim DP As New DatosPersonales

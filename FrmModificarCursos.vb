@@ -129,8 +129,11 @@ Public Class FrmModificarCursos
                         '   y vuelco en el array los id modulos, que saco con una funcion 
                         ListaDeModuloEnListbox = localizarIdModulosEnListbox()
                         '   recorro el array de idmodulos
+                        Dim modEnBD As Boolean
                         For Each indMod As String In ListaDeModuloEnListbox
-                            Call añadirModulosAlCurso(CStr(NumReg), indMod)
+                            modEnBD = añadirModulosAlCurso(CStr(NumReg), indMod)
+                            If modEnBD = False Then Throw New miExcepcion("Error al insertar modulos")
+                            modEnBD = False
                         Next
                     End If
                     MsgBox("Curso creado con exito" & vbCrLf & "aviso1")
@@ -142,9 +145,8 @@ Public Class FrmModificarCursos
                 ' he bloqueado el código para que no se pueda cambiar, al menos desde aquí
                 Dim cambioHoras, cambioNombre, nomrep As Boolean
                 'comprobamos si queremos seguro el nuevo nombre
-                'cambioNombre = QuieroCambiosEnCampos(String.Format("Está cambiando de '{0}' {1} a '{2}'" & vbCrLf &
-                '                "¿Es correcto?", c1.Nombre.ToString, " como nombre de curso ", Me.txtNombreCurso.Text)))
                 cambioNombre = QuieroCambiosEnCampos(c1.Nombre.ToString, " como nombre de curso ", Me.txtNombreCurso.Text)
+
                 'comprobamos si queremos seguro las nuevas horas
                 cambioHoras = QuieroCambiosEnCampos(c1.horas.ToString, " horas en el curso ", Me.txtHorasCurso.Text)
                 nomrep = valorRepetido(Me.txtNombreCurso.Text, "SELECT Cursos.Nombre FROM Cursos")
@@ -158,7 +160,7 @@ Public Class FrmModificarCursos
                 Me.DialogResult = Windows.Forms.DialogResult.OK
             End If
         Catch ex2 As miExcepcion
-            Me.DialogResult = Windows.Forms.DialogResult.Cancel
+            'Me.DialogResult = Windows.Forms.DialogResult.Cancel
             MsgBox(ex2.ToString)
         Catch ex As Exception
             MsgBox(ex.ToString)
@@ -170,8 +172,9 @@ Public Class FrmModificarCursos
         ' Dim respuesta As MsgBoxResult
         '   t1 es nombre viejo, t2 es el campo a cambiar y t3 es nombre nuevo
         Dim respuesta As MsgBoxResult = MsgBox(String.Format("Está cambiando de '{0}' {1} a '{2}'" & vbCrLf &
-                                "¿Es correcto?", t1, t2, t3, MsgBoxStyle.YesNo))
+                                "¿Es correcto?", t1, t2, t3), MsgBoxStyle.YesNo)
         If respuesta = MsgBoxResult.Yes Then Return True
+        If respuesta = MsgBoxResult.No Then Throw New miExcepcion("Modificacion cancelada a peticion del usuario")
         Return False
     End Function
     Private Function valorRepetido(ByVal val As String, consulta As String) As Boolean
@@ -272,17 +275,21 @@ Public Class FrmModificarCursos
             'una vez modificado el curso, le añado los posibles modulos
             '   Primero me cepillo los que hay
             Call CepillarmeLosModulos(c1.Id)
-            c1.modulos.Clear()
+            If Not IsNothing(c1.modulos) Then c1.modulos.Clear()
             '   luego los vuelco otra vez
             Dim ModulosEnElListbox As List(Of String)
             '   y vuelco en el array los id modulos, que saco con una funcion 
             ModulosEnElListbox = localizarIdModulosEnListbox()
             '   recorro el array de idmodulos
+            Dim modEnBD As Boolean
             For Each indMod As String In ModulosEnElListbox
                 '   y los añado uno por uno, primero a la base de datos
-                Call añadirModulosAlCurso(CStr(c1.Id), indMod)
+                modEnBD = añadirModulosAlCurso(CStr(c1.Id), indMod)
+                If modEnBD = False Then Throw New miExcepcion("Error al cargar los modulos")
                 'y luego al objeto
                 c1.añadirModulos(CargarModulo(indMod))
+                'y reseteo la variable
+                modEnBD = False
             Next
             c1.ordenarModulos()
         Catch ex2 As miExcepcion
@@ -304,7 +311,7 @@ Public Class FrmModificarCursos
             cn.Open()
             Dim cmd As New SqlCommand(sql2, cn)
             Dim i As Integer = cmd.ExecuteNonQuery
-            If i > 1 Then Return True
+            If i > 0 Then Return True
         Catch ex As Exception
             cn.Close()
         End Try
@@ -369,7 +376,7 @@ Public Class FrmModificarCursos
         End If
 
     End Sub
-    Private Sub añadirModulosAlCurso(ByVal ic As String, im As String)
+    Private Function añadirModulosAlCurso(ByVal ic As String, im As String) As Boolean
         cn = New SqlConnection(ConeStr)
         Try
             Dim sql As String
@@ -379,16 +386,19 @@ Public Class FrmModificarCursos
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
             Dim i2 As Integer = cmd.ExecuteNonQuery
-            If i2 = 0 Then Throw New miExcepcion("error al insertar el modulo", 381, Me.Name.ToString)
+            If i2 <= 0 Then Throw New miExcepcion("error al insertar el modulo", 381, Me.Name.ToString)
             ' MsgBox("modulo insertado con exito")
         Catch ex As miExcepcion
+            Return False
             MsgBox(ex.ToString)
         Catch ex2 As Exception
+            Return False
             MsgBox(ex2.ToString)
         Finally
             cn.Close()
         End Try
-    End Sub
+        Return True
+    End Function
     Private Function CargarModulo(im As String) As Modulo
         Dim m As New Modulo
         cn = New SqlConnection(ConeStr)

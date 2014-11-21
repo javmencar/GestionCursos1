@@ -575,10 +575,10 @@ Public Class FrmFichas
         End If
     End Sub
     Private Sub cmdCancelar_Click(sender As Object, e As EventArgs) Handles cmdCancelar.Click
-        Me.DialogResult = Windows.Forms.DialogResult.Abort
+        Me.DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
     Private Sub cmdSalir_Click(sender As Object, e As EventArgs) Handles cmdSalir.Click
-        Me.DialogResult = Windows.Forms.DialogResult.Cancel
+        Me.DialogResult = Windows.Forms.DialogResult.Abort
     End Sub
     Public Function cogerUltimaId() As Integer
         Dim i As Integer = 0
