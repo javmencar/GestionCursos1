@@ -142,18 +142,23 @@ Public Class FrmModificarCursos
                 ' he bloqueado el código para que no se pueda cambiar, al menos desde aquí
                 Dim cambioHoras, cambioNombre, nomrep As Boolean
                 'comprobamos si queremos seguro el nuevo nombre
-                cambioNombre = QuieroCambiosEnCampos(c1.Nombre, " como nombre de curso ", Me.txtNombreCurso.Text)
+                'cambioNombre = QuieroCambiosEnCampos(String.Format("Está cambiando de '{0}' {1} a '{2}'" & vbCrLf &
+                '                "¿Es correcto?", c1.Nombre.ToString, " como nombre de curso ", Me.txtNombreCurso.Text)))
+                cambioNombre = QuieroCambiosEnCampos(c1.Nombre.ToString, " como nombre de curso ", Me.txtNombreCurso.Text)
                 'comprobamos si queremos seguro las nuevas horas
                 cambioHoras = QuieroCambiosEnCampos(c1.horas.ToString, " horas en el curso ", Me.txtHorasCurso.Text)
                 nomrep = valorRepetido(Me.txtNombreCurso.Text, "SELECT Cursos.Nombre FROM Cursos")
                 If nomrep = True AndAlso Me.txtNombreCurso.Text <> c1.Nombre Then Throw New miExcepcion("El nombre ya está en uso en otro Curso")
                 'ordenamos el listbox
                 Me.LstModulos.Sorted = True
-                Call ModificarCurso()
+                Dim modificado As Boolean
+                modificado = ModificarCurso()
+                If modificado = False Then Throw New miExcepcion("error al modificar")
                 'MsgBox("Curso Modificado con exito" & vbCrLf & "aviso1")
                 Me.DialogResult = Windows.Forms.DialogResult.OK
             End If
         Catch ex2 As miExcepcion
+            Me.DialogResult = Windows.Forms.DialogResult.Cancel
             MsgBox(ex2.ToString)
         Catch ex As Exception
             MsgBox(ex.ToString)
@@ -162,15 +167,14 @@ Public Class FrmModificarCursos
         End Try
     End Sub
     Friend Function QuieroCambiosEnCampos(ByVal t1 As String, ByVal t2 As String, ByVal t3 As String) As Boolean
-        Dim respuesta As MsgBoxResult
+        ' Dim respuesta As MsgBoxResult
         '   t1 es nombre viejo, t2 es el campo a cambiar y t3 es nombre nuevo
-        respuesta = String.Format("Está cambiando de '{0}' {1} a '{2}'" & vbCrLf &
-                                "¿Es correcto?", t1, t2, t3, MsgBoxStyle.YesNo)
+        Dim respuesta As MsgBoxResult = MsgBox(String.Format("Está cambiando de '{0}' {1} a '{2}'" & vbCrLf &
+                                "¿Es correcto?", t1, t2, t3, MsgBoxStyle.YesNo))
         If respuesta = MsgBoxResult.Yes Then Return True
         Return False
     End Function
     Private Function valorRepetido(ByVal val As String, consulta As String) As Boolean
-
         cn = New SqlConnection(ConeStr)
         Try
             cn.Open()
@@ -256,17 +260,11 @@ Public Class FrmModificarCursos
         Next
         Return False
     End Function
-    Private Sub ModificarCurso()
+    Private Function ModificarCurso() As Boolean
         cn = New SqlConnection(ConeStr)
         Try
-            Dim sql2 As String
-            sql2 = String.Format("UPDATE Cursos SET Cursos.CodCur='{0}', Cursos.Nombre='{1}',Cursos.Horas={2} WHERE Cursos.Id={3}",
-                                 Me.txtCodcur.Text, Me.txtNombreCurso.Text, Me.txtHorasCurso.Text)
-            ' MsgBox(sql2)
-            cn.Open()
-            Dim cmd As New SqlCommand(sql2, cn)
-            Dim i As Integer = cmd.ExecuteNonQuery
-            cn.Close()
+            Dim insercionHecha As Boolean = modif()
+            If insercionHecha = False Then Throw New miExcepcion
             'Una vez hecha la insercion, vuelco los datos en el objeto, para que esté actualizado
             c1.CodCur = Me.txtCodcur.Text
             c1.Nombre = Me.txtNombreCurso.Text
@@ -286,14 +284,32 @@ Public Class FrmModificarCursos
                 'y luego al objeto
                 c1.añadirModulos(CargarModulo(indMod))
             Next
-        Catch ex As miExcepcion
+            c1.ordenarModulos()
+        Catch ex2 As miExcepcion
+            Return False
+        Catch ex As Exception
             MsgBox(ex.ToString)
-        Catch ex2 As Exception
-            MsgBox(ex2.ToString)
+            Return False
         Finally
-
+            cn.Close()
         End Try
-    End Sub
+        Return True
+    End Function
+    Private Function modif() As Boolean
+        Try
+            Dim sql2 As String
+            sql2 = String.Format("UPDATE Cursos SET Cursos.CodCur='{0}', Cursos.Nombre='{1}',Cursos.Horas={2} WHERE Cursos.Id={3}",
+                                 Me.txtCodcur.Text, Me.txtNombreCurso.Text, Me.txtHorasCurso.Text, c1.Id.ToString)
+            ' MsgBox(sql2)
+            cn.Open()
+            Dim cmd As New SqlCommand(sql2, cn)
+            Dim i As Integer = cmd.ExecuteNonQuery
+            If i > 1 Then Return True
+        Catch ex As Exception
+            cn.Close()
+        End Try
+        Return False
+    End Function
 
     Private Sub cmdNuevoModulo_Click(sender As Object, e As EventArgs) Handles cmdNuevoModulo.Click
         'true es nuevo

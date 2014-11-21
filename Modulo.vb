@@ -23,7 +23,7 @@ Public Class Modulo
             mhoras = Value
         End Set
     End Property
-    Public Property Nombre() As String
+    Public Property Nombre As String
         Get
             Return mNombre
         End Get

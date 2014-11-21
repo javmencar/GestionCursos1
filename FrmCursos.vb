@@ -289,6 +289,7 @@ Public Class FrmCursos
                 cu.añadirModulos(m)
                 m = Nothing
             End While
+            cu.ordenarModulos()
             cn2.Close()
         Catch ex2 As miExcepcion
             cu = Nothing
