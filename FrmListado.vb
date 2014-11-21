@@ -4,6 +4,7 @@ Public Class FrmListado
     '  Public pos As Integer
     Public cn As SqlConnection
     Public cat As String
+    Dim tipo As Integer
     'Dim LstClk(4) As Integer
     'Public Sub New()
 
@@ -13,38 +14,33 @@ Public Class FrmListado
     '    ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
 
     'End Sub
-    Public Sub New(ByVal tipo As Integer)
+    Public Sub New(ByVal ti As Integer)
         ' Llamada necesaria para el diseñador.
         InitializeComponent()
-        Select Case tipo
-            Case 1
-                cat = "Alumnos"
-            Case 2
-                cat = "Profesores"
-            Case 3
-                cat = "Candidatos"
-        End Select
+        tipo = ti
        
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
     End Sub
     Private Sub FrmListado_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         cn = New SqlConnection(ConeStr)
-        Select Case cat
-            Case "Alumnos"
-                Me.Label1.Text = "Listado de Alumnos"
-            Case "Profesores"
-                Me.Label1.Text = "Listado de Profesores"
-            Case "Candidatos"
-                Me.Label1.Text = "Listado de candidatos"
-        End Select
-      limpiarListView()
         With Me.CboFiltro
             .Items.Add("DNI")
             .Items.Add("Nombre")
             .Items.Add("Apellido1")
             .Items.Add("Apellido2")
         End With
-
+        Select Case tipo
+            Case 1
+                cat = "Alumnos"
+                Me.Label1.Text = "Listado de Alumnos"
+            Case 2
+                cat = "Profesores"
+                Me.Label1.Text = "Listado de Profesores"
+            Case 3
+                cat = "Candidatos"
+                Me.Label1.Text = "Listado de candidatos"
+        End Select
+      limpiarListView()
     End Sub
     Private Sub limpiarListView()
         Me.ListView1.Refresh()
@@ -53,7 +49,6 @@ Public Class FrmListado
             .FullRowSelect = True
             .GridLines = True
             .Sorting = SortOrder.Ascending
-            '.FocusedItem.EnsureVisible()
             .Items.Clear()
             With .Columns
                 .Add("Id", 25, HorizontalAlignment.Center)
@@ -70,16 +65,16 @@ Public Class FrmListado
             Me.ListView1.Items.Clear()
             cn.Open()
             Dim sql As String = ""
-            Select Case cat
-                Case "Alumnos"
+            Select Case tipo
+                Case 1  ' "Alumnos"
                     sql = "SELECT Alumnos.Id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2" &
                             " FROM Alumnos, DatosPersonales " &
                              " WHERE DatosPersonales.Id=Alumnos.IdDP ORDER BY Alumnos.IdDP ASC "
-                Case "Profesores"
+                Case 2  ' "Profesores"
                     sql = "SELECT Profesores.Id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2" &
                              " FROM Profesores, DatosPersonales " &
                              "  WHERE DatosPersonales.Id=Profesores.IdDP ORDER BY Profesores.IdDP ASC "
-                Case "Candidatos"
+                Case 3  ' "Candidatos"
                     sql = "SELECT DatosPersonales.Id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2" &
                             " FROM DatosPersonales " &
                              " WHERE NOT EXISTS (SELECT 1 FROM Alumnos WHERE Alumnos.IdDP=DatosPersonales.Id) " &
@@ -88,8 +83,6 @@ Public Class FrmListado
                 Case Else
                     Throw New miExcepcion("error al cargar los datos en el listview")
             End Select
-            'Dim sql As String = String.Format("SELECT {0}.id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2" &
-            '       " FROM {0}, DatosPersonales WHERE DatosPersonales.Id={0}.IdDP ORDER BY {0}.IdDP ASC ", cat)
             Dim cmd As New SqlCommand(sql, cn)
             Dim dr As SqlDataReader
             dr = cmd.ExecuteReader
@@ -116,81 +109,37 @@ Public Class FrmListado
     End Sub
 
     Private Sub cmdNuevo_Click(sender As Object, e As EventArgs) Handles cmdNuevo.Click
+        Dim aviso As String = cat.Substring(0, cat.Length - 1)
         Dim dpers As New DatosPersonales
-        Select Case cat
-            Case "Alumnos"
-                'el objeto, si es alumno, si es nuevo 
-                Dim frm As New FrmFichas(dpers, 1, True)
-                If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                    MsgBox("Se ha insertado correctamente el alumno en la base de datos")
-                    Call cargarDatosEnListview()
-                End If
-            Case "Profesores"
-                'el objeto, si es alumno, si es nuevo
-                Dim frm As New FrmFichas(dpers, 2, True)
-                If frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
-                    MsgBox("Proceso cancelado")
-                ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
-                    MsgBox("Proceso cancelado a peticicion del usuario")
-                ElseIf frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                    MsgBox("Se ha insertado correctamente el Profesor en la base de datos")
-                    Call cargarDatosEnListview()
-                End If
-            Case "Candidatos"
-                Dim frm As New FrmFichas(dpers, 3, True)
-                If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                    MsgBox("Se ha insertado correctamente el candidato en la base de datos")
-                    Call cargarDatosEnListview()
-                End If
-            Case Else
-        End Select
-
-
-
-
+        'en tipo llevo si es alumno, profesor o candidato
+        Dim frm As New FrmFichas(dpers, tipo, True)
+        If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
+            MsgBox(String.Format("Se ha insertado correctamente el {0} en la base de datos", aviso))
+            Call cargarDatosEnListview()
+        ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
+            Throw New miExcepcion("cancelado a piticion del usuario")
+        ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
+            Throw New miExcepcion("cancelado a piticion del usuario")
+        End If
     End Sub
 
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
+        Dim aviso As String = cat.Substring(0, cat.Length - 1)
         Try
-            If Me.ListView1.SelectedIndices.Count = 0 Then
-                MsgBox("Debe seleccionar un elemento del listado")
-            Else
-                Dim DP As DatosPersonales = RellenarDatosPersonales()
-                If Not IsNothing(DP) Then
-                    Select Case cat
-                        Case "Alumnos"
-                            'el objeto, si es alumno, si es nuevo 
-                            Dim frm As New FrmFichas(DP, 1, False)
-                            If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                                MsgBox("Se ha insertado correctamente el alumno en la base de datos")
-                                Call cargarDatosEnListview()
-                            ElseIf Windows.Forms.DialogResult.Cancel Then
-                                Throw New miExcepcion("modificacion cancelada")
-                            End If
-                        Case "Profesores"
-                            'el objeto, si es alumno, si es nuevo
-                            Dim frm As New FrmFichas(DP, 2, False)
-                            If frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
-                                MsgBox("Proceso cancelado")
-                            ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
-                                MsgBox("Proceso cancelado a peticicion del usuario")
-                            ElseIf frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                                MsgBox("Se ha insertado correctamente el Profesor en la base de datos")
-                                Call cargarDatosEnListview()
-                            ElseIf Windows.Forms.DialogResult.Cancel Then
-                                Throw New miExcepcion("modificacion cancelada")
-                            End If
-                        Case "Candidatos"
-                            Dim frm As New FrmFichas(DP, 3, False)
-                            If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                                MsgBox("Se ha insertado correctamente el candidato en la base de datos")
-                                Call cargarDatosEnListview()
-                            End If
-                        Case Else
-                    End Select
+            If Me.ListView1.SelectedIndices.Count = 0 Then Throw New miExcepcion("Debe seleccionar un elemento del listado")
+            Dim DP As DatosPersonales = RellenarDatosPersonales()
+            If Not IsNothing(DP) Then
+                'en tipo llevo si es alumno, profesor o candidato
+                Dim frm As New FrmFichas(DP, tipo, False)
+                If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
+                    MsgBox(String.Format("{0} insertado correctamente", aviso))
+                    Call cargarDatosEnListview()
+                ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
+                    Throw New miExcepcion("proceso cancelado a peticion del usuario")
+                ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
+                    Throw New miExcepcion("proceso cancelado")
                 End If
-                Call limpiarListView()
             End If
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
@@ -208,7 +157,6 @@ Public Class FrmListado
             If cat = "Candidatos" Then
                 sql = "SELECT * FROM DatosPersonales WHERE DatosPersonales.Id=" & id
             Else
-
                 sql = String.Format("select * from DatosPersonales, {0} where DatosPersonales.Id={0}.IdDP and {0}.id={1}", cat, id)
             End If
             ' MsgBox(sql)
@@ -313,8 +261,6 @@ Public Class FrmListado
         Me.DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
 
-
-
     Public Function borrarDatosPersonales(ByVal i As Integer) As Integer
         Dim num, idDP As Integer
         Dim sqlIdDP As String = String.Format("Select DatosPersonales.Id from DatosPersonales, {0} where DatosPersonales.Id={0}.IdDP and {0}.id={1}", cat, CStr(i))
@@ -393,54 +339,30 @@ Public Class FrmListado
             MsgBox(ex.ToString)
         End Try
     End Sub
-
-  
-
     Private Sub cmdBuscar_Click(sender As Object, e As EventArgs) Handles cmdBuscar.Click
-
         If Me.CboFiltro.SelectedIndex = -1 Then
             MsgBox(" Seleccione un criterio de busqueda del combo")
         Else
-            Dim crit As String = Me.CboFiltro.SelectedItem.ToString
-            Dim sb As Integer
-            Select Case crit
-                Case "DNI"
-                    sb = 1
-                Case "Nombre"
-                    sb = 2
-                Case "Apellido1"
-                    sb = 3
-                Case "Apellido2"
-                    sb = 4
-            End Select
-            Dim pos As Integer = encontrarItemEnLIstView(sb)
+            Dim pos As Integer = -1
+            Dim encontrado As Boolean = False
+            For i As Integer = 0 To Me.ListView1.Items.Count - 1
+                If Me.ListView1.Items(i).SubItems(Me.CboFiltro.SelectedIndex + 1).Text = Me.TxtCampo.Text Then
+                    encontrado = True
+                    pos = i
+                    Exit For
+                End If
+            Next
             If pos = -1 Then
-                MsgBox(String.Format("El {0} a buscar no se encuentra en el listado", crit))
+                MsgBox(String.Format("El {0} a buscar no se encuentra en el listado", Me.CboFiltro.SelectedItem.ToString))
             Else
                 Me.ListView1.Focus()
                 Me.ListView1.Items.Item(pos).Selected = True
-                ' If Me.ListView1.SelectedIndices.Count = 1 Then
                 Me.ListView1.SelectedItems.Item(0).Focused = True
                 If Not IsNothing(Me.ListView1.FocusedItem) Then
                     Me.ListView1.FocusedItem.EnsureVisible()
                     Me.ListView1.SelectedItems.Item(0).Checked = True
                 End If
-                'End If
             End If
         End If
     End Sub
-    Private Function encontrarItemEnLIstView(ByVal subit As Integer) As Integer
-        Dim encontrado As Boolean = False
-        Dim ind As Integer = -1
-        For i As Integer = 0 To Me.ListView1.Items.Count - 1
-            ' MsgBox(Me.ListView1.Items(i).SubItems(subit).Text)
-            If Me.ListView1.Items(i).SubItems(subit).Text = Me.TxtCampo.Text Then
-                encontrado = True
-                ind = i
-                Exit For
-            End If
-        Next
-        Return ind
-    End Function
-
 End Class
