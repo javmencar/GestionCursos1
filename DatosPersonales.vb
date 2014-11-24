@@ -7,6 +7,8 @@ Public Class DatosPersonales
     Private mEntrevistador, mValoracion, mApto, mPathFoto As String
     Private mFnac, mInFecha, mFecEntr As Date
     Private mInInaem As Boolean
+    Private mcoleccion As Collection
+    Private mlistado As List(Of String)
 
     Public Property Id As String
         Get
@@ -228,9 +230,16 @@ Public Class DatosPersonales
             mPathFoto = Value
         End Set
     End Property
-    Public Function ListadoNombreDeLasPropiedades() As List(Of String)
-        Dim lista As New List(Of String)
-        With lista
+    Public ReadOnly Property listadoNombres As List(Of String)
+        Get
+            Return mlistado
+        End Get
+    End Property
+    Private Function ListadoNombreDeLasPropiedades() As List(Of String)
+        '  Dim lista As New List(Of String)
+        mlistado = New List(Of String)
+        'With lista
+        With mlistado
             .Add("Id")
             .Add("DNI")
             .Add("Nombre")
@@ -258,10 +267,14 @@ Public Class DatosPersonales
             .Add("Apto")
             .Add("PathFoto")
         End With
-        Return lista
+        Return mlistado
     End Function
-
-    Public Function colec() As Collection
+    Public ReadOnly Property listaValores As Collection
+        Get
+            Return mcoleccion
+        End Get
+    End Property
+    Private Function colec() As Collection
         Dim c As New Collection
         With c
             .Add(Id)
@@ -293,4 +306,8 @@ Public Class DatosPersonales
         End With
         Return c
     End Function
+    Public Sub cargarlistas()
+        mcoleccion = colec()
+        mlistado = ListadoNombreDeLasPropiedades()
+    End Sub
 End Class

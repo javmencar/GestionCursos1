@@ -109,7 +109,7 @@ Public Class FrmListado
     Private Sub cmdNuevo_Click(sender As Object, e As EventArgs) Handles cmdNuevo.Click
         Dim aviso As String = cat.Substring(0, cat.Length - 1)
         Dim dpers As New DatosPersonales
-        'en tipo llevo si es alumno, profesor o candidato
+        'en tipo llevo si es alumno, profesor o candidato; true porque es nuevo
         Dim frm As New FrmFichas(dpers, tipo, True)
         If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
             MsgBox(String.Format("Se ha insertado correctamente el {0} en la base de datos", aviso))
@@ -128,16 +128,18 @@ Public Class FrmListado
             If Me.ListView1.SelectedIndices.Count = 0 Then Throw New miExcepcion("Debe seleccionar un elemento del listado")
             Dim DP As DatosPersonales = RellenarDatosPersonales()
             If Not IsNothing(DP) Then
-                'en tipo llevo si es alumno, profesor o candidato
+                'en tipo llevo si es alumno, profesor o candidato; false porque es modificacion de uno existente
                 Dim frm As New FrmFichas(DP, tipo, False)
                 If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                    MsgBox(String.Format("{0} insertado correctamente", aviso))
+                    MsgBox(String.Format("{0} imodificado correctamente", aviso))
                     Call cargarDatosEnListview()
                 ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
                     Throw New miExcepcion("proceso cancelado a peticion del usuario")
                 ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
                     Throw New miExcepcion("proceso cancelado")
                 End If
+            Else
+                Throw New miExcepcion("Error al cargar los datos")
             End If
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
@@ -242,12 +244,16 @@ Public Class FrmListado
                     If Not IsDBNull(dr(25)) Then
                         .PathFoto = dr(25)
                     End If
+                    .cargarlistas()
                 End With
             End If
+
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
+            DP = Nothing
         Catch ex As Exception
             MsgBox(ex.ToString)
+            DP = Nothing
         Finally
             cn.Close()
         End Try
@@ -301,6 +307,7 @@ Public Class FrmListado
             num = -1
             'MsgBox(ex2.ToString)
         Catch ex As Exception
+            num = -1
             MsgBox(ex.ToString)
         Finally
             cn.Close()
@@ -328,7 +335,7 @@ Public Class FrmListado
 
                 Dim resultadoBorrar As Integer = borrarDatosPersonales(id)
                 If resultadoBorrar = -1 Then Throw New miExcepcion("Error al borrar")
-                MsgBox("Alumno y sus datos borrados con éxito")
+                MsgBox("Datos borrados con éxito")
                 Call cargarDatosEnListview()
             End If
         Catch ex2 As miExcepcion
@@ -350,9 +357,11 @@ Public Class FrmListado
                     Exit For
                 End If
             Next
-            If pos = -1 Then
+            If pos = -1 Then ' No lo ha encontrado
                 MsgBox(String.Format("El {0} a buscar no se encuentra en el listado", Me.CboFiltro.SelectedItem.ToString))
-            Else
+                Me.TxtCampo.Focus()
+                Me.TxtCampo.SelectAll()
+            Else 'Lo ha encontrado
                 Me.ListView1.Focus()
                 Me.ListView1.Items.Item(pos).Selected = True
                 Me.ListView1.SelectedItems.Item(0).Focused = True
@@ -360,6 +369,9 @@ Public Class FrmListado
                     Me.ListView1.FocusedItem.EnsureVisible()
                     Me.ListView1.SelectedItems.Item(0).Checked = True
                 End If
+                'Limpio el combo y el campo
+                Me.CboFiltro.SelectedIndex = -1
+                Me.TxtCampo.Text = ""
             End If
         End If
     End Sub

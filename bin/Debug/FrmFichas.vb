@@ -35,6 +35,7 @@ Public Class FrmFichas
         Me.txtId.Enabled = False
         Me.LstExpSector.Items.Clear()
         Me.CboExpSector.SelectedIndex = -1
+        Me.LstExpSector.Enabled = True
         NuIdDP = -1
         Me.cmdAñadirAAlumnos.Visible = False
         If nuevo = True Then
@@ -51,8 +52,8 @@ Public Class FrmFichas
             Me.cmdModificar.Text = "MODIFICAR FICHA"
             Me.cmdCancelar.Text = "Cancelar La Modificación"
             Me.cmdCambiarFoto.Text = "Cambiar Foto"
-            Me.cmdBorrar.Enabled = True
             Me.cmdBorrar.Visible = True
+            Me.cmdBorrar.Enabled = True
             Call rellenarCamposDesdeObjeto(DP)
         End If
     End Sub
@@ -116,7 +117,6 @@ Public Class FrmFichas
                         Me.optAptoSi.Select()
                         Me.cmdAñadirAAlumnos.Visible = True
                         If nuevo = True Then
-
                             Me.cmdAñadirAAlumnos.Enabled = True
                         Else
                             If cat = "Alumnos" Or cat = "Profesores" Then
@@ -124,7 +124,6 @@ Public Class FrmFichas
                                 If esta = False Then Me.cmdAñadirAAlumnos.Enabled = True
                             End If
                         End If
-
                     Case "No Apto"
                         Me.OptAptoNo.Select()
                     Case "Pendiente"
@@ -135,9 +134,14 @@ Public Class FrmFichas
             Else
                 Me.OptAptoPendiente.Select()
             End If
-            Me.PicBx1.ImageLocation = .PathFoto
-            Me.PicBx1.Show()
-            Me.PicBx1.Tag = .PathFoto
+            If Not IsNothing(.PathFoto) Then
+                Me.PicBx1.ImageLocation = .PathFoto
+                Me.PicBx1.Show()
+                Me.PicBx1.Tag = .PathFoto
+            Else
+                Me.PicBx1.Image = Image.FromFile("C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg")
+                Me.PicBx1.Tag = "C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg"
+            End If
         End With
     End Sub
     Private Function EstaEnTablas(ByVal i As String) As Boolean
@@ -157,6 +161,7 @@ Public Class FrmFichas
     Private Function rellenarObjetoDesdeCampos() As DatosPersonales
         Dim D1 As New DatosPersonales
         Try
+            Dim reparador As String = ""
             With D1
                 If Me.txtId.Text <> "" Then
                     .Id = Me.txtId.Text
@@ -165,28 +170,26 @@ Public Class FrmFichas
                 .Apellido2 = Me.txtApellido2.Text
                 .Nombre = Me.txtNombre.Text
                 .DNI = Me.txtDNI.Text
-                .NumSS = Me.txtNumSS.Text
+                reparador = Me.txtNumSS.Text.Replace("/", "")
+                .NumSS = reparador
                 Dim err As Integer = 0
                 Dim t As String = Me.txtFNac.Text
                 err = comprobarformatofecha(t)
                 Select Case err
                     Case 0
                         .Fnac = t
-                    Case 1
-                        Throw New miExcepcion("Error de formato en la fecha de nacimiento" & vbCrLf &
-                                              "El formato debe ser dd/MM/yyyy " & vbCrLf & " case 1")
-                    Case 2
-                        Throw New miExcepcion("Error de formato en la fecha de nacimiento" & vbCrLf &
-                                              "El formato debe ser dd/MM/yyyy " & vbCrLf & " case 2")
-                    Case 3, 4
+                    Case Else
                         Throw New miExcepcion("error en fecha de nacimiento de tipo: " & err)
                 End Select
+                t = ""
                 err = 0
                 .LugNac = Me.txtLugNac.Text
                 If Me.txtEdad.Text = "" Then Me.txtEdad.Text = "0"
                 .Edad = CInt(Me.txtEdad.Text)
-                .Tel1 = Me.txtTel1.Text
-                .Tel2 = Me.txtTel2.Text
+                reparador = Me.txtTel1.Text.Replace("-", "")
+                .Tel1 = reparador
+                reparador = Me.txtTel2.Text.Replace("-", "")
+                .Tel2 = reparador
                 .Domicilio = Me.txtDomicilio.Text
                 .CP = Me.txtCP.Text
                 .Poblacion = Me.txtPoblacion.Text
@@ -198,12 +201,10 @@ Public Class FrmFichas
                     Select Case err
                         Case 0
                             .InFecha = t
-                        Case 1, 2
-                            Throw New miExcepcion("Error de formato en la fecha de inscripcion en la oficina de empleo" & vbCrLf &
-                                              "El formato debe ser dd/MM/yyyy ")
-                        Case 3, 4
+                        Case Else
                             Throw New miExcepcion("error en fecha de inscripcion en el Inaem: " & err)
                     End Select
+                    t = ""
                     err = 0
                 Else
                     .InInaem = "False"
@@ -230,18 +231,16 @@ Public Class FrmFichas
                 If Me.txtTallaCalzado.Text = "" Then Me.txtTallaCalzado.Text = "0"
                 .TallaZapato = CInt(Me.txtTallaCalzado.Text)
                 .Entrevistador = Me.txtEntrevistador.Text
-                If Me.txtEntrevistador.Text <> "" Xor Me.txtValoracion.Text <> "" Then
+                If Me.txtEntrevistador.Text <> "" Or Me.txtValoracion.Text <> "" Then
                     t = Me.txtFecEntr.Text
                     err = comprobarformatofecha(t)
                     Select Case err
                         Case 0
                             .FecEntr = t
-                        Case 1, 2
-                            Throw New miExcepcion("Error de formato en la fecha de entrevista" & vbCrLf &
-                                             "El formato debe ser dd/MM/yyyy ")
-                        Case 3, 4
+                        Case Else
                             Throw New miExcepcion("error en fecha de inscripcion en el Inaem: " & err)
                     End Select
+                    t = ""
                     err = 0
 
                 End If
@@ -256,6 +255,7 @@ Public Class FrmFichas
                 End If
 
                 .PathFoto = Me.PicBx1.Tag
+                .cargarlistas()
             End With
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
@@ -310,26 +310,26 @@ Public Class FrmFichas
                     Call rellenarCamposDesdeObjeto(DP)
                     Throw New miExcepcion("Operación cancelada a peticion del usuario")
                 End If
-
-            Else
             End If
-
+            'comprobados los fallos (o bien no los había) continuamos
             DPConDatosDelFormulario = rellenarObjetoDesdeCampos()
             If Not IsNothing(DPConDatosDelFormulario) Then
-                If nuevo = True Then
-                    Call CrearNuevoDPEnBaseDeDatos(DPConDatosDelFormulario)
+                If nuevo = True Then ' creo una ficha, poeque es nuevo
+                    Dim cargado As Boolean = CrearNuevoDPEnBaseDeDatos(DPConDatosDelFormulario)
+                    If cargado = False Then Throw New miExcepcion("Error al cargar la ficha")
                     ' Dim nuevaId As Integer = cogerUltimaId()
                     NuIdDP = cogerUltimaId()
                     If NuIdDP = -1 Then Throw New miExcepcion("Error al calcular la ultima ID")
-                    If cat = "alumnos" Or cat = "Profesores then" Then
+                    If cat = "alumnos" Or cat = "Profesores then" Then '    los candidatos no necesitan esta parte
                         Dim comp As Integer = insertarEnTablacategoria(NuIdDP)
                         If comp = -1 Then Throw New miExcepcion(String.Format("Problema al insertar en {0}", cat))
                     End If
                 Else
-                    'estoy modificando
-                    Call cargarCambiosEnDPYaCreado(DPConDatosDelFormulario)
+                    'cargo los datos del objeto ya creado
+                    Dim cargado As Boolean = cargarCambiosEnDPYaCreado(DPConDatosDelFormulario)
+                    If cargado = False Then Throw New miExcepcion("No se ha podido cargar la ficha")
                 End If
-            Else
+            Else ' si no hay nada en el objeto es que ha habido error al crearlo
                 If nuevo = True Then
                     Throw New miExcepcion("Cambie los campos necesarios para poder Crear la ficha" & vbCrLf &
                                           " o Pulse Salir")
@@ -354,7 +354,7 @@ Public Class FrmFichas
         If Me.txtApellido2.Text = "" Then vacios.Add("El campo 'Segundo Apellido' está vacío")
         If Me.txtDNI.Text = "" Then vacios.Add("El campo 'DNI' está vacío")
         Dim numSSSinBarras As String
-        numSSSinBarras = Me.txtNumSS.Text.Replace("/", "")
+        numSSSinBarras = Me.txtNumSS.Text.Replace("/", "") '    Quito las barras para comprobar si el campo está vacío
         If numSSSinBarras = "" Then vacios.Add("El campo 'Numero de la seguridad Social' está vacío")
         'añadir o quitar los campos que queramos comprobar
         Return vacios
@@ -362,7 +362,7 @@ Public Class FrmFichas
     Private Function fallosEnCampos() As List(Of String)
         Dim comprobado As Boolean
         Dim cambios As New List(Of String)
-        Dim numSSSinBarras As String = Me.txtNumSS.Text.Replace("/", "")
+        Dim numSSSinBarras As String = Me.txtNumSS.Text.Replace("/", "") '  Quito la barra para comprobar si el campo está vacío
         If DP.Nombre <> Me.txtNombre.Text Then cambios.Add(String.Format("El campo 'Nombre' va a ser cambiado de '{0}' a '{1}", DP.Nombre, Me.txtNombre.Text))
         If DP.Apellido1 <> Me.txtApellido1.Text Then cambios.Add(String.Format("El campo 'Primer Apellido' va a ser cambiado de '{0}' a '{1}", DP.Apellido1, Me.txtApellido1.Text))
         If DP.Apellido2 <> Me.txtApellido2.Text Then cambios.Add(String.Format("El campo 'Segundo Apellido' va a ser cambiado de '{0}' a '{1}", DP.Apellido2, Me.txtApellido2.Text))
@@ -388,35 +388,31 @@ Public Class FrmFichas
         'añadir mas campos si queremos comprobarlos
         Return cambios
     End Function
-    Public Sub cargarCambiosEnDPYaCreado(ByVal dat As DatosPersonales)
+    Public Function cargarCambiosEnDPYaCreado(ByVal dat As DatosPersonales) As Boolean
         'UPDATE
         Try
-            Dim listanombres As List(Of String)
-            Dim listavalores As ArrayList
-            listanombres = dat.ListadoNombreDeLasPropiedades
-            listavalores = ListadoDeValoresDeLasPropiedades(dat)
             Dim Datos As String = ""
-            Dim fechaFormatoCorrecto As String = ""
-            For i As Integer = 1 To 25
-                If TypeOf (listavalores(i)) Is String Then
-                    Datos &= String.Format(", {0}='{1}'", listanombres(i), listavalores(i))
-                ElseIf TypeOf (listavalores(i)) Is Integer Then
-                    Datos &= String.Format(", {0}={1}", listanombres(i), listavalores(i))
-                ElseIf TypeOf (listavalores(i)) Is Date Then
-                    fechaFormatoCorrecto = cambiarFormatoFecha(listavalores(i))
-                    Datos &= String.Format(", {0}={1}", listanombres(i), listavalores(i))
-                ElseIf TypeOf (listavalores(i)) Is Boolean Then
-                    If listavalores(i) = True Then
-                        Datos &= String.Format(", {0}=1", listanombres(i))
-                    Else
-                        Datos &= String.Format(", {0}=0", listanombres(i))
-                    End If
-                End If
+            Dim s As String = ""
+            For i As Integer = 2 To dat.listaValores.Count ' i=2 porque listavalores empieza en 1 y el primer valor no lo queremos
+                Select Case dat.listadoNombres.Item(i - 1)
+                    Case "Edad", "TallaZapato"  'valores integer
+                        Datos &= String.Format(", {0}={1}", dat.listadoNombres.Item(i - 1), dat.listaValores.Item(i))
+                    Case "InInaem"  'valores boolean
+                        If dat.listaValores.Item(i) = True Then
+                            Datos &= String.Format(", {0}=1", dat.listadoNombres.Item(i - 1))
+                        Else
+                            Datos &= String.Format(", {0}=0", dat.listadoNombres.Item(i - 1))
+                        End If
+                    Case Else   'valores String (necesitamos ponerles comillas simples delante y detrás)
+                        Datos &= String.Format(", {0}='{1}'", dat.listadoNombres.Item(i - 1), dat.listaValores.Item(i))
+                End Select
+                s &= dat.listadoNombres.Item(i - 1) & " :  " & dat.listaValores.Item(i) & vbCrLf
             Next
             '   le quito la primera coma
+            MsgBox(s)
             Datos = Datos.Substring(1)
             Dim sql As String = String.Format("UPDATE DatosPersonales SET {0} Where DatosPersonales.Id={1}", Datos, CInt(dat.Id))
-            '    MsgBox(sql)
+            MsgBox(sql)
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
             Dim j As Integer = cmd.ExecuteNonQuery()
@@ -424,69 +420,77 @@ Public Class FrmFichas
             MsgBox("Datos personales modificados en la base de datos")
 
         Catch ex2 As miExcepcion
+            Return False
             '    MsgBox(ex2.ToString)   '   Así devolvera la excepcion en el cmd y lo parará
         Catch ex As Exception
+            Return False
             '     MsgBox(ex.ToString)
         Finally
             cn.Close()
         End Try
-
-    End Sub
-    Public Sub CrearNuevoDPEnBaseDeDatos(ByVal Dat As DatosPersonales)
+        Return True
+    End Function
+    Public Function CrearNuevoDPEnBaseDeDatos(ByVal Dat As DatosPersonales) As Boolean
         'INSERT INTO
         Try
-            Dim listanombres As List(Of String)
-            Dim listavalores As ArrayList
-            listanombres = Dat.ListadoNombreDeLasPropiedades
-            listavalores = ListadoDeValoresDeLasPropiedades(Dat)
+            'Dim listanombres As List(Of String)
+            'Dim listavalores As ArrayList
+            'listanombres = Dat.ListadoNombreDeLasPropiedades
+            'listavalores = ListadoDeValoresDeLasPropiedades(Dat)
             Dim tablas As String = ""
             Dim valores As String = ""
 
-            For j As Integer = 1 To listanombres.Count - 1
-                'solo meto los campos que tengan valores y empiezo en 1 para no meter la Id, que es Identity 
-                If Not IsNothing(listavalores(j)) Then
-                    If TypeOf (listavalores(j)) Is String Then
-                        tablas &= ", " & listanombres(j)
-                        valores &= String.Format(", '{0}'", listavalores(j))
-                    ElseIf TypeOf (listavalores(j)) Is Integer Then
-                        tablas &= ", " & listanombres(j)
-                        valores &= ", " & listavalores(j).ToString
-                    ElseIf TypeOf (listavalores(j)) Is Date Then
-                        tablas &= ", " & listanombres(j)
-                        Dim fechaFormatoCorrecto As String = cambiarFormatoFecha(listavalores(j))
-                        valores &= ", " & fechaFormatoCorrecto
-                    ElseIf TypeOf (listavalores(j)) Is Boolean Then
-                        tablas &= ", " & listanombres(j)
-                        If listavalores(j) = True Then valores &= ", 1"
-                        If listavalores(j) = False Then valores &= ", 0"
-                    End If
-                End If
+
+            Dim s As String = ""
+            For i As Integer = 2 To Dat.listaValores.Count - 1 ' i=2 porque listavalores empieza en 1 y el primer valor no lo queremos
+                Select Case Dat.listadoNombres.Item(i - 1)
+                    Case "Edad", "TallaZapato"  'valores integer
+                        ' Datos &= String.Format(", {0}={1}", Dat.listadoNombres.Item(i - 1), Dat.listaValores.Item(i))
+                        tablas &= String.Format(", {0}", Dat.listadoNombres.Item(i - 1))
+                        valores &= String.Format(", {0}", Dat.listaValores.Item(i))
+                        'tablas &= ", " & listanombres(j)
+                        'valores &= String.Format(", '{0}'", listavalores(j))
+                    Case "InInaem"  'valores boolean
+                        tablas &= String.Format(", {0}", Dat.listadoNombres.Item(i - 1))
+                        If Dat.listaValores.Item(i) = True Then
+                            valores &= String.Format(", {0}", 1)
+                        Else
+                            valores &= String.Format(", {0}", 0)
+                        End If
+                    Case Else   'valores String (necesitamos ponerles comillas simples delante y detrás)
+                        tablas &= String.Format(", {0}", Dat.listadoNombres.Item(i))
+                        valores &= String.Format(", '{0}'", Dat.listaValores.Item(i))
+                End Select
+                s &= Dat.listadoNombres.Item(i - 1) & " :  " & Dat.listaValores.Item(i) & vbCrLf
             Next
+            '   le quito la primera coma
+            MsgBox(s)
+
             'Le quito la primera coma y el primer espacio a las dos variables
             tablas = tablas.Substring(2)
             valores = valores.Substring(2)
             Dim sql As String = String.Format("INSERT INTO DatosPersonales ({0}) VALUES ({1})", tablas, valores)
-            '   MsgBox(sql)
+            MsgBox(sql)
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
-            Dim i As Integer = cmd.ExecuteNonQuery()
-            If i <= 0 Then Throw New miExcepcion("error en la insercion")
+            Dim j As Integer = cmd.ExecuteNonQuery()
+            If j <= 0 Then Throw New miExcepcion("error en la insercion")
             'recojo la nueva IdDP
             Dim pathfoto As String = Dat.PathFoto
             NuIdDP = cogerUltimaId()
             MsgBox("Datos personales introducidos en la base de datos")
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
-
+            Return False
         Catch ex As Exception
             MsgBox(ex.ToString)
-
+            Return False
         Finally
             cn.Close()
         End Try
+        Return True
 
-
-    End Sub 
+    End Function
     Public Function cambiarFormatoFecha(ByVal f As Date) As String
         Dim vieja, dias, meses, años As String
         vieja = f.ToString
@@ -560,7 +564,7 @@ Public Class FrmFichas
             Next
             If repetido = False Then
                 Me.LstExpSector.Items.Add(Me.CboExpSector.SelectedItem.ToString)
-                MsgBox("Sector añadido al listado")
+                '  MsgBox("Sector añadido al listado")
             Else
                 MsgBox("Ese sector ya está elegido")
             End If
@@ -822,5 +826,9 @@ Public Class FrmFichas
     Private Sub OptAptoPendiente_Click(sender As Object, e As EventArgs) Handles OptAptoPendiente.Click
         Me.cmdAñadirAAlumnos.Visible = True
         Me.cmdAñadirAAlumnos.Enabled = False
+    End Sub
+
+    Private Sub LstExpSector_SelectedIndexChanged(sender As Object, e As EventArgs) Handles LstExpSector.SelectedIndexChanged
+
     End Sub
 End Class
