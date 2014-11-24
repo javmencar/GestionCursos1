@@ -162,43 +162,66 @@ Public Class Form2
     End Function
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Dim d As DatosPersonales = RellenarDatosPersonales()
-        MsgBox(d.Id & vbCrLf & d.Nombre & vbCrLf & d.Apellido1)
+        'Dim d As DatosPersonales = RellenarDatosPersonales()
+        Dim d As New DatosPersonales
+        d.Id = "128"
+        d.CP = "50004"
+        d.DNI = "291300381F"
+        d.Apellido1 = "probando"
+        d.Apellido2 = " no se que saldrá de aquí"
+        d.Domicilio = "la calle 24"
+        d.Edad = "125"
+        d.Nombre = "Ya veremos"
+
+        MsgBox(d.colec.Count)
+        MsgBox(d.ListadoNombreDeLasPropiedades.Count)
+        MsgBox(d.colec.GetEnumerator.Current.ToString)
+        MsgBox(d.colec.GetEnumerator.MoveNext)
+        'For i As Integer = 1 To d.colec.Count - 1
+        '    If Not IsNothing(d.colec.Item(i)) Then
+        '        MsgBox(d.colec.GetEnumerator.Current.ToString)
+        '        '  MsgBox(d.ListadoNombreDeLasPropiedades.Item(i - 1) & vbCrLf & "Es : " & d.colec.Item(i))
+        '    End If
+        'Next
+        'MsgBox(d.colec.Item(1).ToString & vbCrLf & "Es : " & d.colec.Item(1))
+        'MsgBox(d.colec.Item(3).ToString)
+        'MsgBox("Es : " & d.colec.Item(2))
+
     End Sub
-    Private Function RellenarDatosPersonales() As DatosPersonales
-        Dim DP As New DatosPersonales
-        Try
-            cn = New SqlConnection(ConeStr)
-            'recupero el id del elemento que quiero modificar a traves del listview
+    'Private Function RellenarDatosPersonales() As DatosPersonales
+    '    Dim DP As New DatosPersonales
+    '    Try
+    '        cn = New SqlConnection(ConeStr)
+    '        'recupero el id del elemento que quiero modificar a traves del listview
 
-            Dim Sql As String
+    '        Dim Sql As String
 
-            Sql = String.Format("SELECT * FROM DatosPersonales WHERE DatosPersonales.Id={0}", 4)
-   
-            cn.Open()
-            Dim cmd As New SqlCommand(Sql, cn)
-            Dim dr As SqlDataReader
-            dr = cmd.ExecuteReader
-            Dim s As String
-            If dr.Read Then
-                For i As Integer = 0 To dr.FieldCount - 1
-                    If Not IsNothing(dr(i)) Then
-                        s = DP.colec.Item(i).ToString
-                        DP.s = dr(i)
-                    End If
-                Next
-                'If Not IsNothing(dr(0)) Then
-                '    .Id = dr(0)
-                'End If
-            End If
-        Catch ex2 As miExcepcion
-            MsgBox(ex2.ToString)
-        Catch ex As Exception
-            MsgBox(ex.ToString)
-        Finally
-            cn.Close()
-        End Try
+    '        Sql = String.Format("SELECT * FROM DatosPersonales WHERE DatosPersonales.Id={0}", 4)
 
-        Return DP
-    End Function
+    '        cn.Open()
+    '        Dim cmd As New SqlCommand(Sql, cn)
+    '        Dim dr As SqlDataReader
+    '        dr = cmd.ExecuteReader
+    '        Dim s As String
+    '        If dr.Read Then
+    '            For i As Integer = 0 To dr.FieldCount - 1
+    '                If Not IsNothing(dr(i)) Then
+    '                    s = DP.colec.Item(i).ToString
+    '                    DP.s = dr(i)
+    '                End If
+    '            Next
+    '            'If Not IsNothing(dr(0)) Then
+    '            '    .Id = dr(0)
+    '            'End If
+    '        End If
+    '    Catch ex2 As miExcepcion
+    '        MsgBox(ex2.ToString)
+    '    Catch ex As Exception
+    '        MsgBox(ex.ToString)
+    '    Finally
+    '        cn.Close()
+    '    End Try
+
+    '    Return DP
+    'End Function
 End Class
