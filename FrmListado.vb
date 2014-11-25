@@ -5,13 +5,6 @@ Public Class FrmListado
     Public cn As SqlConnection
     Public cat As String
     Dim tipo As Integer
-    'Public Sub New()
-    '    ' Llamada necesaria para el diseñador.
-    '    InitializeComponent()
-
-    '    ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
-
-    'End Sub
     Public Sub New(ByVal ti As Integer)
         ' Llamada necesaria para el diseñador.
         InitializeComponent()
@@ -77,24 +70,20 @@ Public Class FrmListado
                              " WHERE NOT EXISTS (SELECT 1 FROM Alumnos WHERE Alumnos.IdDP=DatosPersonales.Id) " &
                              " AND NOT EXISTS (SELECT 1 FROM Profesores WHERE Profesores.IdDP=DatosPersonales.Id)" &
                              " ORDER BY DatosPersonales.Id ASC"
-                    'ojo a los WHERE NOT EXISTS, es para descartar alumnos y profesores 
                 Case Else
                     Throw New miExcepcion("error al cargar los datos en el listview")
             End Select
             Dim cmd As New SqlCommand(sql, cn)
             Dim dr As SqlDataReader
             dr = cmd.ExecuteReader
-            'creo un contador para ayudarme a poner los valores en los items correctos
+
             Dim i As Integer = 0
             While dr.Read
-                'aqui añado un dato nuevo
                 Me.ListView1.Items.Add(dr(0))
-                'aqui añado los subitems al recien añadido. El contador 'i' me llevará el item alque añadirlo
                 Me.ListView1.Items(i).SubItems.Add(dr(1).ToString)
                 Me.ListView1.Items(i).SubItems.Add(dr(2).ToString)
                 Me.ListView1.Items(i).SubItems.Add(dr(3).ToString)
                 Me.ListView1.Items(i).SubItems.Add(dr(4).ToString)
-                'aumentamos 'i' para la siguiente vuelta
                 i += 1
             End While
         Catch ex2 As miExcepcion
@@ -107,12 +96,11 @@ Public Class FrmListado
     End Sub
 
     Private Sub cmdNuevo_Click(sender As Object, e As EventArgs) Handles cmdNuevo.Click
-        Dim aviso As String = cat.Substring(0, cat.Length - 1)
         Dim dpers As New DatosPersonales
         'en tipo llevo si es alumno, profesor o candidato; true porque es nuevo
         Dim frm As New FrmFichas(dpers, tipo, True)
         If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-            MsgBox(String.Format("Se ha insertado correctamente el {0} en la base de datos", aviso))
+            MsgBox("Insercion en la base de datos Completada")
             Call cargarDatosEnListview()
         ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
             Throw New miExcepcion("cancelado a peticion del usuario")
@@ -120,8 +108,6 @@ Public Class FrmListado
             Throw New miExcepcion("cancelado a peticion del usuario")
         End If
     End Sub
-
-
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
         Dim aviso As String = cat.Substring(0, cat.Length - 1)
         Try
@@ -131,7 +117,7 @@ Public Class FrmListado
                 'en tipo llevo si es alumno, profesor o candidato; false porque es modificacion de uno existente
                 Dim frm As New FrmFichas(DP, tipo, False)
                 If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                    MsgBox(String.Format("{0} imodificado correctamente", aviso))
+                    MsgBox("Modificación Completada Correctamente")
                     Call cargarDatosEnListview()
                 ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
                     Throw New miExcepcion("proceso cancelado a peticion del usuario")
@@ -159,7 +145,6 @@ Public Class FrmListado
             Else
                 Sql = String.Format("SELECT * FROM DatosPersonales, {0} WHERE DatosPersonales.Id={0}.IdDP and {0}.Id={1}", cat, id)
             End If
-            ' MsgBox(sql)
             cn.Open()
             Dim cmd As New SqlCommand(Sql, cn)
             Dim dr As SqlDataReader
@@ -257,22 +242,16 @@ Public Class FrmListado
         Finally
             cn.Close()
         End Try
-
         Return DP
     End Function
-
     Private Sub cmdSalir_Click(sender As Object, e As EventArgs) Handles cmdSalir.Click
         Me.DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
-
     Public Function borrarDatosPersonales(ByVal i As Integer) As Integer
         Dim num, idDP As Integer
         Dim sqlIdDP As String = String.Format("Select DatosPersonales.Id from DatosPersonales, {0} where DatosPersonales.Id={0}.IdDP and {0}.id={1}", cat, CStr(i))
-        '  MsgBox(sqlIdDP)
         Dim sqlalumnos As String = String.Format("delete from {0} where {0}.id={1}", cat, CStr(i))
-        ' MsgBox(sqlalumnos)
         Dim sqlDatosPersonales As String = "DELETE FROM DatosPersonales WHERE DatosPersonales.Id="
-        ' MsgBox(sqlDatosPersonales)
         Dim cn2 As New SqlConnection(ConeStr)
         Try
             If cat = "Candidatos" Then
@@ -282,9 +261,7 @@ Public Class FrmListado
                 cmd1 = New SqlCommand(sqlDatosPersonales, cn)
                 num = cmd1.ExecuteNonQuery
                 If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))
-            Else
-                cn.Open()
-                'hago la consulta para obtener la ID de DatosPersonales
+            Else ' Para alumnos y profesores primero busco la ID
                 Dim cmd1, cmd2, cmd3 As SqlCommand
                 cmd1 = New SqlCommand(sqlIdDP, cn)
                 idDP = cmd1.ExecuteScalar
@@ -292,20 +269,15 @@ Public Class FrmListado
                 cn.Open()
                 cmd2 = New SqlCommand(sqlalumnos, cn)
                 num = cmd2.ExecuteNonQuery
-                If num < 0 Then
-                    Dim aviso As String = (String.Format("error al borrar  {0}", cat))
-                    Throw New miExcepcion(aviso.Substring(0, aviso.Length - 1))
-                End If
+                If num <> 1 Then Throw New miExcepcion("error al borrar")
                 cn2.Open()
-                sqlDatosPersonales &= CStr(idDP)
-                ' MsgBox("Ahora con el Id: " & vbCrLf & sqlDatosPersonales)
+                sqlDatosPersonales &= CStr(idDP) ' Añado la Id obtenida al final de la consulta
                 cmd3 = New SqlCommand(sqlDatosPersonales, cn2)
                 num = cmd3.ExecuteNonQuery
-                If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))
+                If num <> 1 Then Throw New miExcepcion("Error al borrar datos personales en")
             End If
         Catch ex2 As miExcepcion
             num = -1
-            'MsgBox(ex2.ToString)
         Catch ex As Exception
             num = -1
             MsgBox(ex.ToString)
@@ -332,7 +304,6 @@ Public Class FrmListado
                 If respuesta1 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
                 respuesta2 = MsgBox("¿Seguro que desea continuar?" & vbCrLf & "Una vez borrado no se puede recuperar", MsgBoxStyle.YesNo)
                 If respuesta2 = MsgBoxResult.No Then Throw New miExcepcion("Borrado cancelado a peticion del usuario")
-
                 Dim resultadoBorrar As Integer = borrarDatosPersonales(id)
                 If resultadoBorrar = -1 Then Throw New miExcepcion("Error al borrar")
                 MsgBox("Datos borrados con éxito")
