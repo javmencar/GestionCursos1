@@ -276,6 +276,7 @@ Public Class DatosPersonales
     End Property
     Private Function colec() As Collection
         Dim c As New Collection
+
         With c
             .Add(Id)
             .Add(DNI)

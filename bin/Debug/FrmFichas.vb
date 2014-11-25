@@ -409,10 +409,10 @@ Public Class FrmFichas
                 s &= dat.listadoNombres.Item(i - 1) & " :  " & dat.listaValores.Item(i) & vbCrLf
             Next
             '   le quito la primera coma
-            MsgBox(s)
+            '   MsgBox(s)
             Datos = Datos.Substring(1)
             Dim sql As String = String.Format("UPDATE DatosPersonales SET {0} Where DatosPersonales.Id={1}", Datos, CInt(dat.Id))
-            MsgBox(sql)
+            '   MsgBox(sql)
             cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
             Dim j As Integer = cmd.ExecuteNonQuery()
@@ -433,39 +433,27 @@ Public Class FrmFichas
     Public Function CrearNuevoDPEnBaseDeDatos(ByVal Dat As DatosPersonales) As Boolean
         'INSERT INTO
         Try
-            'Dim listanombres As List(Of String)
-            'Dim listavalores As ArrayList
-            'listanombres = Dat.ListadoNombreDeLasPropiedades
-            'listavalores = ListadoDeValoresDeLasPropiedades(Dat)
             Dim tablas As String = ""
             Dim valores As String = ""
-
-
-            Dim s As String = ""
-            For i As Integer = 2 To Dat.listaValores.Count - 1 ' i=2 porque listavalores empieza en 1 y el primer valor no lo queremos
-                Select Case Dat.listadoNombres.Item(i - 1)
-                    Case "Edad", "TallaZapato"  'valores integer
-                        ' Datos &= String.Format(", {0}={1}", Dat.listadoNombres.Item(i - 1), Dat.listaValores.Item(i))
-                        tablas &= String.Format(", {0}", Dat.listadoNombres.Item(i - 1))
-                        valores &= String.Format(", {0}", Dat.listaValores.Item(i))
-                        'tablas &= ", " & listanombres(j)
-                        'valores &= String.Format(", '{0}'", listavalores(j))
-                    Case "InInaem"  'valores boolean
-                        tablas &= String.Format(", {0}", Dat.listadoNombres.Item(i - 1))
-                        If Dat.listaValores.Item(i) = True Then
-                            valores &= String.Format(", {0}", 1)
-                        Else
-                            valores &= String.Format(", {0}", 0)
-                        End If
-                    Case Else   'valores String (necesitamos ponerles comillas simples delante y detrás)
-                        tablas &= String.Format(", {0}", Dat.listadoNombres.Item(i))
-                        valores &= String.Format(", '{0}'", Dat.listaValores.Item(i))
-                End Select
-                s &= Dat.listadoNombres.Item(i - 1) & " :  " & Dat.listaValores.Item(i) & vbCrLf
+            For i As Integer = 2 To 26 ' i=2 porque listavalores empieza en 1 y el primer valor no lo queremos
+                If Not IsNothing(Dat.listaValores.Item(i)) Then
+                    Select Case i
+                        Case 8, 21 'valores integer
+                            tablas &= String.Format(", {0}", Dat.listadoNombres.Item(i - 1))
+                            valores &= String.Format(", {0}", Dat.listaValores.Item(i))
+                        Case 15  'valores boolean
+                            tablas &= String.Format(", {0}", Dat.listadoNombres.Item(i - 1))
+                            If Dat.listaValores.Item(i) = True Then
+                                valores &= String.Format(", {0}", 1)
+                            Else
+                                valores &= String.Format(", {0}", 0)
+                            End If
+                        Case Else  'valores String (necesitamos ponerles comillas simples delante y detrás a los valores)
+                            tablas &= String.Format(", {0}", Dat.listadoNombres.Item(i - 1))
+                            valores &= String.Format(", '{0}'", Dat.listaValores.Item(i))
+                    End Select
+                End If
             Next
-            '   le quito la primera coma
-            MsgBox(s)
-
             'Le quito la primera coma y el primer espacio a las dos variables
             tablas = tablas.Substring(2)
             valores = valores.Substring(2)
