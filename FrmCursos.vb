@@ -61,6 +61,12 @@ Public Class FrmCursos
     End Sub
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
+        Call cargarFicha()
+    End Sub
+    Private Sub LstCursosOModulos_DoubleClick(sender As Object, e As EventArgs) Handles LstCursosOModulos.DoubleClick
+        Call cargarFicha()
+    End Sub
+    Private Sub cargarFicha()
         Try
             cont = Me.LstCursosOModulos.SelectedIndex
             If cont = -1 Then
@@ -71,7 +77,7 @@ Public Class FrmCursos
                 cont = CInt(aux(0))
                 If EsCurso = True Then 'cargamos cursos
                     'si estamos en cursos debo buscar el idcurso
-                    
+
                     Dim c As Curso
                     c = cargarElCurso(cont)
                     If Not IsNothing(c) Then
@@ -115,7 +121,6 @@ Public Class FrmCursos
             Me.LstCursosOModulos.SelectedIndex = -1
         End Try
     End Sub
-
     Private Sub cmdNuevoCurso_Click(sender As Object, e As EventArgs) Handles cmdNuevoCurso.Click
         Try
             'como no hay nada seleccionado le paso -1 para que sepa que será nuevo
@@ -331,4 +336,6 @@ Public Class FrmCursos
         End Try
         Return Mo
     End Function
+
+
 End Class

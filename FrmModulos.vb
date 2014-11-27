@@ -37,6 +37,12 @@ Public Class FrmModulos
     End Sub
 
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
+        Call llamarFicha()
+    End Sub
+    Private Sub lstModulos_DoubleClick(sender As Object, e As EventArgs) Handles lstModulos.DoubleClick
+        Call llamarFicha()
+    End Sub
+    Private Sub llamarFicha()
         Try
             If Me.lstModulos.SelectedIndex = -1 Then Throw New miExcepcion("Debe seleccionar un Modulo a modificar")
             Dim aux(2) As String
@@ -65,6 +71,7 @@ Public Class FrmModulos
             cont = 0
         End Try
     End Sub
+
     Private Function rellenarModulo(ByVal id As String) As Modulo
         Dim m As New Modulo
         Try
@@ -177,4 +184,6 @@ Public Class FrmModulos
         End Try
         Return True
     End Function
+
+  
 End Class

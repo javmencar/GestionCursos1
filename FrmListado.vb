@@ -12,12 +12,13 @@ Public Class FrmListado
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
     End Sub
     Private Sub FrmListado_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Dim camposListview() As String = {"DNI", "Nombre", "Apellido1", "Apellido2"}
+
         cn = New SqlConnection(ConeStr)
         With Me.CboFiltro
-            .Items.Add("DNI")
-            .Items.Add("Nombre")
-            .Items.Add("Apellido1")
-            .Items.Add("Apellido2")
+            For Each s As String In camposListview
+                .Items.Add(s)
+            Next
         End With
         Select Case tipo
             Case 1
@@ -30,7 +31,7 @@ Public Class FrmListado
                 cat = "Candidatos"
                 Me.Label1.Text = "Listado de candidatos"
         End Select
-      limpiarListView()
+        limpiarListView()
     End Sub
     Private Sub limpiarListView()
         Me.ListView1.Refresh()
@@ -109,6 +110,12 @@ Public Class FrmListado
         End If
     End Sub
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
+        Call AccederFicha()
+    End Sub
+    Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs) Handles ListView1.DoubleClick
+        AccederFicha()
+    End Sub
+    Private Sub AccederFicha()
         Dim aviso As String = cat.Substring(0, cat.Length - 1)
         Try
             If Me.ListView1.SelectedIndices.Count = 0 Then Throw New miExcepcion("Debe seleccionar un elemento del listado")
@@ -117,7 +124,6 @@ Public Class FrmListado
                 'en tipo llevo si es alumno, profesor o candidato; false porque es modificacion de uno existente
                 Dim frm As New FrmFichas(DP, tipo, False)
                 If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                    MsgBox("Modificación Completada Correctamente")
                     Call cargarDatosEnListview()
                 ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
                     Throw New miExcepcion("proceso cancelado a peticion del usuario")
