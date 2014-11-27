@@ -30,6 +30,8 @@ Partial Class FrmModificarModulos
         Me.lblIdModulo = New System.Windows.Forms.Label()
         Me.CmdModificar = New System.Windows.Forms.Button()
         Me.cmdCancelar = New System.Windows.Forms.Button()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.txtContenidoModulo = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'txtHorasCurso
@@ -83,7 +85,7 @@ Partial Class FrmModificarModulos
         '
         'CmdModificar
         '
-        Me.CmdModificar.Location = New System.Drawing.Point(140, 143)
+        Me.CmdModificar.Location = New System.Drawing.Point(139, 311)
         Me.CmdModificar.Name = "CmdModificar"
         Me.CmdModificar.Size = New System.Drawing.Size(88, 23)
         Me.CmdModificar.TabIndex = 12
@@ -92,18 +94,37 @@ Partial Class FrmModificarModulos
         '
         'cmdCancelar
         '
-        Me.cmdCancelar.Location = New System.Drawing.Point(283, 143)
+        Me.cmdCancelar.Location = New System.Drawing.Point(288, 311)
         Me.cmdCancelar.Name = "cmdCancelar"
         Me.cmdCancelar.Size = New System.Drawing.Size(75, 23)
         Me.cmdCancelar.TabIndex = 13
         Me.cmdCancelar.Text = "Cancelar"
         Me.cmdCancelar.UseVisualStyleBackColor = True
         '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(67, 125)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(109, 13)
+        Me.Label1.TabIndex = 15
+        Me.Label1.Text = "Contenido del módulo"
+        '
+        'txtContenidoModulo
+        '
+        Me.txtContenidoModulo.Location = New System.Drawing.Point(67, 148)
+        Me.txtContenidoModulo.Multiline = True
+        Me.txtContenidoModulo.Name = "txtContenidoModulo"
+        Me.txtContenidoModulo.Size = New System.Drawing.Size(381, 134)
+        Me.txtContenidoModulo.TabIndex = 14
+        '
         'FrmModificarModulos
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(515, 196)
+        Me.ClientSize = New System.Drawing.Size(515, 364)
+        Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.txtContenidoModulo)
         Me.Controls.Add(Me.cmdCancelar)
         Me.Controls.Add(Me.CmdModificar)
         Me.Controls.Add(Me.txtHorasCurso)
@@ -126,4 +147,6 @@ Partial Class FrmModificarModulos
     Friend WithEvents lblIdModulo As System.Windows.Forms.Label
     Friend WithEvents CmdModificar As System.Windows.Forms.Button
     Friend WithEvents cmdCancelar As System.Windows.Forms.Button
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents txtContenidoModulo As System.Windows.Forms.TextBox
 End Class

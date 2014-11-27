@@ -40,6 +40,7 @@ Public Class FrmModificarModulos
                 modu.Id = CInt(Me.txtIdModulos.Text)
                 modu.Nombre = Me.txtNombreCurso.Text
                 modu.horas = CInt(Me.txtHorasCurso.Text)
+                modu.Contenidos = Me.txtContenidoModulo.Text
             End If
         Catch ex As miExcepcion
             MsgBox(ex.ToString)
@@ -79,6 +80,7 @@ Public Class FrmModificarModulos
         Me.txtIdModulos.Text = m.Id
         Me.txtNombreCurso.Text = m.Nombre
         Me.txtHorasCurso.Text = CStr(m.horas)
+        Me.txtContenidoModulo.Text = m.Contenidos
     End Sub
 
     Private Sub CmdModificar_Click(sender As Object, e As EventArgs) Handles CmdModificar.Click
@@ -88,13 +90,13 @@ Public Class FrmModificarModulos
             If nuevo = True Then
                 If Me.txtNombreCurso.Text = "" Or Me.txtHorasCurso.Text = "" Then Throw New miExcepcion("No puede crear un modulo con campos vacíos" & vbCrLf &
                     "Si es necesario los puede cambiar luego")
-                Sql = String.Format("INSERT INTO Modulos (Modulos.Nombre,Modulos.Horas) VALUES ('{0}',{1})",
-                                    Me.txtNombreCurso.Text, Me.txtHorasCurso.Text)
+                Sql = String.Format("INSERT INTO Modulos (Modulos.Nombre, Modulos.Horas, Modulos.Contenidos) VALUES ('{0}',{1}, '{2}')",
+                                    Me.txtNombreCurso.Text, Me.txtHorasCurso.Text, Me.txtContenidoModulo.Text)
             Else
                 Dim cambiosvalidos As Boolean = ValidarCambios()
                 If cambiosvalidos = False Then Throw New miExcepcion("Modificacion cancelada a instancia del ususario")
-                Sql = String.Format("UPDATE Modulos SET MODULOS.Nombre='{0}', Modulos.Horas={1} WHERE Modulos.Id={2}",
-                                   Me.txtNombreCurso.Text, Me.txtHorasCurso.Text, modu.Id)
+                Sql = String.Format("UPDATE Modulos SET MODULOS.Nombre='{0}', Modulos.Horas={1} , Modulos.Contenidos='{2}' WHERE Modulos.Id={3}",
+                                   Me.txtNombreCurso.Text, Me.txtHorasCurso.Text, Me.txtContenidoModulo.Text, modu.Id)
             End If
             ' MsgBox(sql)
             cn.Open()

@@ -314,7 +314,9 @@ Public Class FrmCursos
         Dim Mo As New Modulo
 
         Try
-            Dim sql As String = "SELECT * FROM Modulos WHERE Modulos.Id=" & i
+            ' Dim sql As String = "SELECT * FROM Modulos WHERE Modulos.Id=" & i
+            Dim sql As String = String.Format("SELECT Modulos.Id, Modulos.Nombre, Modulos.Horas, Modulos.Contenidos FROM Modulos WHERE Modulos.Id={0}", i)
+
             cn.Open()
             Dim dr As SqlDataReader
             Dim cmd As New SqlCommand(sql, cn)
@@ -323,6 +325,7 @@ Public Class FrmCursos
                 Mo.Id = dr(0)
                 Mo.Nombre = dr(1)
                 Mo.horas = dr(2)
+                Mo.Contenidos = dr(3)
             End If
           
         Catch ex2 As miExcepcion

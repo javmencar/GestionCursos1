@@ -44,7 +44,7 @@ Public Class FrmModulos
     End Sub
     Private Sub llamarFicha()
         Try
-            If Me.lstModulos.SelectedIndex = -1 Then Throw New miExcepcion("Debe seleccionar un Modulo a modificar")
+            If Me.lstModulos.SelectedIndex = -1 Then Throw New miExcepcion("Debe seleccionar un Modulo")
             Dim aux(2) As String
             aux = Split(Me.lstModulos.SelectedItem.ToString, "_")
             cont = CInt(aux(0))
@@ -77,7 +77,7 @@ Public Class FrmModulos
         Try
             Dim cn As New SqlConnection(ConeStr)
             cn.Open()
-            Dim sql As String = String.Format("SELECT * FROM Modulos WHERE Modulos.Id={0}", id)
+            Dim sql As String = String.Format("SELECT Modulos.Id, Modulos.Nombre, Modulos.Horas, Modulos.Contenidos FROM Modulos WHERE Modulos.Id={0}", id)
             Dim cmd As New SqlCommand(sql, cn)
             Dim dr As SqlDataReader
             dr = cmd.ExecuteReader
@@ -85,6 +85,7 @@ Public Class FrmModulos
                 m.Id = dr(0)
                 m.Nombre = dr(1)
                 m.horas = dr(2)
+                m.Contenidos = dr(3)
             Else
                 Throw New miExcepcion("Error al cargar el modulo")
             End If
