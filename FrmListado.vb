@@ -28,6 +28,7 @@ Public Class FrmListado
                 cat = "Candidatos"
                 Me.Label1.Text = "Listado de candidatos"
         End Select
+        Me.CboFiltroGordo.SelectedIndex = -1
         limpiarListView()
     End Sub
     Private Sub cargarComboGordo()
@@ -69,34 +70,41 @@ Public Class FrmListado
             Dim camposListview() As String = {"Id", "DNI", "Nombre", "Apellido1", "Apellido2",
                                         "Tel1", "tel2", "InInaem", "", ""}
             With .Columns
-                For Each s As String In camposListview
-                    .Add(s, 150, HorizontalAlignment.Center)
+                For i As Integer = 0 To camposListview.Length - 1
+                    Select Case i
+                        Case 0
+                            .Add(camposListview(i), 25, HorizontalAlignment.Center)
+                        Case 1
+                            .Add(camposListview(i), 75, HorizontalAlignment.Center)
+                        Case Else
+                            .Add(camposListview(i), 150, HorizontalAlignment.Center)
+                    End Select
                 Next
             End With
         End With
-        Call cargarDatosEnListview("")
+        Call cargarDatosEnListview()
     End Sub
-    Private Sub cargarDatosEnListview(ByVal str As String)
+    Private Sub cargarDatosEnListview()
         Try
             Me.ListView1.Items.Clear()
-            cn.Open()
+            Dim filtrado As Boolean
             Dim sql As String = ""
-            'METER AQUI LOS DATOS QUE SE QUIERAN CONSULTAR
-            Dim SelectDatos As String = "DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2," &
-                " DatosPersonales.Tel1, DatosPersonales.Tel2, DatosPersonales.InInaem " 'AQUI AÑADES EL RESTO DE CONSULTAS
-            Select Case tipo
-                Case 1  ' "Alumnos"
-                    sql = String.Format("SELECT {1}.Id, {0} FROM {1}, DatosPersonales WHERE DatosPersonales.Id={1}.IdDP ORDER BY {1}.IdDP ASC", SelectDatos, "Alumnos")
-                Case 2  ' "Profesores"
-                    sql = String.Format("SELECT {1}.Id, {0} FROM {1}, DatosPersonales WHERE DatosPersonales.Id={1}.IdDP ORDER BY {1}.IdDP ASC", SelectDatos, "Profesores")
+            Dim idcurso As Integer
+            If Me.CboFiltroGordo.SelectedIndex <> -1 Then
+                filtrado = True
+                idcurso = Me.listaCursos.Item(Me.CboFiltroGordo.SelectedIndex)
+            End If
+            Dim recorte As String = cat.Substring(0, 2)
 
-                Case 3  ' "Candidatos"
-                    sql = String.Format("SELECT DatosPersonales.Id, {0} FROM DatosPersonales  WHERE NOT EXISTS (SELECT 1 FROM Alumnos WHERE Alumnos.IdDP=DatosPersonales.Id) " &
-                             " AND NOT EXISTS (SELECT 1 FROM Profesores WHERE Profesores.IdDP=DatosPersonales.Id)" &
-                             " ORDER BY DatosPersonales.Id ASC", SelectDatos)
-                Case Else
-                    Throw New miExcepcion("error al cargar los datos en el listview")
-            End Select
+            If filtrado = True Then
+                Dim aux1 As String = String.Format(", {0}_Cursos, Cursos", cat)
+                Dim aux2 As String = String.Format("AND {0}.Id={0}_Cursos.Id{1} AND Cursos.Id={0}_Cursos.IdCur AND Cursos.Id={2}", cat, recorte, idcurso)
+                sql = String.Format("SELECT {0}.Id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2, DatosPersonales.Tel1, DatosPersonales.Tel2, DatosPersonales.InInaem FROM {0}, DatosPersonales {1} WHERE DatosPersonales.Id={0}.IdDP {2}", cat, aux1, aux2)
+            Else
+                sql = String.Format("SELECT {0}.Id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2, DatosPersonales.Tel1, DatosPersonales.Tel2, DatosPersonales.InInaem FROM {0}, DatosPersonales WHERE DatosPersonales.Id={0}.IdDP", cat)
+            End If
+            ' MsgBox(sql)
+            cn.Open()
             Dim cmd As New SqlCommand(sql, cn)
             Dim dr As SqlDataReader
             dr = cmd.ExecuteReader
@@ -129,7 +137,7 @@ Public Class FrmListado
         Dim frm As New FrmFichas(dpers, tipo, True)
         If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
             MsgBox("Insercion en la base de datos Completada")
-            Call cargarDatosEnListview("")
+            Call cargarDatosEnListview()
         ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
             Throw New miExcepcion("cancelado a peticion del usuario")
         ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
@@ -151,7 +159,7 @@ Public Class FrmListado
                 'en tipo llevo si es alumno, profesor o candidato; false porque es modificacion de uno existente
                 Dim frm As New FrmFichas(DP, tipo, False)
                 If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                    Call cargarDatosEnListview("")
+                    Call cargarDatosEnListview()
                 ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
                     Throw New miExcepcion("proceso cancelado a peticion del usuario")
                 ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
@@ -262,6 +270,12 @@ Public Class FrmListado
                     If Not IsDBNull(dr(25)) Then
                         .PathFoto = dr(25)
                     End If
+                    If Not IsDBNull(dr(26)) Then
+                        .Email = dr(26)
+                    End If
+                    If Not IsDBNull(dr(27)) Then
+                        .Comentarios = dr(27)
+                    End If
                     .cargarlistas()
                 End With
             End If
@@ -287,28 +301,28 @@ Public Class FrmListado
         Dim sqlDatosPersonales As String = "DELETE FROM DatosPersonales WHERE DatosPersonales.Id="
         Dim cn2 As New SqlConnection(ConeStr)
         Try
-            If cat = "Candidatos" Then
-                cn.Open()
-                Dim cmd1 As SqlCommand
-                sqlDatosPersonales &= CStr(i)
-                cmd1 = New SqlCommand(sqlDatosPersonales, cn)
-                num = cmd1.ExecuteNonQuery
-                If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))
-            Else ' Para alumnos y profesores primero busco la ID
-                Dim cmd1, cmd2, cmd3 As SqlCommand
-                cmd1 = New SqlCommand(sqlIdDP, cn)
-                idDP = cmd1.ExecuteScalar
-                cn.Close()
-                cn.Open()
-                cmd2 = New SqlCommand(sqlalumnos, cn)
-                num = cmd2.ExecuteNonQuery
-                If num <> 1 Then Throw New miExcepcion("error al borrar")
-                cn2.Open()
-                sqlDatosPersonales &= CStr(idDP) ' Añado la Id obtenida al final de la consulta
-                cmd3 = New SqlCommand(sqlDatosPersonales, cn2)
-                num = cmd3.ExecuteNonQuery
-                If num <> 1 Then Throw New miExcepcion("Error al borrar datos personales en")
-            End If
+            'If cat = "Candidatos" Then
+            '    cn.Open()
+            '    Dim cmd1 As SqlCommand
+            '    sqlDatosPersonales &= CStr(i)
+            '    cmd1 = New SqlCommand(sqlDatosPersonales, cn)
+            '    num = cmd1.ExecuteNonQuery
+            '    If num < 0 Then Throw New miExcepcion(String.Format("Error al borrar datos personales en {0}", cat))
+            'Else ' Para alumnos y profesores primero busco la ID
+            Dim cmd1, cmd2, cmd3 As SqlCommand
+            cmd1 = New SqlCommand(sqlIdDP, cn)
+            idDP = cmd1.ExecuteScalar
+            cn.Close()
+            cn.Open()
+            cmd2 = New SqlCommand(sqlalumnos, cn)
+            num = cmd2.ExecuteNonQuery
+            If num <> 1 Then Throw New miExcepcion("error al borrar")
+            cn2.Open()
+            sqlDatosPersonales &= CStr(idDP) ' Añado la Id obtenida al final de la consulta
+            cmd3 = New SqlCommand(sqlDatosPersonales, cn2)
+            num = cmd3.ExecuteNonQuery
+            If num <> 1 Then Throw New miExcepcion("Error al borrar datos personales en")
+            'End If
         Catch ex2 As miExcepcion
             num = -1
         Catch ex As Exception
@@ -320,7 +334,6 @@ Public Class FrmListado
         End Try
         Return num
     End Function
-
     Private Sub cmdBorrar_Click(sender As Object, e As EventArgs) Handles cmdBorrar.Click
         Try
             Dim respuesta1, respuesta2 As MsgBoxResult
@@ -340,7 +353,7 @@ Public Class FrmListado
                 Dim resultadoBorrar As Integer = borrarDatosPersonales(id)
                 If resultadoBorrar = -1 Then Throw New miExcepcion("Error al borrar")
                 MsgBox("Datos borrados con éxito")
-                Call cargarDatosEnListview("")
+                Call cargarDatosEnListview()
             End If
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
@@ -379,16 +392,12 @@ Public Class FrmListado
             End If
         End If
     End Sub
-
     Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
 
     End Sub
-
     Private Sub CmdActivarExportar_Click(sender As Object, e As EventArgs) Handles CmdExportar.Click
         MsgBox("Proximamente")
     End Sub
-
-
     Private Sub ChkExportar_Click(sender As Object, e As EventArgs) Handles ChkExportar.Click
         If ChkExportar.Checked = True Then
             Me.ListView1.MultiSelect = True
@@ -397,21 +406,13 @@ Public Class FrmListado
             Me.ListView1.MultiSelect = False
             Me.CmdExportar.Enabled = False
         End If
-
     End Sub
-
-    Private Sub CboFiltroGordo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CboFiltroGordo.SelectedIndexChanged
-        crit = Me.CboFiltroGordo.SelectedItem.ToString
-        Call cargarcombo2()
-    End Sub
-    Private Sub cargarcombo2()
-
-    End Sub
-
     Private Sub cmdFiltrar_Click(sender As Object, e As EventArgs) Handles cmdFiltrar.Click
-        'For Each i As Integer In listaCursos
-        '    Me.cboFiltro2.Items.Add(i)
-        'Next
-        Call cargarDatosEnListview("") ' aqui añadir la ultima condicion del where
+        Call cargarDatosEnListview()
+    End Sub
+    
+    Private Sub cmdQuitarFiltro_Click(sender As Object, e As EventArgs) Handles cmdQuitarFiltro.Click
+        Me.CboFiltroGordo.SelectedIndex = -1
+        Call cargarDatosEnListview()
     End Sub
 End Class

@@ -39,12 +39,10 @@ Partial Class FrmListado
         Me.CmdExportar = New System.Windows.Forms.Button()
         Me.ChkExportar = New System.Windows.Forms.CheckBox()
         Me.GbFiltros = New System.Windows.Forms.GroupBox()
-        Me.cboFiltro2 = New System.Windows.Forms.ComboBox()
-        Me.lblFiltro2 = New System.Windows.Forms.Label()
+        Me.cmdQuitarFiltro = New System.Windows.Forms.Button()
+        Me.cmdFiltrar = New System.Windows.Forms.Button()
         Me.CboFiltroGordo = New System.Windows.Forms.ComboBox()
         Me.lblFiltroGordo = New System.Windows.Forms.Label()
-        Me.cmdFiltrar = New System.Windows.Forms.Button()
-        Me.cmdQuitarFiltro = New System.Windows.Forms.Button()
         Me.GbBusquedaUnica.SuspendLayout()
         CType(Me.GestionCursosDataSet, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.GestionCursosDataSetBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -88,7 +86,7 @@ Partial Class FrmListado
         '
         'cmdSalir
         '
-        Me.cmdSalir.Location = New System.Drawing.Point(1120, 423)
+        Me.cmdSalir.Location = New System.Drawing.Point(1120, 560)
         Me.cmdSalir.Name = "cmdSalir"
         Me.cmdSalir.Size = New System.Drawing.Size(121, 48)
         Me.cmdSalir.TabIndex = 4
@@ -163,7 +161,7 @@ Partial Class FrmListado
         '
         'CmdExportar
         '
-        Me.CmdExportar.Location = New System.Drawing.Point(1120, 459)
+        Me.CmdExportar.Location = New System.Drawing.Point(1122, 402)
         Me.CmdExportar.Name = "CmdExportar"
         Me.CmdExportar.Size = New System.Drawing.Size(121, 48)
         Me.CmdExportar.TabIndex = 7
@@ -173,7 +171,7 @@ Partial Class FrmListado
         'ChkExportar
         '
         Me.ChkExportar.AutoSize = True
-        Me.ChkExportar.Location = New System.Drawing.Point(908, 476)
+        Me.ChkExportar.Location = New System.Drawing.Point(1037, 456)
         Me.ChkExportar.Name = "ChkExportar"
         Me.ChkExportar.Size = New System.Drawing.Size(206, 17)
         Me.ChkExportar.TabIndex = 8
@@ -184,8 +182,6 @@ Partial Class FrmListado
         '
         Me.GbFiltros.Controls.Add(Me.cmdQuitarFiltro)
         Me.GbFiltros.Controls.Add(Me.cmdFiltrar)
-        Me.GbFiltros.Controls.Add(Me.cboFiltro2)
-        Me.GbFiltros.Controls.Add(Me.lblFiltro2)
         Me.GbFiltros.Controls.Add(Me.CboFiltroGordo)
         Me.GbFiltros.Controls.Add(Me.lblFiltroGordo)
         Me.GbFiltros.Location = New System.Drawing.Point(37, 27)
@@ -195,22 +191,23 @@ Partial Class FrmListado
         Me.GbFiltros.TabStop = False
         Me.GbFiltros.Text = "Filtrar"
         '
-        'cboFiltro2
+        'cmdQuitarFiltro
         '
-        Me.cboFiltro2.FormattingEnabled = True
-        Me.cboFiltro2.Location = New System.Drawing.Point(262, 48)
-        Me.cboFiltro2.Name = "cboFiltro2"
-        Me.cboFiltro2.Size = New System.Drawing.Size(187, 21)
-        Me.cboFiltro2.TabIndex = 16
+        Me.cmdQuitarFiltro.Location = New System.Drawing.Point(364, 37)
+        Me.cmdQuitarFiltro.Name = "cmdQuitarFiltro"
+        Me.cmdQuitarFiltro.Size = New System.Drawing.Size(66, 41)
+        Me.cmdQuitarFiltro.TabIndex = 18
+        Me.cmdQuitarFiltro.Text = "Quitar Filtro"
+        Me.cmdQuitarFiltro.UseVisualStyleBackColor = True
         '
-        'lblFiltro2
+        'cmdFiltrar
         '
-        Me.lblFiltro2.AutoSize = True
-        Me.lblFiltro2.Location = New System.Drawing.Point(259, 32)
-        Me.lblFiltro2.Name = "lblFiltro2"
-        Me.lblFiltro2.Size = New System.Drawing.Size(199, 13)
-        Me.lblFiltro2.TabIndex = 15
-        Me.lblFiltro2.Text = "Opciones Dentro Del Filtro Seleccionado"
+        Me.cmdFiltrar.Location = New System.Drawing.Point(272, 37)
+        Me.cmdFiltrar.Name = "cmdFiltrar"
+        Me.cmdFiltrar.Size = New System.Drawing.Size(66, 41)
+        Me.cmdFiltrar.TabIndex = 17
+        Me.cmdFiltrar.Text = "Filtrar"
+        Me.cmdFiltrar.UseVisualStyleBackColor = True
         '
         'CboFiltroGordo
         '
@@ -225,27 +222,9 @@ Partial Class FrmListado
         Me.lblFiltroGordo.AutoSize = True
         Me.lblFiltroGordo.Location = New System.Drawing.Point(40, 32)
         Me.lblFiltroGordo.Name = "lblFiltroGordo"
-        Me.lblFiltroGordo.Size = New System.Drawing.Size(157, 13)
+        Me.lblFiltroGordo.Size = New System.Drawing.Size(171, 13)
         Me.lblFiltroGordo.TabIndex = 13
-        Me.lblFiltroGordo.Text = "Seleccione el criterio para Filtrar"
-        '
-        'cmdFiltrar
-        '
-        Me.cmdFiltrar.Location = New System.Drawing.Point(498, 37)
-        Me.cmdFiltrar.Name = "cmdFiltrar"
-        Me.cmdFiltrar.Size = New System.Drawing.Size(66, 41)
-        Me.cmdFiltrar.TabIndex = 17
-        Me.cmdFiltrar.Text = "Filtrar"
-        Me.cmdFiltrar.UseVisualStyleBackColor = True
-        '
-        'cmdQuitarFiltro
-        '
-        Me.cmdQuitarFiltro.Location = New System.Drawing.Point(580, 37)
-        Me.cmdQuitarFiltro.Name = "cmdQuitarFiltro"
-        Me.cmdQuitarFiltro.Size = New System.Drawing.Size(66, 41)
-        Me.cmdQuitarFiltro.TabIndex = 18
-        Me.cmdQuitarFiltro.Text = "Quitar Filtro"
-        Me.cmdQuitarFiltro.UseVisualStyleBackColor = True
+        Me.lblFiltroGordo.Text = "Seleccione el curso que desea ver"
         '
         'FrmListado
         '
@@ -290,8 +269,6 @@ Partial Class FrmListado
     Friend WithEvents CmdExportar As System.Windows.Forms.Button
     Friend WithEvents ChkExportar As System.Windows.Forms.CheckBox
     Friend WithEvents GbFiltros As System.Windows.Forms.GroupBox
-    Friend WithEvents cboFiltro2 As System.Windows.Forms.ComboBox
-    Friend WithEvents lblFiltro2 As System.Windows.Forms.Label
     Friend WithEvents CboFiltroGordo As System.Windows.Forms.ComboBox
     Friend WithEvents lblFiltroGordo As System.Windows.Forms.Label
     Friend WithEvents cmdFiltrar As System.Windows.Forms.Button

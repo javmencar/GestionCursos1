@@ -89,6 +89,12 @@ Partial Class FrmFichas
         Me.LblFoto = New System.Windows.Forms.Label()
         Me.cmdBorrar = New System.Windows.Forms.Button()
         Me.cmdAñadirAAlumnos = New System.Windows.Forms.Button()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.lblCurso = New System.Windows.Forms.Label()
+        Me.cmdAñadirComentarios = New System.Windows.Forms.Button()
+        Me.lblComentarios = New System.Windows.Forms.Label()
+        Me.txtEmail = New System.Windows.Forms.TextBox()
+        Me.lblEmail = New System.Windows.Forms.Label()
         CType(Me.PicBx1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GbInaem.SuspendLayout()
         Me.GbExperiencia.SuspendLayout()
@@ -153,7 +159,7 @@ Partial Class FrmFichas
         Me.PicBx1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PicBx1.Image = Global.GestionCursos_0._1.My.Resources.Resources.NuevaFicha01
         Me.PicBx1.InitialImage = CType(resources.GetObject("PicBx1.InitialImage"), System.Drawing.Image)
-        Me.PicBx1.Location = New System.Drawing.Point(719, 23)
+        Me.PicBx1.Location = New System.Drawing.Point(668, 23)
         Me.PicBx1.Name = "PicBx1"
         Me.PicBx1.Size = New System.Drawing.Size(125, 140)
         Me.PicBx1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
@@ -200,7 +206,7 @@ Partial Class FrmFichas
         'lblDNI
         '
         Me.lblDNI.AutoSize = True
-        Me.lblDNI.Location = New System.Drawing.Point(319, 62)
+        Me.lblDNI.Location = New System.Drawing.Point(299, 62)
         Me.lblDNI.Name = "lblDNI"
         Me.lblDNI.Size = New System.Drawing.Size(35, 13)
         Me.lblDNI.TabIndex = 15
@@ -288,15 +294,15 @@ Partial Class FrmFichas
         'lblNumSS
         '
         Me.lblNumSS.AutoSize = True
-        Me.lblNumSS.Location = New System.Drawing.Point(446, 62)
+        Me.lblNumSS.Location = New System.Drawing.Point(440, 62)
         Me.lblNumSS.Name = "lblNumSS"
-        Me.lblNumSS.Size = New System.Drawing.Size(157, 13)
+        Me.lblNumSS.Size = New System.Drawing.Size(102, 13)
         Me.lblNumSS.TabIndex = 31
-        Me.lblNumSS.Text = "Numero de La Seguridad Social"
+        Me.lblNumSS.Text = "Nº Seguridad Social"
         '
         'txtDNI
         '
-        Me.txtDNI.Location = New System.Drawing.Point(372, 59)
+        Me.txtDNI.Location = New System.Drawing.Point(352, 59)
         Me.txtDNI.Mask = "00000000A"
         Me.txtDNI.Name = "txtDNI"
         Me.txtDNI.Size = New System.Drawing.Size(67, 20)
@@ -305,7 +311,7 @@ Partial Class FrmFichas
         '
         'txtNumSS
         '
-        Me.txtNumSS.Location = New System.Drawing.Point(613, 59)
+        Me.txtNumSS.Location = New System.Drawing.Point(551, 59)
         Me.txtNumSS.Mask = "00/00000000/00"
         Me.txtNumSS.Name = "txtNumSS"
         Me.txtNumSS.Size = New System.Drawing.Size(100, 20)
@@ -318,7 +324,7 @@ Partial Class FrmFichas
         Me.GbInaem.Controls.Add(Me.lblInFecha)
         Me.GbInaem.Controls.Add(Me.OptInaemNo)
         Me.GbInaem.Controls.Add(Me.optInaemSi)
-        Me.GbInaem.Location = New System.Drawing.Point(25, 246)
+        Me.GbInaem.Location = New System.Drawing.Point(25, 275)
         Me.GbInaem.Name = "GbInaem"
         Me.GbInaem.Size = New System.Drawing.Size(235, 60)
         Me.GbInaem.TabIndex = 13
@@ -375,7 +381,7 @@ Partial Class FrmFichas
         Me.GbExperiencia.Controls.Add(Me.cmdExperiencia)
         Me.GbExperiencia.Controls.Add(Me.LstExpSector)
         Me.GbExperiencia.Controls.Add(Me.CboExpSector)
-        Me.GbExperiencia.Location = New System.Drawing.Point(580, 222)
+        Me.GbExperiencia.Location = New System.Drawing.Point(580, 251)
         Me.GbExperiencia.Name = "GbExperiencia"
         Me.GbExperiencia.Size = New System.Drawing.Size(278, 130)
         Me.GbExperiencia.TabIndex = 15
@@ -428,7 +434,7 @@ Partial Class FrmFichas
         Me.GbUniforme.Controls.Add(Me.lblTallaPantalon)
         Me.GbUniforme.Controls.Add(Me.CboTallaCamiseta)
         Me.GbUniforme.Controls.Add(Me.lblTallaCamiseta)
-        Me.GbUniforme.Location = New System.Drawing.Point(25, 358)
+        Me.GbUniforme.Location = New System.Drawing.Point(25, 378)
         Me.GbUniforme.Name = "GbUniforme"
         Me.GbUniforme.Size = New System.Drawing.Size(172, 130)
         Me.GbUniforme.TabIndex = 16
@@ -498,9 +504,9 @@ Partial Class FrmFichas
         Me.GbEntrevista.Controls.Add(Me.txtValoracion)
         Me.GbEntrevista.Controls.Add(Me.txtEntrevistador)
         Me.GbEntrevista.Controls.Add(Me.lblEntrevistador)
-        Me.GbEntrevista.Location = New System.Drawing.Point(230, 358)
+        Me.GbEntrevista.Location = New System.Drawing.Point(230, 378)
         Me.GbEntrevista.Name = "GbEntrevista"
-        Me.GbEntrevista.Size = New System.Drawing.Size(519, 147)
+        Me.GbEntrevista.Size = New System.Drawing.Size(470, 147)
         Me.GbEntrevista.TabIndex = 17
         Me.GbEntrevista.TabStop = False
         Me.GbEntrevista.Tag = "21"
@@ -508,7 +514,7 @@ Partial Class FrmFichas
         '
         'txtFecEntr
         '
-        Me.txtFecEntr.Location = New System.Drawing.Point(407, 19)
+        Me.txtFecEntr.Location = New System.Drawing.Point(377, 19)
         Me.txtFecEntr.Mask = "00/00/0000"
         Me.txtFecEntr.Name = "txtFecEntr"
         Me.txtFecEntr.Size = New System.Drawing.Size(67, 20)
@@ -519,7 +525,7 @@ Partial Class FrmFichas
         'lblFecEntr
         '
         Me.lblFecEntr.AutoSize = True
-        Me.lblFecEntr.Location = New System.Drawing.Point(288, 22)
+        Me.lblFecEntr.Location = New System.Drawing.Point(258, 22)
         Me.lblFecEntr.Name = "lblFecEntr"
         Me.lblFecEntr.Size = New System.Drawing.Size(113, 13)
         Me.lblFecEntr.TabIndex = 39
@@ -530,7 +536,7 @@ Partial Class FrmFichas
         Me.txtValoracion.Location = New System.Drawing.Point(23, 59)
         Me.txtValoracion.Multiline = True
         Me.txtValoracion.Name = "txtValoracion"
-        Me.txtValoracion.Size = New System.Drawing.Size(482, 78)
+        Me.txtValoracion.Size = New System.Drawing.Size(426, 78)
         Me.txtValoracion.TabIndex = 2
         Me.txtValoracion.Tag = "23"
         '
@@ -564,7 +570,7 @@ Partial Class FrmFichas
         '
         'cmdModificar
         '
-        Me.cmdModificar.Location = New System.Drawing.Point(897, 161)
+        Me.cmdModificar.Location = New System.Drawing.Point(897, 166)
         Me.cmdModificar.Name = "cmdModificar"
         Me.cmdModificar.Size = New System.Drawing.Size(104, 52)
         Me.cmdModificar.TabIndex = 19
@@ -583,7 +589,7 @@ Partial Class FrmFichas
         'lblId1
         '
         Me.lblId1.AutoSize = True
-        Me.lblId1.Location = New System.Drawing.Point(897, 20)
+        Me.lblId1.Location = New System.Drawing.Point(849, 20)
         Me.lblId1.Name = "lblId1"
         Me.lblId1.Size = New System.Drawing.Size(18, 13)
         Me.lblId1.TabIndex = 42
@@ -592,7 +598,7 @@ Partial Class FrmFichas
         'txtId
         '
         Me.txtId.Enabled = False
-        Me.txtId.Location = New System.Drawing.Point(900, 37)
+        Me.txtId.Location = New System.Drawing.Point(881, 16)
         Me.txtId.Name = "txtId"
         Me.txtId.Size = New System.Drawing.Size(56, 20)
         Me.txtId.TabIndex = 43
@@ -600,7 +606,7 @@ Partial Class FrmFichas
         '
         'txtNivelEstudios
         '
-        Me.txtNivelEstudios.Location = New System.Drawing.Point(297, 253)
+        Me.txtNivelEstudios.Location = New System.Drawing.Point(297, 282)
         Me.txtNivelEstudios.Multiline = True
         Me.txtNivelEstudios.Name = "txtNivelEstudios"
         Me.txtNivelEstudios.Size = New System.Drawing.Size(270, 53)
@@ -610,7 +616,7 @@ Partial Class FrmFichas
         'lblNivelEstudios
         '
         Me.lblNivelEstudios.AutoSize = True
-        Me.lblNivelEstudios.Location = New System.Drawing.Point(297, 222)
+        Me.lblNivelEstudios.Location = New System.Drawing.Point(297, 251)
         Me.lblNivelEstudios.Name = "lblNivelEstudios"
         Me.lblNivelEstudios.Size = New System.Drawing.Size(102, 13)
         Me.lblNivelEstudios.TabIndex = 14
@@ -621,7 +627,7 @@ Partial Class FrmFichas
         Me.GbApto.Controls.Add(Me.OptAptoPendiente)
         Me.GbApto.Controls.Add(Me.OptAptoNo)
         Me.GbApto.Controls.Add(Me.optAptoSi)
-        Me.GbApto.Location = New System.Drawing.Point(230, 512)
+        Me.GbApto.Location = New System.Drawing.Point(230, 532)
         Me.GbApto.Name = "GbApto"
         Me.GbApto.Size = New System.Drawing.Size(519, 48)
         Me.GbApto.TabIndex = 18
@@ -666,7 +672,7 @@ Partial Class FrmFichas
         '
         'cmdSalir
         '
-        Me.cmdSalir.Location = New System.Drawing.Point(897, 522)
+        Me.cmdSalir.Location = New System.Drawing.Point(897, 543)
         Me.cmdSalir.Name = "cmdSalir"
         Me.cmdSalir.Size = New System.Drawing.Size(104, 52)
         Me.cmdSalir.TabIndex = 21
@@ -692,7 +698,7 @@ Partial Class FrmFichas
         '
         'cmdCambiarFoto
         '
-        Me.cmdCambiarFoto.Location = New System.Drawing.Point(850, 76)
+        Me.cmdCambiarFoto.Location = New System.Drawing.Point(799, 117)
         Me.cmdCambiarFoto.Name = "cmdCambiarFoto"
         Me.cmdCambiarFoto.Size = New System.Drawing.Size(53, 39)
         Me.cmdCambiarFoto.TabIndex = 45
@@ -702,7 +708,7 @@ Partial Class FrmFichas
         'LblFoto
         '
         Me.LblFoto.AutoSize = True
-        Me.LblFoto.Location = New System.Drawing.Point(768, 9)
+        Me.LblFoto.Location = New System.Drawing.Point(717, 4)
         Me.LblFoto.Name = "LblFoto"
         Me.LblFoto.Size = New System.Drawing.Size(28, 13)
         Me.LblFoto.TabIndex = 46
@@ -727,11 +733,70 @@ Partial Class FrmFichas
         Me.cmdAñadirAAlumnos.Text = "Añadir  Como Alumno"
         Me.cmdAñadirAAlumnos.UseVisualStyleBackColor = True
         '
+        'TextBox1
+        '
+        Me.TextBox1.Enabled = False
+        Me.TextBox1.Location = New System.Drawing.Point(804, 75)
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.Size = New System.Drawing.Size(197, 20)
+        Me.TextBox1.TabIndex = 50
+        Me.TextBox1.Tag = "0"
+        '
+        'lblCurso
+        '
+        Me.lblCurso.AutoSize = True
+        Me.lblCurso.Location = New System.Drawing.Point(886, 55)
+        Me.lblCurso.Name = "lblCurso"
+        Me.lblCurso.Size = New System.Drawing.Size(45, 13)
+        Me.lblCurso.TabIndex = 49
+        Me.lblCurso.Text = "CURSO"
+        '
+        'cmdAñadirComentarios
+        '
+        Me.cmdAñadirComentarios.Location = New System.Drawing.Point(748, 438)
+        Me.cmdAñadirComentarios.Name = "cmdAñadirComentarios"
+        Me.cmdAñadirComentarios.Size = New System.Drawing.Size(104, 52)
+        Me.cmdAñadirComentarios.TabIndex = 51
+        Me.cmdAñadirComentarios.Text = "Añadir Comentarios"
+        Me.cmdAñadirComentarios.UseVisualStyleBackColor = True
+        '
+        'lblComentarios
+        '
+        Me.lblComentarios.AutoSize = True
+        Me.lblComentarios.Location = New System.Drawing.Point(748, 406)
+        Me.lblComentarios.Name = "lblComentarios"
+        Me.lblComentarios.Size = New System.Drawing.Size(65, 13)
+        Me.lblComentarios.TabIndex = 52
+        Me.lblComentarios.Text = "Comentarios"
+        '
+        'txtEmail
+        '
+        Me.txtEmail.Location = New System.Drawing.Point(79, 213)
+        Me.txtEmail.Name = "txtEmail"
+        Me.txtEmail.Size = New System.Drawing.Size(457, 20)
+        Me.txtEmail.TabIndex = 53
+        Me.txtEmail.Tag = "8"
+        '
+        'lblEmail
+        '
+        Me.lblEmail.AutoSize = True
+        Me.lblEmail.Location = New System.Drawing.Point(24, 216)
+        Me.lblEmail.Name = "lblEmail"
+        Me.lblEmail.Size = New System.Drawing.Size(49, 13)
+        Me.lblEmail.TabIndex = 54
+        Me.lblEmail.Text = "Domicilio"
+        '
         'FrmFichas
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1013, 636)
+        Me.Controls.Add(Me.txtEmail)
+        Me.Controls.Add(Me.lblEmail)
+        Me.Controls.Add(Me.lblComentarios)
+        Me.Controls.Add(Me.cmdAñadirComentarios)
+        Me.Controls.Add(Me.TextBox1)
+        Me.Controls.Add(Me.lblCurso)
         Me.Controls.Add(Me.cmdAñadirAAlumnos)
         Me.Controls.Add(Me.cmdBorrar)
         Me.Controls.Add(Me.LblFoto)
@@ -856,4 +921,10 @@ Partial Class FrmFichas
     Friend WithEvents LblFoto As System.Windows.Forms.Label
     Friend WithEvents cmdBorrar As System.Windows.Forms.Button
     Friend WithEvents cmdAñadirAAlumnos As System.Windows.Forms.Button
+    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
+    Friend WithEvents lblCurso As System.Windows.Forms.Label
+    Friend WithEvents cmdAñadirComentarios As System.Windows.Forms.Button
+    Friend WithEvents lblComentarios As System.Windows.Forms.Label
+    Friend WithEvents txtEmail As System.Windows.Forms.TextBox
+    Friend WithEvents lblEmail As System.Windows.Forms.Label
 End Class

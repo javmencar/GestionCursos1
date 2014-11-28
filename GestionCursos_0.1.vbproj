@@ -114,6 +114,12 @@
     <Compile Include="FrmAlumnos.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FrmComentarios.Designer.vb">
+      <DependentUpon>FrmComentarios.vb</DependentUpon>
+    </Compile>
+    <Compile Include="FrmComentarios.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FrmCursos.Designer.vb">
       <DependentUpon>FrmCursos.vb</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

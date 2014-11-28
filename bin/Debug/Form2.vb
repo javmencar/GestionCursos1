@@ -4,7 +4,7 @@ Public Class Form2
     Dim cn As SqlConnection
     Dim cur As Curso
     Public arr As ArrayList
-    Dim tipo As Integer
+    Dim tipo, idcurso As Integer
 
     Dim filtrado As Boolean
     Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -19,7 +19,8 @@ Public Class Form2
         For Each lin As String In arr
             Me.ListBox1.Items.Add(lin.ToString)
         Next
-
+        tipo = 0
+        idcurso = 0
     End Sub
     Public Function cambiarPutoFormatoFecha(ByVal s As String) As Date
         Dim t As String = "311299990000"
@@ -290,7 +291,7 @@ Public Class Form2
             filtrado = False
         End If
         tipo = CInt(Me.TextBox3.Text)
-
+        idcurso = CInt(Me.TextBox4.Text)
         Select Case tipo
             Case 1
                 tabla = "Alumnos"
@@ -303,7 +304,7 @@ Public Class Form2
 
         If filtrado = True Then
             Dim aux1 As String = String.Format(", {0}_Cursos, Cursos", tabla)
-            Dim aux2 As String = String.Format("AND {0}.Id={0}_Cursos.Id{1} AND Cursos.Id={0}_Cursos.IdCur AND Cursos.Id=1", tabla, recorte)
+            Dim aux2 As String = String.Format("AND {0}.Id={0}_Cursos.Id{1} AND Cursos.Id={0}_Cursos.IdCur AND Cursos.Id={2}", tabla, recorte, idcurso)
             sql = String.Format("SELECT {0}.Id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2, DatosPersonales.Tel1, DatosPersonales.Tel2, DatosPersonales.InInaem FROM {0}, DatosPersonales {1} WHERE DatosPersonales.Id={0}.IdDP {2}", tabla, aux1, aux2)
         Else
             sql = String.Format("SELECT {0}.Id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2, DatosPersonales.Tel1, DatosPersonales.Tel2, DatosPersonales.InInaem FROM {0}, DatosPersonales WHERE DatosPersonales.Id={0}.IdDP", tabla)

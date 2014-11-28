@@ -136,6 +136,12 @@ Public Class FrmFichas
                 Me.PicBx1.Image = Image.FromFile("C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg")
                 Me.PicBx1.Tag = "C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg"
             End If
+            Me.txtEmail.Text = .Email
+            If Not IsNothing(.Comentarios) Then
+                Me.lblComentarios.Text = "HAY COMENTARIOS"
+                Me.lblComentarios.BackColor = Color.Red
+                Me.cmdAñadirComentarios.Text = "Acceder a Comentarios"
+            End If
         End With
     End Sub
 
@@ -761,4 +767,12 @@ Public Class FrmFichas
         Me.cmdAñadirAAlumnos.Enabled = False
     End Sub
 
+    Private Sub GbEntrevista_Enter(sender As Object, e As EventArgs) Handles GbEntrevista.Enter
+
+    End Sub
+
+    Private Sub cmdAñadirComentarios_Click(sender As Object, e As EventArgs) Handles cmdAñadirComentarios.Click
+        Dim frm As New FrmComentarios
+        frm.ShowDialog()
+    End Sub
 End Class
