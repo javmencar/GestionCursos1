@@ -3,8 +3,9 @@ Imports System.Data.SqlClient
 Public Class FrmListado
 
     Public cn As SqlConnection
-    Public cat As String
+    Public cat, crit As String
     Dim tipo As Integer
+    Dim listaCursos As List(Of Integer)
     Public Sub New(ByVal ti As Integer)
         ' Llamada necesaria para el diseñador.
         InitializeComponent()
@@ -12,14 +13,10 @@ Public Class FrmListado
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
     End Sub
     Private Sub FrmListado_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim camposListview() As String = {"DNI", "Nombre", "Apellido1", "Apellido2"}
-
         cn = New SqlConnection(ConeStr)
-        With Me.CboFiltro
-            For Each s As String In camposListview
-                .Items.Add(s)
-            Next
-        End With
+        Me.CmdExportar.Enabled = False
+        Call cargarBusquedaUnica()
+        Call cargarComboGordo()
         Select Case tipo
             Case 1
                 cat = "Alumnos"
@@ -33,6 +30,33 @@ Public Class FrmListado
         End Select
         limpiarListView()
     End Sub
+    Private Sub cargarComboGordo()
+        Try
+            listaCursos = New List(Of Integer)
+            'los ordeno de forma descendente para que salgan primero los ultimos
+            Dim sql As String = "SELECT Cursos.Id, Cursos.CodCur FROM CURSOS ORDER BY Cursos.Id DESC"
+            Dim cmd As New SqlCommand(sql, cn)
+            Dim dr As SqlDataReader
+            cn.Open()
+            dr = cmd.ExecuteReader
+            While dr.Read
+                listaCursos.Add(dr(0))
+                Me.CboFiltroGordo.Items.Add(dr(1))
+            End While
+        Catch ex2 As miExcepcion
+            MsgBox(ex2.ToString)
+        Catch ex As Exception
+            MsgBox(ex.ToString)
+        Finally
+            cn.Close()
+        End Try
+    End Sub
+    Private Sub cargarBusquedaUnica()
+        Dim camposFiltroBusquedaUnica() As String = {"DNI", "Nombre", "Apellido1", "Apellido2"}
+        For Each s As String In camposFiltroBusquedaUnica
+            Me.CboFiltroBusquedaUnica.Items.Add(s)
+        Next
+    End Sub
     Private Sub limpiarListView()
         Me.ListView1.Refresh()
         With Me.ListView1
@@ -41,50 +65,53 @@ Public Class FrmListado
             .GridLines = True
             .Sorting = SortOrder.Ascending
             .Items.Clear()
+            'METER AQUI LOS CAMPOS QUE QUIERAN, POR AHORA LOS TELEFONOS
+            Dim camposListview() As String = {"Id", "DNI", "Nombre", "Apellido1", "Apellido2",
+                                        "Tel1", "tel2", "InInaem", "", ""}
             With .Columns
-                .Add("Id", 25, HorizontalAlignment.Center)
-                .Add("DNI", 75, HorizontalAlignment.Center)
-                .Add("Nombre", 180, HorizontalAlignment.Center)
-                .Add("Apellido1", 180, HorizontalAlignment.Center)
-                .Add("Apellido2", 180, HorizontalAlignment.Center)
+                For Each s As String In camposListview
+                    .Add(s, 150, HorizontalAlignment.Center)
+                Next
             End With
         End With
-        Call cargarDatosEnListview()
+        Call cargarDatosEnListview("")
     End Sub
-    Private Sub cargarDatosEnListview()
+    Private Sub cargarDatosEnListview(ByVal str As String)
         Try
             Me.ListView1.Items.Clear()
             cn.Open()
             Dim sql As String = ""
+            'METER AQUI LOS DATOS QUE SE QUIERAN CONSULTAR
+            Dim SelectDatos As String = "DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2," &
+                " DatosPersonales.Tel1, DatosPersonales.Tel2, DatosPersonales.InInaem " 'AQUI AÑADES EL RESTO DE CONSULTAS
             Select Case tipo
                 Case 1  ' "Alumnos"
-                    sql = "SELECT Alumnos.Id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2" &
-                            " FROM Alumnos, DatosPersonales " &
-                             " WHERE DatosPersonales.Id=Alumnos.IdDP ORDER BY Alumnos.IdDP ASC "
+                    sql = String.Format("SELECT {1}.Id, {0} FROM {1}, DatosPersonales WHERE DatosPersonales.Id={1}.IdDP ORDER BY {1}.IdDP ASC", SelectDatos, "Alumnos")
                 Case 2  ' "Profesores"
-                    sql = "SELECT Profesores.Id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2" &
-                             " FROM Profesores, DatosPersonales " &
-                             "  WHERE DatosPersonales.Id=Profesores.IdDP ORDER BY Profesores.IdDP ASC "
+                    sql = String.Format("SELECT {1}.Id, {0} FROM {1}, DatosPersonales WHERE DatosPersonales.Id={1}.IdDP ORDER BY {1}.IdDP ASC", SelectDatos, "Profesores")
+
                 Case 3  ' "Candidatos"
-                    sql = "SELECT DatosPersonales.Id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2" &
-                            " FROM DatosPersonales " &
-                             " WHERE NOT EXISTS (SELECT 1 FROM Alumnos WHERE Alumnos.IdDP=DatosPersonales.Id) " &
+                    sql = String.Format("SELECT DatosPersonales.Id, {0} FROM DatosPersonales  WHERE NOT EXISTS (SELECT 1 FROM Alumnos WHERE Alumnos.IdDP=DatosPersonales.Id) " &
                              " AND NOT EXISTS (SELECT 1 FROM Profesores WHERE Profesores.IdDP=DatosPersonales.Id)" &
-                             " ORDER BY DatosPersonales.Id ASC"
+                             " ORDER BY DatosPersonales.Id ASC", SelectDatos)
                 Case Else
                     Throw New miExcepcion("error al cargar los datos en el listview")
             End Select
             Dim cmd As New SqlCommand(sql, cn)
             Dim dr As SqlDataReader
             dr = cmd.ExecuteReader
-
             Dim i As Integer = 0
             While dr.Read
                 Me.ListView1.Items.Add(dr(0))
-                Me.ListView1.Items(i).SubItems.Add(dr(1).ToString)
-                Me.ListView1.Items(i).SubItems.Add(dr(2).ToString)
-                Me.ListView1.Items(i).SubItems.Add(dr(3).ToString)
-                Me.ListView1.Items(i).SubItems.Add(dr(4).ToString)
+                For j As Integer = 1 To dr.FieldCount - 1
+                    If j = 7 Then
+                        If dr(j).ToString = "True" Then
+                            Me.ListView1.Items(i).SubItems.Add("En Paro")
+                        End If
+                    Else
+                        Me.ListView1.Items(i).SubItems.Add(dr(j).ToString)
+                    End If
+                Next
                 i += 1
             End While
         Catch ex2 As miExcepcion
@@ -102,7 +129,7 @@ Public Class FrmListado
         Dim frm As New FrmFichas(dpers, tipo, True)
         If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
             MsgBox("Insercion en la base de datos Completada")
-            Call cargarDatosEnListview()
+            Call cargarDatosEnListview("")
         ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
             Throw New miExcepcion("cancelado a peticion del usuario")
         ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
@@ -115,7 +142,7 @@ Public Class FrmListado
     Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs) Handles ListView1.DoubleClick
         AccederFicha()
     End Sub
-    Private Sub AccederFicha()
+    Private Sub AccederFicha()  'Lo saco porque se duplica al poder hacerlo tb. desde dobleClick
         Dim aviso As String = cat.Substring(0, cat.Length - 1)
         Try
             If Me.ListView1.SelectedIndices.Count = 0 Then Throw New miExcepcion("Debe seleccionar un elemento del listado")
@@ -124,7 +151,7 @@ Public Class FrmListado
                 'en tipo llevo si es alumno, profesor o candidato; false porque es modificacion de uno existente
                 Dim frm As New FrmFichas(DP, tipo, False)
                 If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                    Call cargarDatosEnListview()
+                    Call cargarDatosEnListview("")
                 ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
                     Throw New miExcepcion("proceso cancelado a peticion del usuario")
                 ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
@@ -313,7 +340,7 @@ Public Class FrmListado
                 Dim resultadoBorrar As Integer = borrarDatosPersonales(id)
                 If resultadoBorrar = -1 Then Throw New miExcepcion("Error al borrar")
                 MsgBox("Datos borrados con éxito")
-                Call cargarDatosEnListview()
+                Call cargarDatosEnListview("")
             End If
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
@@ -322,20 +349,20 @@ Public Class FrmListado
         End Try
     End Sub
     Private Sub cmdBuscar_Click(sender As Object, e As EventArgs) Handles cmdBuscar.Click
-        If Me.CboFiltro.SelectedIndex = -1 Then
+        If Me.CboFiltroBusquedaUnica.SelectedIndex = -1 Then
             MsgBox(" Seleccione un criterio de busqueda del combo")
         Else
             Dim pos As Integer = -1
             Dim encontrado As Boolean = False
             For i As Integer = 0 To Me.ListView1.Items.Count - 1
-                If Me.ListView1.Items(i).SubItems(Me.CboFiltro.SelectedIndex + 1).Text = Me.TxtCampo.Text Then
+                If Me.ListView1.Items(i).SubItems(Me.CboFiltroBusquedaUnica.SelectedIndex + 1).Text = Me.TxtCampo.Text Then
                     encontrado = True
                     pos = i
                     Exit For
                 End If
             Next
             If pos = -1 Then ' No lo ha encontrado
-                MsgBox(String.Format("El {0} a buscar no se encuentra en el listado", Me.CboFiltro.SelectedItem.ToString))
+                MsgBox(String.Format("El {0} a buscar no se encuentra en el listado", Me.CboFiltroBusquedaUnica.SelectedItem.ToString))
                 Me.TxtCampo.Focus()
                 Me.TxtCampo.SelectAll()
             Else 'Lo ha encontrado
@@ -347,9 +374,44 @@ Public Class FrmListado
                     Me.ListView1.SelectedItems.Item(0).Checked = True
                 End If
                 'Limpio el combo y el campo
-                Me.CboFiltro.SelectedIndex = -1
+                Me.CboFiltroBusquedaUnica.SelectedIndex = -1
                 Me.TxtCampo.Text = ""
             End If
         End If
+    End Sub
+
+    Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+
+    End Sub
+
+    Private Sub CmdActivarExportar_Click(sender As Object, e As EventArgs) Handles CmdExportar.Click
+        MsgBox("Proximamente")
+    End Sub
+
+
+    Private Sub ChkExportar_Click(sender As Object, e As EventArgs) Handles ChkExportar.Click
+        If ChkExportar.Checked = True Then
+            Me.ListView1.MultiSelect = True
+            Me.CmdExportar.Enabled = True
+        Else
+            Me.ListView1.MultiSelect = False
+            Me.CmdExportar.Enabled = False
+        End If
+
+    End Sub
+
+    Private Sub CboFiltroGordo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles CboFiltroGordo.SelectedIndexChanged
+        crit = Me.CboFiltroGordo.SelectedItem.ToString
+        Call cargarcombo2()
+    End Sub
+    Private Sub cargarcombo2()
+
+    End Sub
+
+    Private Sub cmdFiltrar_Click(sender As Object, e As EventArgs) Handles cmdFiltrar.Click
+        'For Each i As Integer In listaCursos
+        '    Me.cboFiltro2.Items.Add(i)
+        'Next
+        Call cargarDatosEnListview("") ' aqui añadir la ultima condicion del where
     End Sub
 End Class

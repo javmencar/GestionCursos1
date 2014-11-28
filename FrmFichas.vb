@@ -88,7 +88,7 @@ Public Class FrmFichas
             'controlo si hay algo en el string
             Me.LstExpSector.Items.Clear()
             If Not IsNothing(.ExpSector) Then
-                Dim sectores() As String = .ExpSector.Split(";")
+                Dim sectores() As String = .ExpSector.Split("/")
                 For Each s As String In sectores
                     Me.LstExpSector.Items.Add(s)
                 Next
@@ -194,7 +194,7 @@ Public Class FrmFichas
                 Dim expSect1 As String = ""
                 If Me.LstExpSector.Items.Count > 0 Then
                     For Each l As String In Me.LstExpSector.Items
-                        expSect1 &= String.Format(";{0}", l)
+                        expSect1 &= String.Format("/{0}", l)
                     Next
                     expSect1 = expSect1.Substring(1)
                 End If

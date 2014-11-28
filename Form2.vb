@@ -4,6 +4,9 @@ Public Class Form2
     Dim cn As SqlConnection
     Dim cur As Curso
     Public arr As ArrayList
+    Dim tipo As Integer
+
+    Dim filtrado As Boolean
     Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         cn = New SqlConnection(ConeStr)
         Arr = New ArrayList
@@ -12,7 +15,7 @@ Public Class Form2
         arr.Add("1_modulo 1")
         arr.Add("4_modulo 4")
         arr.Add("2_modulo 2")
-
+       
         For Each lin As String In arr
             Me.ListBox1.Items.Add(lin.ToString)
         Next
@@ -277,4 +280,41 @@ Public Class Form2
         End Try
         Return DP
     End Function
+
+    Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        Dim sql As String = ""
+        Dim tabla, recorte As String
+        If Me.CheckBox1.Checked = True Then
+            filtrado = True
+        Else
+            filtrado = False
+        End If
+        tipo = CInt(Me.TextBox3.Text)
+
+        Select Case tipo
+            Case 1
+                tabla = "Alumnos"
+            Case 2
+                tabla = "Profesores"
+            Case 3
+                tabla = "Candidatos"
+        End Select
+        recorte = tabla.Substring(0, 2)
+
+        If filtrado = True Then
+            Dim aux1 As String = String.Format(", {0}_Cursos, Cursos", tabla)
+            Dim aux2 As String = String.Format("AND {0}.Id={0}_Cursos.Id{1} AND Cursos.Id={0}_Cursos.IdCur AND Cursos.Id=1", tabla, recorte)
+            sql = String.Format("SELECT {0}.Id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2, DatosPersonales.Tel1, DatosPersonales.Tel2, DatosPersonales.InInaem FROM {0}, DatosPersonales {1} WHERE DatosPersonales.Id={0}.IdDP {2}", tabla, aux1, aux2)
+        Else
+            sql = String.Format("SELECT {0}.Id, DatosPersonales.DNI, DatosPersonales.Nombre, DatosPersonales.Apellido1, DatosPersonales.Apellido2, DatosPersonales.Tel1, DatosPersonales.Tel2, DatosPersonales.InInaem FROM {0}, DatosPersonales WHERE DatosPersonales.Id={0}.IdDP", tabla)
+        End If
+        MsgBox(sql)
+
+
+
+
+
+
+
+    End Sub
 End Class

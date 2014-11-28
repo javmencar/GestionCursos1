@@ -28,30 +28,40 @@ Partial Class FrmListado
         Me.cmdModificar = New System.Windows.Forms.Button()
         Me.cmdBorrar = New System.Windows.Forms.Button()
         Me.cmdSalir = New System.Windows.Forms.Button()
-        Me.GbBuscar = New System.Windows.Forms.GroupBox()
+        Me.GbBusquedaUnica = New System.Windows.Forms.GroupBox()
         Me.cmdBuscar = New System.Windows.Forms.Button()
         Me.TxtCampo = New System.Windows.Forms.TextBox()
         Me.LblCampo = New System.Windows.Forms.Label()
-        Me.CboFiltro = New System.Windows.Forms.ComboBox()
+        Me.CboFiltroBusquedaUnica = New System.Windows.Forms.ComboBox()
         Me.GestionCursosDataSet = New GestionCursos_0._1.GestionCursosDataSet()
         Me.GestionCursosDataSetBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.GbBuscar.SuspendLayout()
+        Me.CmdExportar = New System.Windows.Forms.Button()
+        Me.ChkExportar = New System.Windows.Forms.CheckBox()
+        Me.GbFiltros = New System.Windows.Forms.GroupBox()
+        Me.cboFiltro2 = New System.Windows.Forms.ComboBox()
+        Me.lblFiltro2 = New System.Windows.Forms.Label()
+        Me.CboFiltroGordo = New System.Windows.Forms.ComboBox()
+        Me.lblFiltroGordo = New System.Windows.Forms.Label()
+        Me.cmdFiltrar = New System.Windows.Forms.Button()
+        Me.cmdQuitarFiltro = New System.Windows.Forms.Button()
+        Me.GbBusquedaUnica.SuspendLayout()
         CType(Me.GestionCursosDataSet, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.GestionCursosDataSetBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GbFiltros.SuspendLayout()
         Me.SuspendLayout()
         '
         'ListView1
         '
-        Me.ListView1.Location = New System.Drawing.Point(13, 35)
+        Me.ListView1.Location = New System.Drawing.Point(13, 152)
         Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(668, 298)
+        Me.ListView1.Size = New System.Drawing.Size(1077, 298)
         Me.ListView1.TabIndex = 0
         Me.ListView1.UseCompatibleStateImageBehavior = False
         '
         'cmdNuevo
         '
-        Me.cmdNuevo.Location = New System.Drawing.Point(687, 89)
+        Me.cmdNuevo.Location = New System.Drawing.Point(1120, 206)
         Me.cmdNuevo.Name = "cmdNuevo"
         Me.cmdNuevo.Size = New System.Drawing.Size(121, 48)
         Me.cmdNuevo.TabIndex = 1
@@ -60,7 +70,7 @@ Partial Class FrmListado
         '
         'cmdModificar
         '
-        Me.cmdModificar.Location = New System.Drawing.Point(687, 153)
+        Me.cmdModificar.Location = New System.Drawing.Point(1120, 270)
         Me.cmdModificar.Name = "cmdModificar"
         Me.cmdModificar.Size = New System.Drawing.Size(121, 48)
         Me.cmdModificar.TabIndex = 2
@@ -69,7 +79,7 @@ Partial Class FrmListado
         '
         'cmdBorrar
         '
-        Me.cmdBorrar.Location = New System.Drawing.Point(687, 219)
+        Me.cmdBorrar.Location = New System.Drawing.Point(1120, 336)
         Me.cmdBorrar.Name = "cmdBorrar"
         Me.cmdBorrar.Size = New System.Drawing.Size(121, 48)
         Me.cmdBorrar.TabIndex = 3
@@ -78,25 +88,25 @@ Partial Class FrmListado
         '
         'cmdSalir
         '
-        Me.cmdSalir.Location = New System.Drawing.Point(687, 285)
+        Me.cmdSalir.Location = New System.Drawing.Point(1120, 423)
         Me.cmdSalir.Name = "cmdSalir"
         Me.cmdSalir.Size = New System.Drawing.Size(121, 48)
         Me.cmdSalir.TabIndex = 4
         Me.cmdSalir.Text = "Salir"
         Me.cmdSalir.UseVisualStyleBackColor = True
         '
-        'GbBuscar
+        'GbBusquedaUnica
         '
-        Me.GbBuscar.Controls.Add(Me.cmdBuscar)
-        Me.GbBuscar.Controls.Add(Me.TxtCampo)
-        Me.GbBuscar.Controls.Add(Me.LblCampo)
-        Me.GbBuscar.Controls.Add(Me.CboFiltro)
-        Me.GbBuscar.Location = New System.Drawing.Point(37, 386)
-        Me.GbBuscar.Name = "GbBuscar"
-        Me.GbBuscar.Size = New System.Drawing.Size(627, 100)
-        Me.GbBuscar.TabIndex = 5
-        Me.GbBuscar.TabStop = False
-        Me.GbBuscar.Text = "BUSCAR POR"
+        Me.GbBusquedaUnica.Controls.Add(Me.cmdBuscar)
+        Me.GbBusquedaUnica.Controls.Add(Me.TxtCampo)
+        Me.GbBusquedaUnica.Controls.Add(Me.LblCampo)
+        Me.GbBusquedaUnica.Controls.Add(Me.CboFiltroBusquedaUnica)
+        Me.GbBusquedaUnica.Location = New System.Drawing.Point(37, 503)
+        Me.GbBusquedaUnica.Name = "GbBusquedaUnica"
+        Me.GbBusquedaUnica.Size = New System.Drawing.Size(627, 100)
+        Me.GbBusquedaUnica.TabIndex = 5
+        Me.GbBusquedaUnica.TabStop = False
+        Me.GbBusquedaUnica.Text = "Buscar una ficha "
         '
         'cmdBuscar
         '
@@ -123,14 +133,14 @@ Partial Class FrmListado
         Me.LblCampo.TabIndex = 1
         Me.LblCampo.Text = "Campo a buscar"
         '
-        'CboFiltro
+        'CboFiltroBusquedaUnica
         '
-        Me.CboFiltro.DataBindings.Add(New System.Windows.Forms.Binding("SelectedValue", Me.GestionCursosDataSet, "DatosPersonales.Id", True))
-        Me.CboFiltro.FormattingEnabled = True
-        Me.CboFiltro.Location = New System.Drawing.Point(16, 20)
-        Me.CboFiltro.Name = "CboFiltro"
-        Me.CboFiltro.Size = New System.Drawing.Size(180, 21)
-        Me.CboFiltro.TabIndex = 0
+        Me.CboFiltroBusquedaUnica.DataBindings.Add(New System.Windows.Forms.Binding("SelectedValue", Me.GestionCursosDataSet, "DatosPersonales.Id", True))
+        Me.CboFiltroBusquedaUnica.FormattingEnabled = True
+        Me.CboFiltroBusquedaUnica.Location = New System.Drawing.Point(16, 20)
+        Me.CboFiltroBusquedaUnica.Name = "CboFiltroBusquedaUnica"
+        Me.CboFiltroBusquedaUnica.Size = New System.Drawing.Size(180, 21)
+        Me.CboFiltroBusquedaUnica.TabIndex = 0
         '
         'GestionCursosDataSet
         '
@@ -145,19 +155,108 @@ Partial Class FrmListado
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(296, 13)
+        Me.Label1.Location = New System.Drawing.Point(296, 130)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(39, 13)
         Me.Label1.TabIndex = 6
         Me.Label1.Text = "Label1"
         '
+        'CmdExportar
+        '
+        Me.CmdExportar.Location = New System.Drawing.Point(1120, 459)
+        Me.CmdExportar.Name = "CmdExportar"
+        Me.CmdExportar.Size = New System.Drawing.Size(121, 48)
+        Me.CmdExportar.TabIndex = 7
+        Me.CmdExportar.Text = "Exportar Datos"
+        Me.CmdExportar.UseVisualStyleBackColor = True
+        '
+        'ChkExportar
+        '
+        Me.ChkExportar.AutoSize = True
+        Me.ChkExportar.Location = New System.Drawing.Point(908, 476)
+        Me.ChkExportar.Name = "ChkExportar"
+        Me.ChkExportar.Size = New System.Drawing.Size(206, 17)
+        Me.ChkExportar.TabIndex = 8
+        Me.ChkExportar.Text = "Quiero Activar la exportación de datos"
+        Me.ChkExportar.UseVisualStyleBackColor = True
+        '
+        'GbFiltros
+        '
+        Me.GbFiltros.Controls.Add(Me.cmdQuitarFiltro)
+        Me.GbFiltros.Controls.Add(Me.cmdFiltrar)
+        Me.GbFiltros.Controls.Add(Me.cboFiltro2)
+        Me.GbFiltros.Controls.Add(Me.lblFiltro2)
+        Me.GbFiltros.Controls.Add(Me.CboFiltroGordo)
+        Me.GbFiltros.Controls.Add(Me.lblFiltroGordo)
+        Me.GbFiltros.Location = New System.Drawing.Point(37, 27)
+        Me.GbFiltros.Name = "GbFiltros"
+        Me.GbFiltros.Size = New System.Drawing.Size(668, 88)
+        Me.GbFiltros.TabIndex = 9
+        Me.GbFiltros.TabStop = False
+        Me.GbFiltros.Text = "Filtrar"
+        '
+        'cboFiltro2
+        '
+        Me.cboFiltro2.FormattingEnabled = True
+        Me.cboFiltro2.Location = New System.Drawing.Point(262, 48)
+        Me.cboFiltro2.Name = "cboFiltro2"
+        Me.cboFiltro2.Size = New System.Drawing.Size(187, 21)
+        Me.cboFiltro2.TabIndex = 16
+        '
+        'lblFiltro2
+        '
+        Me.lblFiltro2.AutoSize = True
+        Me.lblFiltro2.Location = New System.Drawing.Point(259, 32)
+        Me.lblFiltro2.Name = "lblFiltro2"
+        Me.lblFiltro2.Size = New System.Drawing.Size(199, 13)
+        Me.lblFiltro2.TabIndex = 15
+        Me.lblFiltro2.Text = "Opciones Dentro Del Filtro Seleccionado"
+        '
+        'CboFiltroGordo
+        '
+        Me.CboFiltroGordo.FormattingEnabled = True
+        Me.CboFiltroGordo.Location = New System.Drawing.Point(27, 48)
+        Me.CboFiltroGordo.Name = "CboFiltroGordo"
+        Me.CboFiltroGordo.Size = New System.Drawing.Size(187, 21)
+        Me.CboFiltroGordo.TabIndex = 14
+        '
+        'lblFiltroGordo
+        '
+        Me.lblFiltroGordo.AutoSize = True
+        Me.lblFiltroGordo.Location = New System.Drawing.Point(40, 32)
+        Me.lblFiltroGordo.Name = "lblFiltroGordo"
+        Me.lblFiltroGordo.Size = New System.Drawing.Size(157, 13)
+        Me.lblFiltroGordo.TabIndex = 13
+        Me.lblFiltroGordo.Text = "Seleccione el criterio para Filtrar"
+        '
+        'cmdFiltrar
+        '
+        Me.cmdFiltrar.Location = New System.Drawing.Point(498, 37)
+        Me.cmdFiltrar.Name = "cmdFiltrar"
+        Me.cmdFiltrar.Size = New System.Drawing.Size(66, 41)
+        Me.cmdFiltrar.TabIndex = 17
+        Me.cmdFiltrar.Text = "Filtrar"
+        Me.cmdFiltrar.UseVisualStyleBackColor = True
+        '
+        'cmdQuitarFiltro
+        '
+        Me.cmdQuitarFiltro.Location = New System.Drawing.Point(580, 37)
+        Me.cmdQuitarFiltro.Name = "cmdQuitarFiltro"
+        Me.cmdQuitarFiltro.Size = New System.Drawing.Size(66, 41)
+        Me.cmdQuitarFiltro.TabIndex = 18
+        Me.cmdQuitarFiltro.Text = "Quitar Filtro"
+        Me.cmdQuitarFiltro.UseVisualStyleBackColor = True
+        '
         'FrmListado
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(836, 492)
+        Me.ClientSize = New System.Drawing.Size(1274, 620)
+        Me.Controls.Add(Me.GbFiltros)
+        Me.Controls.Add(Me.ChkExportar)
+        Me.Controls.Add(Me.CmdExportar)
         Me.Controls.Add(Me.Label1)
-        Me.Controls.Add(Me.GbBuscar)
+        Me.Controls.Add(Me.GbBusquedaUnica)
         Me.Controls.Add(Me.cmdSalir)
         Me.Controls.Add(Me.cmdBorrar)
         Me.Controls.Add(Me.cmdModificar)
@@ -165,10 +264,12 @@ Partial Class FrmListado
         Me.Controls.Add(Me.ListView1)
         Me.Name = "FrmListado"
         Me.Text = "FrmListado"
-        Me.GbBuscar.ResumeLayout(False)
-        Me.GbBuscar.PerformLayout()
+        Me.GbBusquedaUnica.ResumeLayout(False)
+        Me.GbBusquedaUnica.PerformLayout()
         CType(Me.GestionCursosDataSet, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.GestionCursosDataSetBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GbFiltros.ResumeLayout(False)
+        Me.GbFiltros.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -178,12 +279,21 @@ Partial Class FrmListado
     Friend WithEvents cmdModificar As System.Windows.Forms.Button
     Friend WithEvents cmdBorrar As System.Windows.Forms.Button
     Friend WithEvents cmdSalir As System.Windows.Forms.Button
-    Friend WithEvents GbBuscar As System.Windows.Forms.GroupBox
+    Friend WithEvents GbBusquedaUnica As System.Windows.Forms.GroupBox
     Friend WithEvents TxtCampo As System.Windows.Forms.TextBox
     Friend WithEvents LblCampo As System.Windows.Forms.Label
-    Friend WithEvents CboFiltro As System.Windows.Forms.ComboBox
+    Friend WithEvents CboFiltroBusquedaUnica As System.Windows.Forms.ComboBox
     Friend WithEvents cmdBuscar As System.Windows.Forms.Button
     Friend WithEvents GestionCursosDataSetBindingSource As System.Windows.Forms.BindingSource
     Friend WithEvents GestionCursosDataSet As GestionCursos_0._1.GestionCursosDataSet
     Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents CmdExportar As System.Windows.Forms.Button
+    Friend WithEvents ChkExportar As System.Windows.Forms.CheckBox
+    Friend WithEvents GbFiltros As System.Windows.Forms.GroupBox
+    Friend WithEvents cboFiltro2 As System.Windows.Forms.ComboBox
+    Friend WithEvents lblFiltro2 As System.Windows.Forms.Label
+    Friend WithEvents CboFiltroGordo As System.Windows.Forms.ComboBox
+    Friend WithEvents lblFiltroGordo As System.Windows.Forms.Label
+    Friend WithEvents cmdFiltrar As System.Windows.Forms.Button
+    Friend WithEvents cmdQuitarFiltro As System.Windows.Forms.Button
 End Class
