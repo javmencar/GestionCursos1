@@ -6,10 +6,15 @@ Public Class FrmListado
     Public cat, crit As String
     Dim tipo As Integer
     Dim listaCursos As List(Of Integer)
+    Private lvwColumnSorter As ListViewColumnSorter
     Public Sub New(ByVal ti As Integer)
         ' Llamada necesaria para el diseñador.
         InitializeComponent()
         tipo = ti
+        ' Crear una instancia de una ordenación de columna ListView y asignarla ' al control ListView. 
+        lvwColumnSorter = New ListViewColumnSorter()
+        Me.ListView1.ListViewItemSorter = lvwColumnSorter
+
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
     End Sub
     Private Sub FrmListado_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -20,16 +25,16 @@ Public Class FrmListado
         Select Case tipo
             Case 1
                 cat = "Alumnos"
-                Me.Label1.Text = "Listado de Alumnos"
+                Me.GroupBox1.Text = "Listado de Alumnos"
             Case 2
                 cat = "Profesores"
-                Me.Label1.Text = "Listado de Profesores"
+                Me.GroupBox1.Text = "Listado de Profesores"
             Case 3
                 cat = "Candidatos"
-                Me.Label1.Text = "Listado de candidatos"
+                Me.GroupBox1.Text = "Listado de candidatos"
         End Select
         Me.CboFiltroGordo.SelectedIndex = -1
-        limpiarListView()
+        limpiarListView2()
     End Sub
     Private Sub cargarComboGordo()
         Try
@@ -84,6 +89,42 @@ Public Class FrmListado
         End With
         Call cargarDatosEnListview()
     End Sub
+    Private Sub limpiarListView2()
+        Me.ListView1.Refresh()
+        Dim columnheader As ColumnHeader
+        With Me.ListView1
+            .View = View.Details
+            .FullRowSelect = True
+            .GridLines = True
+            .Sorting = SortOrder.Ascending
+            .Items.Clear()
+            'METER AQUI LOS CAMPOS QUE QUIERAN, POR AHORA LOS TELEFONOS
+            Dim camposListview() As String = {"Id", "DNI", "Nombre", "Apellido1", "Apellido2",
+                                        "Tel1", "tel2", "InInaem", "", ""}
+
+            For i As Integer = 0 To camposListview.Length - 1
+                columnheader = New ColumnHeader()
+                columnheader.Text = camposListview(i)
+                Me.ListView1.Columns.Add(columnheader)
+            Next
+            For Each columnheader In Me.ListView1.Columns
+                columnheader.Width = -2
+            Next
+        End With
+        ' Se usa para crear encabezados de columna. Dim listviewitem As ListViewItem    ' Se usa para crear elementos de ListView.
+
+        'Asegúrese de que la vista se establece para mostrar detalles. ListView1.View = View.Details
+
+        ' Crear algunos elementos de ListView con el nombre y apellidos. listviewitem = New ListViewItem("Mike") listviewitem.SubItems.Add("Nash") Me.ListView1.Items.Add(listviewitem)
+
+
+
+
+
+        Call cargarDatosEnListview()
+    End Sub
+
+
     Private Sub cargarDatosEnListview()
         Try
             Me.ListView1.Items.Clear()
@@ -130,7 +171,6 @@ Public Class FrmListado
             cn.Close()
         End Try
     End Sub
-
     Private Sub cmdNuevo_Click(sender As Object, e As EventArgs) Handles cmdNuevo.Click
         Dim dpers As New DatosPersonales
         'en tipo llevo si es alumno, profesor o candidato; true porque es nuevo
@@ -138,17 +178,15 @@ Public Class FrmListado
         If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
             MsgBox("Insercion en la base de datos Completada")
             Call cargarDatosEnListview()
-        ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
-            Throw New miExcepcion("cancelado a peticion del usuario")
-        ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
+        Else
             Throw New miExcepcion("cancelado a peticion del usuario")
         End If
     End Sub
     Private Sub cmdModificar_Click(sender As Object, e As EventArgs) Handles cmdModificar.Click
         Call AccederFicha()
     End Sub
-    Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs) Handles ListView1.DoubleClick
-        AccederFicha()
+    Private Sub ListView1_DoubleClick(sender As Object, e As EventArgs)
+        Call AccederFicha()
     End Sub
     Private Sub AccederFicha()  'Lo saco porque se duplica al poder hacerlo tb. desde dobleClick
         Dim aviso As String = cat.Substring(0, cat.Length - 1)
@@ -158,15 +196,12 @@ Public Class FrmListado
             If Not IsNothing(DP) Then
                 'en tipo llevo si es alumno, profesor o candidato; false porque es modificacion de uno existente
                 Dim frm As New FrmFichas(DP, tipo, False)
-                If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
+
+                If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
                     Call cargarDatosEnListview()
-                ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Cancel Then
-                    Throw New miExcepcion("proceso cancelado a peticion del usuario")
-                ElseIf frm.ShowDialog = Windows.Forms.DialogResult.Abort Then
+                Else
                     Throw New miExcepcion("proceso cancelado")
                 End If
-            Else
-                Throw New miExcepcion("Error al cargar los datos")
             End If
         Catch ex2 As miExcepcion
             MsgBox(ex2.ToString)
@@ -392,7 +427,7 @@ Public Class FrmListado
             End If
         End If
     End Sub
-    Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ListView1.SelectedIndexChanged
+    Private Sub ListView1_SelectedIndexChanged(sender As Object, e As EventArgs)
 
     End Sub
     Private Sub CmdActivarExportar_Click(sender As Object, e As EventArgs) Handles CmdExportar.Click
@@ -414,5 +449,25 @@ Public Class FrmListado
     Private Sub cmdQuitarFiltro_Click(sender As Object, e As EventArgs) Handles cmdQuitarFiltro.Click
         Me.CboFiltroGordo.SelectedIndex = -1
         Call cargarDatosEnListview()
+    End Sub
+
+    Private Sub ListView1_ColumnClick(sender As Object, e As ColumnClickEventArgs) Handles ListView1.ColumnClick
+        ' Determinar si la columna en la que se hizo clic ya es la que se está ordenando. 
+        If (e.Column = lvwColumnSorter.SortColumn) Then
+            ' Revertir la dirección de ordenación actual de esta columna. 
+            If (lvwColumnSorter.Order = SortOrder.Ascending) Then
+                lvwColumnSorter.Order = SortOrder.Descending
+            Else
+                lvwColumnSorter.Order = SortOrder.Ascending
+            End If
+        Else
+            ' Establecer el número de columna que se va a ordenar; de forma predeterminada, en orden ascendente. 
+            lvwColumnSorter.SortColumn = e.Column
+            lvwColumnSorter.Order = SortOrder.Ascending
+        End If
+
+        ' Realizar la ordenación con estas nuevas opciones de ordenación.
+        Me.ListView1.Sort()
+
     End Sub
 End Class

@@ -72,3 +72,4 @@ C:\GIT\GestionCursos1\bin\Debug\Form2.vb
 C:\GIT\GestionCursos1\bin\Debug\FrmCursos.resx
 C:\GIT\GestionCursos1\bin\Debug\FrmCursos.Designer.vb
 C:\GIT\GestionCursos1\bin\Debug\FrmCursos.vb
+C:\GIT\GestionCursos1\obj\Debug\GestionCursos_0._1.FrmComentarios.resources

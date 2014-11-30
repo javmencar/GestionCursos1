@@ -40,9 +40,12 @@ Public Class FrmFichas
             Me.PicBx1.Tag = "C:\GIT\GestionCursos1\Resources\female-silhouette_0.jpg"
             ' NuIdDP = cogerUltimaId() + 1
             ' MsgBox("UltimaID + 1=  " & NuIdDP)
+            Me.txtFNac.Text = "01/01/1900"
+            Me.txtFecEntr.Text = "01/01/1900"
+            Me.txtInFecha.Text = "01/01/1900"
             Me.OptAptoPendiente.Select()
         Else
-            Me.cmdModificar.Text = "MODIFICAR FICHA"
+            Me.cmdModificar.Text = "GUARDAR CAMBIOS EN LA FICHA"
             Me.cmdCancelar.Text = "Cancelar La Modificación"
             Me.cmdCambiarFoto.Text = "Cambiar Foto"
             Me.cmdBorrar.Visible = True
@@ -62,7 +65,7 @@ Public Class FrmFichas
             If .Fnac <> "1/1/1900" Then
                 Me.txtFNac.Text = .Fnac
             Else
-                Me.txtFNac.Text = ""
+                Me.txtFNac.Text = "1/1/1900"
             End If
             ' Me.txtFNac.Text = CStr(.FecEntr)
             Me.txtLugNac.Text = .LugNac
@@ -80,7 +83,7 @@ Public Class FrmFichas
             If .InFecha <> "1/1/1900" Then
                 Me.txtInFecha.Text = .InFecha
             Else
-                Me.txtInFecha.Text = ""
+                Me.txtInFecha.Text = "1/1/1900"
             End If
             ' Me.txtInFecha.Text = CStr(.InFecha)
             Me.txtNivelEstudios.Text = .NivelEstudios
@@ -100,7 +103,7 @@ Public Class FrmFichas
             If .FecEntr <> "1/1/1900" Then
                 Me.txtFecEntr.Text = .InFecha
             Else
-                Me.txtFecEntr.Text = ""
+                Me.txtFecEntr.Text = "1/1/1900"
             End If
             ' Me.txtFecEntr.Text = CStr(.FecEntr)
             Me.txtValoracion.Text = .Valoracion
@@ -142,6 +145,7 @@ Public Class FrmFichas
                 Me.lblComentarios.BackColor = Color.Red
                 Me.cmdAñadirComentarios.Text = "Acceder a Comentarios"
             End If
+
         End With
     End Sub
 
@@ -175,7 +179,12 @@ Public Class FrmFichas
                 .NumSS = Me.txtNumSS.Text.Replace("/", "")
                 Dim err As Integer = 0
                 err = comprobarformatofecha(Me.txtFNac.Text)
-                If err <> 0 Then Throw New miExcepcion("error en fecha de nacimiento")
+                If err <> 0 Then
+                    MsgBox(err)
+                    Throw New miExcepcion("error en fecha de nacimiento")
+                End If
+
+
                 .Fnac = Me.txtFNac.Text
                 .LugNac = Me.txtLugNac.Text
                 If Me.txtEdad.Text = "" Then Me.txtEdad.Text = "0"
@@ -228,6 +237,8 @@ Public Class FrmFichas
                     .Apto = "Pendiente"
                 End If
                 .PathFoto = Me.PicBx1.Tag
+                .Email = Me.txtEmail.Text
+                .Comentarios = Me.lblComentariosEscritos.Text
                 .cargarlistas() 'Llamo al procedimiento de la clase que carga listadoNombres y listavalores
             End With
         Catch ex2 As miExcepcion
@@ -294,10 +305,14 @@ Public Class FrmFichas
                     ' Dim nuevaId As Integer = cogerUltimaId()
                     NuIdDP = cogerUltimaId()
                     If NuIdDP = -1 Then Throw New miExcepcion("Error al calcular la ultima ID")
-                    If cat = "alumnos" Or cat = "Profesores then" Then '    los candidatos no necesitan esta parte
-                        Dim comp As Integer = insertarEnTablacategoria(NuIdDP)
-                        If comp = -1 Then Throw New miExcepcion(String.Format("Problema al insertar en {0}", cat))
-                    End If
+                    'If cat = "alumnos" Or cat = "Profesores then" Then '    los candidatos no necesitan esta parte
+                    '    Dim comp As Integer = insertarEnTablacategoria(NuIdDP)
+                    '    If comp = -1 Then Throw New miExcepcion(String.Format("Problema al insertar en {0}", cat))
+                    'End If
+                    Dim comp As Integer = insertarEnTablacategoria(NuIdDP)
+                    If comp = -1 Then Throw New miExcepcion(String.Format("Problema al insertar en {0}", cat))
+
+
                 Else
                     'cargo los datos del objeto ya creado
                     Dim cargado As Boolean = cargarCambiosEnDPYaCreado(DPConDatosDelFormulario)
@@ -368,7 +383,7 @@ Public Class FrmFichas
     Public Function cargarCambiosEnDPYaCreado(ByVal dat As DatosPersonales) As Boolean
         Try
             Dim Datos As String = ""
-            For i As Integer = 2 To 26 ' i=2 porque listavalores empieza en 1 y el primer valor no lo queremos
+            For i As Integer = 2 To 28 ' i=2 porque listavalores empieza en 1 y el primer valor no lo queremos
                 If Not IsNothing(dat.listaValores.Item(i)) Then
                     Select Case i
                         Case 8, 21 'valores integer
@@ -772,7 +787,13 @@ Public Class FrmFichas
     End Sub
 
     Private Sub cmdAñadirComentarios_Click(sender As Object, e As EventArgs) Handles cmdAñadirComentarios.Click
-        Dim frm As New FrmComentarios
-        frm.ShowDialog()
+        Dim frm As New FrmComentarios(DP)
+        If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
+            MsgBox("Comentario Guardado")
+            'MsgBox(DP.Comentarios)
+            Me.lblComentariosEscritos.Text = DP.Comentarios
+        Else
+            MsgBox("No se ha guardado el comentario")
+        End If
     End Sub
 End Class

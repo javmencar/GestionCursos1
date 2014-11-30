@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Alumno.vb" />
+    <Compile Include="ListViewColumnSorter.vb" />
     <Compile Include="DatosPersonales.vb" />
     <Compile Include="BBDD_02DataSet.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -201,6 +202,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FrmAlumnos.resx">
       <DependentUpon>FrmAlumnos.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmComentarios.resx">
+      <DependentUpon>FrmComentarios.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmCrear.resx">
       <DependentUpon>FrmCrear.vb</DependentUpon>

@@ -23,7 +23,6 @@ Partial Class FrmListado
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Me.ListView1 = New System.Windows.Forms.ListView()
         Me.cmdNuevo = New System.Windows.Forms.Button()
         Me.cmdModificar = New System.Windows.Forms.Button()
         Me.cmdBorrar = New System.Windows.Forms.Button()
@@ -35,7 +34,6 @@ Partial Class FrmListado
         Me.CboFiltroBusquedaUnica = New System.Windows.Forms.ComboBox()
         Me.GestionCursosDataSet = New GestionCursos_0._1.GestionCursosDataSet()
         Me.GestionCursosDataSetBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.CmdExportar = New System.Windows.Forms.Button()
         Me.ChkExportar = New System.Windows.Forms.CheckBox()
         Me.GbFiltros = New System.Windows.Forms.GroupBox()
@@ -43,19 +41,14 @@ Partial Class FrmListado
         Me.cmdFiltrar = New System.Windows.Forms.Button()
         Me.CboFiltroGordo = New System.Windows.Forms.ComboBox()
         Me.lblFiltroGordo = New System.Windows.Forms.Label()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.ListView1 = New System.Windows.Forms.ListView()
         Me.GbBusquedaUnica.SuspendLayout()
         CType(Me.GestionCursosDataSet, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.GestionCursosDataSetBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GbFiltros.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'ListView1
-        '
-        Me.ListView1.Location = New System.Drawing.Point(13, 152)
-        Me.ListView1.Name = "ListView1"
-        Me.ListView1.Size = New System.Drawing.Size(1077, 298)
-        Me.ListView1.TabIndex = 0
-        Me.ListView1.UseCompatibleStateImageBehavior = False
         '
         'cmdNuevo
         '
@@ -150,18 +143,9 @@ Partial Class FrmListado
         Me.GestionCursosDataSetBindingSource.DataSource = Me.GestionCursosDataSet
         Me.GestionCursosDataSetBindingSource.Position = 0
         '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(296, 130)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(39, 13)
-        Me.Label1.TabIndex = 6
-        Me.Label1.Text = "Label1"
-        '
         'CmdExportar
         '
-        Me.CmdExportar.Location = New System.Drawing.Point(1122, 402)
+        Me.CmdExportar.Location = New System.Drawing.Point(1120, 424)
         Me.CmdExportar.Name = "CmdExportar"
         Me.CmdExportar.Size = New System.Drawing.Size(121, 48)
         Me.CmdExportar.TabIndex = 7
@@ -171,7 +155,7 @@ Partial Class FrmListado
         'ChkExportar
         '
         Me.ChkExportar.AutoSize = True
-        Me.ChkExportar.Location = New System.Drawing.Point(1037, 456)
+        Me.ChkExportar.Location = New System.Drawing.Point(1035, 478)
         Me.ChkExportar.Name = "ChkExportar"
         Me.ChkExportar.Size = New System.Drawing.Size(206, 17)
         Me.ChkExportar.TabIndex = 8
@@ -226,21 +210,38 @@ Partial Class FrmListado
         Me.lblFiltroGordo.TabIndex = 13
         Me.lblFiltroGordo.Text = "Seleccione el curso que desea ver"
         '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.ListView1)
+        Me.GroupBox1.Location = New System.Drawing.Point(13, 121)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(1101, 352)
+        Me.GroupBox1.TabIndex = 10
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "GroupBox1"
+        '
+        'ListView1
+        '
+        Me.ListView1.Location = New System.Drawing.Point(6, 19)
+        Me.ListView1.Name = "ListView1"
+        Me.ListView1.Size = New System.Drawing.Size(1077, 292)
+        Me.ListView1.TabIndex = 1
+        Me.ListView1.UseCompatibleStateImageBehavior = False
+        '
         'FrmListado
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1274, 620)
+        Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.GbFiltros)
         Me.Controls.Add(Me.ChkExportar)
         Me.Controls.Add(Me.CmdExportar)
-        Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.GbBusquedaUnica)
         Me.Controls.Add(Me.cmdSalir)
         Me.Controls.Add(Me.cmdBorrar)
         Me.Controls.Add(Me.cmdModificar)
         Me.Controls.Add(Me.cmdNuevo)
-        Me.Controls.Add(Me.ListView1)
         Me.Name = "FrmListado"
         Me.Text = "FrmListado"
         Me.GbBusquedaUnica.ResumeLayout(False)
@@ -249,11 +250,11 @@ Partial Class FrmListado
         CType(Me.GestionCursosDataSetBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GbFiltros.ResumeLayout(False)
         Me.GbFiltros.PerformLayout()
+        Me.GroupBox1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
-    Friend WithEvents ListView1 As System.Windows.Forms.ListView
     Friend WithEvents cmdNuevo As System.Windows.Forms.Button
     Friend WithEvents cmdModificar As System.Windows.Forms.Button
     Friend WithEvents cmdBorrar As System.Windows.Forms.Button
@@ -265,7 +266,6 @@ Partial Class FrmListado
     Friend WithEvents cmdBuscar As System.Windows.Forms.Button
     Friend WithEvents GestionCursosDataSetBindingSource As System.Windows.Forms.BindingSource
     Friend WithEvents GestionCursosDataSet As GestionCursos_0._1.GestionCursosDataSet
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents CmdExportar As System.Windows.Forms.Button
     Friend WithEvents ChkExportar As System.Windows.Forms.CheckBox
     Friend WithEvents GbFiltros As System.Windows.Forms.GroupBox
@@ -273,4 +273,6 @@ Partial Class FrmListado
     Friend WithEvents lblFiltroGordo As System.Windows.Forms.Label
     Friend WithEvents cmdFiltrar As System.Windows.Forms.Button
     Friend WithEvents cmdQuitarFiltro As System.Windows.Forms.Button
+    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents ListView1 As System.Windows.Forms.ListView
 End Class

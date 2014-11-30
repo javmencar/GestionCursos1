@@ -29,7 +29,6 @@ Partial Class FrmFichas
         Me.lblApellido2 = New System.Windows.Forms.Label()
         Me.txtNombre = New System.Windows.Forms.TextBox()
         Me.lblNombre = New System.Windows.Forms.Label()
-        Me.PicBx1 = New System.Windows.Forms.PictureBox()
         Me.lblFNac = New System.Windows.Forms.Label()
         Me.txtFNac = New System.Windows.Forms.MaskedTextBox()
         Me.txtLugNac = New System.Windows.Forms.TextBox()
@@ -95,12 +94,14 @@ Partial Class FrmFichas
         Me.lblComentarios = New System.Windows.Forms.Label()
         Me.txtEmail = New System.Windows.Forms.TextBox()
         Me.lblEmail = New System.Windows.Forms.Label()
-        CType(Me.PicBx1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PicBx1 = New System.Windows.Forms.PictureBox()
+        Me.lblComentariosEscritos = New System.Windows.Forms.Label()
         Me.GbInaem.SuspendLayout()
         Me.GbExperiencia.SuspendLayout()
         Me.GbUniforme.SuspendLayout()
         Me.GbEntrevista.SuspendLayout()
         Me.GbApto.SuspendLayout()
+        CType(Me.PicBx1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'LblApellido1
@@ -153,19 +154,6 @@ Partial Class FrmFichas
         Me.lblNombre.Size = New System.Drawing.Size(44, 13)
         Me.lblNombre.TabIndex = 5
         Me.lblNombre.Text = "Nombre"
-        '
-        'PicBx1
-        '
-        Me.PicBx1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PicBx1.Image = Global.GestionCursos_0._1.My.Resources.Resources.NuevaFicha01
-        Me.PicBx1.InitialImage = CType(resources.GetObject("PicBx1.InitialImage"), System.Drawing.Image)
-        Me.PicBx1.Location = New System.Drawing.Point(668, 23)
-        Me.PicBx1.Name = "PicBx1"
-        Me.PicBx1.Size = New System.Drawing.Size(125, 140)
-        Me.PicBx1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.PicBx1.TabIndex = 7
-        Me.PicBx1.TabStop = False
-        Me.PicBx1.Tag = "25"
         '
         'lblFNac
         '
@@ -786,11 +774,34 @@ Partial Class FrmFichas
         Me.lblEmail.TabIndex = 54
         Me.lblEmail.Text = "Domicilio"
         '
+        'PicBx1
+        '
+        Me.PicBx1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.PicBx1.Image = Global.GestionCursos_0._1.My.Resources.Resources.NuevaFicha01
+        Me.PicBx1.InitialImage = CType(resources.GetObject("PicBx1.InitialImage"), System.Drawing.Image)
+        Me.PicBx1.Location = New System.Drawing.Point(668, 23)
+        Me.PicBx1.Name = "PicBx1"
+        Me.PicBx1.Size = New System.Drawing.Size(125, 140)
+        Me.PicBx1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.PicBx1.TabIndex = 7
+        Me.PicBx1.TabStop = False
+        Me.PicBx1.Tag = "25"
+        '
+        'lblComentariosEscritos
+        '
+        Me.lblComentariosEscritos.AutoSize = True
+        Me.lblComentariosEscritos.Location = New System.Drawing.Point(779, 512)
+        Me.lblComentariosEscritos.Name = "lblComentariosEscritos"
+        Me.lblComentariosEscritos.Size = New System.Drawing.Size(65, 13)
+        Me.lblComentariosEscritos.TabIndex = 55
+        Me.lblComentariosEscritos.Text = "Comentarios"
+        '
         'FrmFichas
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1013, 636)
+        Me.Controls.Add(Me.lblComentariosEscritos)
         Me.Controls.Add(Me.txtEmail)
         Me.Controls.Add(Me.lblEmail)
         Me.Controls.Add(Me.lblComentarios)
@@ -841,7 +852,6 @@ Partial Class FrmFichas
         Me.Controls.Add(Me.LblApellido1)
         Me.Name = "FrmFichas"
         Me.Text = "FrmFichas"
-        CType(Me.PicBx1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GbInaem.ResumeLayout(False)
         Me.GbInaem.PerformLayout()
         Me.GbExperiencia.ResumeLayout(False)
@@ -851,6 +861,7 @@ Partial Class FrmFichas
         Me.GbEntrevista.PerformLayout()
         Me.GbApto.ResumeLayout(False)
         Me.GbApto.PerformLayout()
+        CType(Me.PicBx1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -927,4 +938,5 @@ Partial Class FrmFichas
     Friend WithEvents lblComentarios As System.Windows.Forms.Label
     Friend WithEvents txtEmail As System.Windows.Forms.TextBox
     Friend WithEvents lblEmail As System.Windows.Forms.Label
+    Friend WithEvents lblComentariosEscritos As System.Windows.Forms.Label
 End Class
